@@ -201,6 +201,8 @@ export default function HomePage() {
             For RIAs
           </button>
           <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
+          <a href="/insights" className="hover:text-white transition-colors">Insights</a>
+          <a href="/geo-remediation" className="hover:text-white transition-colors">GEO Remediation</a>
           <a href="#about" className="hover:text-white transition-colors">About</a>
         </div>
         <a
