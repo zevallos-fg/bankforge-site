@@ -1,0 +1,41 @@
+# BankForge.ai
+
+> BankForge is a compliance intelligence platform for regulated
+> financial institutions. We scan public digital presences for
+> regulatory compliance gaps and surface findings before the
+> next examination cycle.
+
+## What BankForge does
+
+- Scrapes public-facing websites of banks and RIAs
+- Runs compliance checks against UDAAP, Reg Z, Reg DD,
+  Fair Lending, and SEC Marketing Rule (Rule 206(4)-1) criteria
+- Severity-grades findings (High / Medium / Low) with
+  regulatory citations
+- Delivers structured findings reports reviewed by a team
+  with examiner-side experience at $100B+ institutions
+- Offers ongoing monthly monitoring with delta alerts
+
+## Who we serve
+
+- SEC-registered Investment Advisers (RIAs) — Marketing Rule
+  compliance, Reg S-P, SEC examination preparation
+- Community banks ($500M–$5B assets) — UDAAP, Reg Z, Reg DD,
+  Fair Lending, FFIEC digital presence monitoring
+
+## Key regulatory frameworks covered
+
+- SEC Marketing Rule / Rule 206(4)-1 (testimonials,
+  third-party ratings, performance advertising)
+- Regulation S-P (privacy notices)
+- UDAAP (Unfair, Deceptive, or Abusive Acts or Practices)
+- Regulation Z (Truth in Lending — APR disclosures)
+- Regulation DD (Truth in Savings — rate advertising)
+- Fair Lending / Equal Credit Opportunity Act
+- FFIEC digital banking examination guidance
+- SAFE Act / RESPA (NMLS identifiers)
+
+## Contact
+
+- Website: https://bankforge.ai
+- Email: fernando@bankforge.ai

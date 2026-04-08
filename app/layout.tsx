@@ -16,9 +16,39 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "BankForge.ai — Compliance Intelligence Platform",
+  title: "BankForge.ai — Compliance Intelligence for Banks & RIAs",
   description:
-    "BankForge reveals what examiners look for before your next exam cycle. Compliance intelligence for community banks and registered investment advisers.",
+    "BankForge scans your public digital presence for UDAAP, Reg Z, Reg DD, Fair Lending, and SEC Marketing Rule compliance gaps. Built by practitioners with examiner-side experience at $100B+ institutions.",
+  keywords: [
+    "RIA compliance review",
+    "Marketing Rule 206(4)-1",
+    "bank compliance monitoring",
+    "UDAAP website audit",
+    "Reg Z compliance",
+    "SEC examination prep",
+  ],
+  openGraph: {
+    title: "BankForge.ai — Compliance Intelligence for Banks & RIAs",
+    description:
+      "We scrape your website and run a compliance Ctrl+F against the exact criteria your examiners use. Severity-graded findings. Regulatory citations. Reviewed by the BankForge team.",
+    url: "https://bankforge.ai",
+    siteName: "BankForge.ai",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BankForge.ai — Compliance Intelligence for Banks & RIAs",
+    description:
+      "Marketing Rule compliance reviews for RIAs. UDAAP and Reg Z monitoring for community banks.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  alternates: {
+    canonical: "https://bankforge.ai",
+  },
 };
 
 export default function RootLayout({
@@ -31,6 +61,9 @@ export default function RootLayout({
       lang="en"
       className={`${dmSerif.variable} ${dmSans.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+      </head>
       <body
         className="min-h-full flex flex-col"
         style={{ fontFamily: "var(--font-body), sans-serif" }}
