@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import ScanDemo from './components/ScanDemo';
 import DemoRequestForm from './components/DemoRequestForm';
 
 // ─── Signal Card Data ───────────────────────────────────────────────
@@ -18,9 +17,9 @@ const bankCards = [
   },
   {
     accent: 'blue',
-    tag: 'GEO Score',
+    tag: 'AI SEO Score',
     stat: '45.8 avg',
-    title: 'Average bank GEO score out of 100',
+    title: 'Average bank AI SEO score out of 100',
     desc: '16.6% of banks score below 40 \u2014 invisible on ChatGPT, Perplexity, and Google AI Overviews for local deposit and loan queries.',
     ref: 'March 2026',
   },
@@ -51,9 +50,9 @@ const riaCards = [
   },
   {
     accent: 'blue',
-    tag: 'GEO Score',
+    tag: 'AI SEO Score',
     stat: '33.3 avg',
-    title: 'Average RIA GEO score out of 100',
+    title: 'Average RIA AI SEO score out of 100',
     desc: '37.2% of RIAs score below 40 \u2014 invisible on ChatGPT, Perplexity, and Google AI Overviews when prospects search for investment advisers.',
     ref: 'March 2026',
   },
@@ -152,7 +151,6 @@ function renderSignalText(html: string) {
 
 export default function HomePage() {
   const [tab, setTab] = useState<'bank' | 'ria'>('bank');
-  const [scanOpen, setScanOpen] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
 
   const cards = tab === 'bank' ? bankCards : riaCards;
@@ -184,32 +182,21 @@ export default function HomePage() {
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
-            <button
-              onClick={() => setTab('bank')}
-              className="relative px-4 py-2 text-sm transition-colors"
-              style={{ color: tab === 'bank' ? '#fff' : '#9ca3af' }}
-            >
-              Banks &amp; Credit Unions
-              {tab === 'bank' && (
-                <span className="absolute bottom-0 left-4 right-4 h-[2px]" style={{ backgroundColor: '#7EB3E8' }} />
-              )}
-            </button>
-            <button
-              onClick={() => setTab('ria')}
-              className="relative px-4 py-2 text-sm transition-colors"
-              style={{ color: tab === 'ria' ? '#fff' : '#9ca3af' }}
-            >
-              Investment Advisers
-              {tab === 'ria' && (
-                <span className="absolute bottom-0 left-4 right-4 h-[2px]" style={{ backgroundColor: '#7EB3E8' }} />
-              )}
-            </button>
-            <span className="w-px h-4 bg-white/20 mx-2" />
-            <Link href="/insights" className="px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+            <Link href="/insights" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
               Insights
             </Link>
-            <Link href="/geo-score" className="px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
-              GEO Score
+            <Link href="/geo-score" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
+              AI SEO Score
+            </Link>
+            <span className="w-px h-4 bg-white/20 mx-3" />
+            <Link href="/for-banks" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
+              FAQ Banks
+            </Link>
+            <Link href="/for-credit-unions" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
+              FAQ Credit Unions
+            </Link>
+            <Link href="/for-rias" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
+              FAQ RIAs
             </Link>
           </div>
 
@@ -231,11 +218,11 @@ export default function HomePage() {
         </div>
         {mobileNav && (
           <div className="md:hidden border-t border-white/10 py-2">
-            <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Banks</Link>
-            <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Credit Unions</Link>
-            <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Investment Advisers</Link>
             <Link href="/insights" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Insights</Link>
-            <Link href="/geo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>GEO Score</Link>
+            <Link href="/geo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO Score</Link>
+            <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Banks</Link>
+            <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Credit Unions</Link>
+            <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ RIAs</Link>
           </div>
         )}
       </nav>
@@ -262,28 +249,44 @@ export default function HomePage() {
           >
             Know what your website says about you.
             <br />
-            <em style={{ color: '#7EB3E8' }}>Before <span className="font-bold">customers</span> or <span className="font-bold">regulators</span> do.</em>
+            <em style={{ color: '#7EB3E8' }}>Before <span className="bf-shimmer font-bold">customers</span> or <span className="bf-shimmer font-bold">regulators</span> do.</em>
           </h1>
           <p className="text-blue-200/80 text-lg leading-relaxed mb-8 max-w-xl mx-auto">
             BankForge scans your public digital presence for regulatory compliance gaps and
             AI &amp; digital marketing visibility. One scan. Three perspectives &mdash; your
             examiners, your customers, and your competitors on AI.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a
-              href="mailto:outreach@bankforge.ai"
-              className="bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors text-center"
-            >
-              Request a Review
-            </a>
+
+          {/* Audience selector */}
+          <p className="text-[10px] uppercase tracking-widest text-white/40 mb-3">I work at a &mdash;</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-xl mx-auto">
             <button
-              onClick={() =>
-                document.getElementById('what-bankforge-finds')
-                  ?.scrollIntoView({ behavior: 'smooth' })
-              }
-              className="border border-white/30 text-white px-6 py-3 rounded-lg text-sm hover:border-white/60 transition-colors"
+              onClick={() => setTab('bank')}
+              className="flex-1 rounded-lg px-5 py-4 text-left transition-all cursor-pointer"
+              style={{
+                backgroundColor: tab === 'bank' ? 'rgba(27,82,153,0.55)' : 'rgba(255,255,255,0.07)',
+                border: tab === 'bank' ? '1px solid #7EB3E8' : '1px solid rgba(255,255,255,0.18)',
+              }}
             >
-              See what we find
+              <span className="text-sm font-medium text-white block">Bank or Credit Union</span>
+              <span className="text-[10px] text-white/50 block mt-0.5">UDAAP &middot; Reg Z &middot; Reg DD &middot; Fair Lending &middot; FFIEC</span>
+              {tab === 'bank' && (
+                <span className="text-xs mt-2 block" style={{ color: '#7EB3E8' }}>&darr; See what we find</span>
+              )}
+            </button>
+            <button
+              onClick={() => setTab('ria')}
+              className="flex-1 rounded-lg px-5 py-4 text-left transition-all cursor-pointer"
+              style={{
+                backgroundColor: tab === 'ria' ? 'rgba(27,82,153,0.55)' : 'rgba(255,255,255,0.07)',
+                border: tab === 'ria' ? '1px solid #7EB3E8' : '1px solid rgba(255,255,255,0.18)',
+              }}
+            >
+              <span className="text-sm font-medium text-white block">Registered Investment Adviser</span>
+              <span className="text-[10px] text-white/50 block mt-0.5">SEC Marketing Rule &middot; Reg S-P &middot; Rule 206(4)-1</span>
+              {tab === 'ria' && (
+                <span className="text-xs mt-2 block" style={{ color: '#7EB3E8' }}>&darr; See what we find</span>
+              )}
             </button>
           </div>
         </div>
@@ -317,7 +320,7 @@ export default function HomePage() {
           </div>
 
           {/* 2x2 grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" style={{ transition: 'opacity 0.15s ease', opacity: 1 }}>
             {cards.map((card, i) => (
               <div
                 key={`${tab}-${i}`}
@@ -567,8 +570,6 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* ─── SCAN DEMO MODAL ───────────────────────────────────── */}
-      {scanOpen && <ScanDemo onClose={() => setScanOpen(false)} />}
     </div>
   );
 }
