@@ -187,6 +187,9 @@ export default function HomePage() {
             <Link href="/ai-seo-score" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
               AI SEO Score
             </Link>
+            <Link href="/sec-marketing-rule-audit" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
+              2025 SEC Marketing Audit
+            </Link>
             <span className="w-px h-4 bg-white/20 mx-3" />
             <Link href="/for-banks" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
               FAQ Banks
@@ -219,6 +222,7 @@ export default function HomePage() {
           <div className="md:hidden border-t border-white/10 py-2">
             <Link href="/insights" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Insights</Link>
             <Link href="/ai-seo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO Score</Link>
+            <Link href="/sec-marketing-rule-audit" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>2025 SEC Marketing Audit</Link>
             <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Banks</Link>
             <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Credit Unions</Link>
             <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ RIAs</Link>
