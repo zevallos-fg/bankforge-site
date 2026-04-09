@@ -8,6 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: 'ClaudeBot', allow: '/' },
       { userAgent: 'PerplexityBot', allow: '/' },
       { userAgent: 'Googlebot', allow: '/' },
+      { userAgent: 'anthropic-ai', allow: '/' },
+      { userAgent: 'cohere-ai', allow: '/' },
     ],
     sitemap: 'https://bankforge.ai/sitemap.xml',
   }

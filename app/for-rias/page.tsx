@@ -67,12 +67,27 @@ const faqItems = [
   },
 ];
 
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'RIA Marketing Rule Compliance Review',
+  provider: { '@type': 'Organization', name: 'BankForge.ai' },
+  serviceType: 'Compliance Review',
+  audience: { '@type': 'Audience', audienceType: 'Registered Investment Advisers' },
+  description: 'Review of an RIA\u2019s public website against SEC Marketing Rule (Rule 206(4)-1) criteria. References December 2025 SEC Risk Alert deficiency categories. Testimonial disclosures, third-party ratings, performance advertising, Reg S-P privacy notices.',
+  areaServed: 'United States',
+};
+
 export default function ForRiasPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
       <AudiencePage
         pageType="ria"

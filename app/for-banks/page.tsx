@@ -67,12 +67,27 @@ const faqItems = [
   },
 ];
 
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Bank Website Compliance Review',
+  provider: { '@type': 'Organization', name: 'BankForge.ai' },
+  serviceType: 'Compliance Review',
+  audience: { '@type': 'Audience', audienceType: 'Community Banks' },
+  description: 'Structured review of a bank\u2019s public digital presence against UDAAP, Reg Z, Reg DD, FFIEC, and Fair Lending criteria. Severity-graded findings with regulatory citations. Delivered within 5 business days.',
+  areaServed: 'United States',
+};
+
 export default function ForBanksPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
       <AudiencePage
         pageType="bank"

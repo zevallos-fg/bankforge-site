@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import DemoRequestForm from './DemoRequestForm';
 
 interface FaqItem {
   q: string;
@@ -17,7 +18,10 @@ interface AudiencePageProps {
   extraNote?: string;
 }
 
-export default function AudiencePage({ h1, ctaText, faqItems, extraNote }: AudiencePageProps) {
+const audienceTypeMap = { bank: 'bank', cu: 'credit_union', ria: 'ria' } as const;
+const sourcePageMap = { bank: '/for-banks', cu: '/for-credit-unions', ria: '/for-rias' } as const;
+
+export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNote }: AudiencePageProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -59,12 +63,13 @@ export default function AudiencePage({ h1, ctaText, faqItems, extraNote }: Audie
           <p className="text-blue-200/80 text-lg leading-relaxed max-w-xl mx-auto mb-8">
             Know what your website says about you. Before customers or regulators do.
           </p>
-          <Link
-            href="mailto:fernando@bankforge.ai"
-            className="inline-block bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-          >
-            {ctaText}
-          </Link>
+          <DemoRequestForm
+            audienceType={audienceTypeMap[pageType]}
+            sourcePage={sourcePageMap[pageType]}
+            sourceCta="hero_primary"
+            ctaLabel={ctaText}
+            buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
+          />
         </div>
       </section>
 
@@ -119,12 +124,13 @@ export default function AudiencePage({ h1, ctaText, faqItems, extraNote }: Audie
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
               The BankForge team reviews every finding before delivery. No vendor energy. No AI noise.
             </p>
-            <Link
-              href="mailto:fernando@bankforge.ai"
-              className="inline-block bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-            >
-              {ctaText}
-            </Link>
+            <DemoRequestForm
+              audienceType={audienceTypeMap[pageType]}
+              sourcePage={sourcePageMap[pageType]}
+              sourceCta="cta_block"
+              ctaLabel={ctaText}
+              buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
+            />
           </div>
         </div>
       </section>

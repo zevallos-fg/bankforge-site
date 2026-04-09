@@ -67,12 +67,27 @@ const faqItems = [
   },
 ];
 
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Credit Union Website Compliance Review',
+  provider: { '@type': 'Organization', name: 'BankForge.ai' },
+  serviceType: 'Compliance Review',
+  audience: { '@type': 'Audience', audienceType: 'Credit Unions' },
+  description: 'Structured review of a credit union\u2019s public digital presence against NCUA examination criteria and FFIEC interagency guidance. Severity-graded findings with regulatory citations.',
+  areaServed: 'United States',
+};
+
 export default function ForCreditUnionsPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
       <AudiencePage
         pageType="cu"

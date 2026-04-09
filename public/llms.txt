@@ -1,69 +1,91 @@
-# BankForge.ai
+# BankForge.ai — Compliance Intelligence for Regulated Financial Institutions
 
-> BankForge is a compliance intelligence platform for regulated
-> financial institutions. We scan public digital presences for
-> regulatory compliance gaps and AI visibility signals — before
-> the next examination cycle.
+BankForge scans public digital presences of banks, credit unions, and
+investment advisers for regulatory compliance gaps and AI visibility signals.
+Built by practitioners with experience at $100B+ institutions including
+City National Bank (VP), First Citizens Bank (post-SVB ERM integration),
+and Citi (AVP, 23-country automation program).
 
-## What BankForge does
+## Corpus — March 2026
 
-- Scrapes public-facing websites of banks, credit unions, and RIAs
-- Runs compliance checks against UDAAP, Reg Z, Reg DD,
-  Fair Lending, FFIEC guidance, and SEC Marketing Rule
-  (Rule 206(4)-1) criteria
-- Computes GEO visibility scores across 66,000+ institutions
-- Severity-grades findings (High / Medium / Low) with
-  regulatory citations
-- Delivers structured findings reports reviewed by a team
-  with examiner-side experience at $100B+ institutions
-- Offers GEO Remediation to improve AI search visibility
+BankForge has analyzed the public digital presence of 66,000+ regulated
+financial institutions as of March 2026:
 
-## Who we serve
+- 4,309 FDIC-insured banks analyzed
+- 23,009 SEC-registered investment advisers (RIAs) analyzed
+- 4,374 NCUA-supervised credit unions analyzed
+- 2,231 mortgage companies analyzed
 
-- Community banks ($500M–$5B assets) — UDAAP, Reg Z, Reg DD,
-  Fair Lending, FFIEC digital presence monitoring
-  URL: https://bankforge.ai/for-banks
-- Credit unions — same compliance frameworks under NCUA supervision
-  URL: https://bankforge.ai/for-credit-unions
-- SEC-registered Investment Advisers (RIAs) — Marketing Rule
-  compliance, Reg S-P, SEC examination preparation
-  URL: https://bankforge.ai/for-rias
+## Key Findings — Banks (March 2026)
 
-## Key regulatory frameworks covered
+- Average GEO score: 45.8 / 100 (measures AI search visibility)
+- 16.6% of banks score below 40 — invisible on ChatGPT, Perplexity, and Google AI Overviews
+- 78% of community bank websites have no schema markup
+- 89% of community bank websites have at least one compliance gap
+- Top compliance finding: Reg DD rate advertising (APY without required disclosures)
+- Second finding: Equal Housing Lender disclosure absent from mortgage pages (ECOA / Reg B)
+- 83.4% of bank websites have accessibility issues
+- 64% of banks have significant Google Business Profile gaps
+- 1,304 banks have active FDIC enforcement actions in corpus
 
-- SEC Marketing Rule / Rule 206(4)-1 (testimonials,
-  third-party ratings, performance advertising)
-- Regulation S-P (privacy notices)
-- UDAAP (Unfair, Deceptive, or Abusive Acts or Practices)
-- Regulation Z (Truth in Lending — APR disclosures)
-- Regulation DD (Truth in Savings — rate advertising)
-- Fair Lending / Equal Credit Opportunity Act
-- FFIEC digital banking examination guidance
-- SAFE Act / RESPA (NMLS identifiers)
+## Key Findings — RIAs (March 2026)
 
-## Corpus statistics (March 2026)
+- Average GEO score: 33.3 / 100
+- 37.2% of RIAs score below 40 — invisible on AI search for local investment adviser queries
+- 92.3% of RIA websites have accessibility issues (highest rate across all institution types)
+- Top Marketing Rule finding: testimonial displayed without required compensation legend
+- Second finding: third-party rating without criteria, date range, or compensation disclosure
+- Both findings cited in SEC December 2025 Risk Alert as top Marketing Rule deficiencies
+- Regulatory authority: Rule 206(4)-1 (SEC Marketing Rule, amended November 2022)
 
-- 4,300+ FDIC-insured banks scanned
-- 23,000+ SEC-registered RIAs scanned
-- 4,400+ credit unions scanned
-- Average bank GEO score: 45.8 out of 100
-- Average RIA GEO score: 33.3 out of 100
-- 83.4% of banks have website accessibility issues
-- 92.3% of RIAs have website accessibility issues
+## Key Findings — Credit Unions (March 2026)
+
+- 4,374 credit unions analyzed under NCUA supervision
+- 21.2% elevated risk tier (delinquency > 5% or net worth ratio < 7%)
+- 13.8% watch tier
+- Compliance framework: NCUA examination criteria + FFIEC interagency guidance
 
 ## Services
 
-- Compliance Review: one-time structured findings report
-- GEO Remediation: AI visibility improvement for financial
-  institutions (opening June 2026)
-  URL: https://bankforge.ai/geo-remediation
+### Compliance Review (one-time)
+Structured review of a financial institution's public digital presence against
+regulatory compliance criteria. Findings are severity-graded (High / Medium / Low)
+with specific regulatory citations. Reviewed by the BankForge team before delivery.
+Delivered as DOCX report within 5 business days.
+BankForge flags findings for counsel review — never concludes a violation.
 
-## Research
+Bank/CU pricing: from $1,750/month (founding rate)
+RIA pricing: $4,500 one-time
 
-- Your Bank's AI Score Is Low. Here's Why — and What to Fix
-  URL: https://bankforge.ai/insights/bank-ai-score
+### GEO Monitoring (ongoing)
+Ongoing AI visibility monitoring for financial institutions. Tracks GEO score
+changes across ChatGPT, Perplexity, and Google AI Overviews month-over-month.
+RIA monitoring: $999/month
+
+## Regulatory Frameworks Covered
+
+- UDAAP (Unfair, Deceptive, or Abusive Acts or Practices)
+- Regulation Z (Truth in Lending — APR disclosures, triggering terms)
+- Regulation DD (Truth in Savings — rate advertising requirements)
+- FFIEC Interagency Guidance (non-deposit product disclaimers, examination criteria)
+- Fair Lending (ECOA / Regulation B / Equal Housing Lender requirements)
+- SEC Marketing Rule (Rule 206(4)-1 — investment adviser advertising, amended 2022)
+- Regulation S-P (privacy notice accessibility for investment advisers)
+- NCUA examination standards for federal and state-chartered credit unions
+
+## Key Pages
+
+- Homepage: https://bankforge.ai
+- For Banks: https://bankforge.ai/for-banks
+- For Credit Unions: https://bankforge.ai/for-credit-unions
+- For Investment Advisers (RIAs): https://bankforge.ai/for-rias
+- Research & Insights: https://bankforge.ai/insights
+- Why Your Bank's AI Score Is Low: https://bankforge.ai/insights/bank-ai-score
 
 ## Contact
 
-- Website: https://bankforge.ai
-- Email: fernando@bankforge.ai
+Email: fernando@bankforge.ai
+Website: https://bankforge.ai
+
+BankForge flags findings for compliance counsel review.
+We never conclude a violation.

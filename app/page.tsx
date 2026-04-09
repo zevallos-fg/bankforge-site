@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ScanDemo from './components/ScanDemo';
+import DemoRequestForm from './components/DemoRequestForm';
 
 // ─── Signal Card Data ───────────────────────────────────────────────
 
@@ -249,13 +250,14 @@ export default function HomePage() {
             AI &amp; digital marketing visibility. One scan. Three perspectives &mdash; your
             examiners, your customers, and your competitors on AI.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="mailto:fernando@bankforge.ai"
-              className="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-            >
-              Request a Review
-            </Link>
+          <div className="flex flex-col items-center gap-4">
+            <DemoRequestForm
+              audienceType={tab === 'ria' ? 'ria' : 'bank'}
+              sourcePage="/"
+              sourceCta="hero_primary"
+              ctaLabel="Request a Review"
+              buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
+            />
             <button
               onClick={() => setScanOpen(true)}
               className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm"
@@ -512,13 +514,14 @@ export default function HomePage() {
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
               The BankForge team reviews every finding before delivery. No vendor energy. No AI noise.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="mailto:fernando@bankforge.ai"
-                className="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-              >
-                Request a Review
-              </Link>
+            <div className="flex flex-col items-center gap-4">
+              <DemoRequestForm
+                audienceType={tab === 'ria' ? 'ria' : 'bank'}
+                sourcePage="/"
+                sourceCta="cta_block"
+                ctaLabel="Request a Review"
+                buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
+              />
               <button
                 onClick={() => setScanOpen(true)}
                 className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm"
