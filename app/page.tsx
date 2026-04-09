@@ -207,7 +207,7 @@ export default function HomePage() {
             <Link href="/insights" className="px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
               Insights
             </Link>
-            <Link href="/insights/bank-ai-score" className="px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+            <Link href="/geo-score" className="px-3 py-2 text-sm text-gray-300 hover:text-white transition-colors">
               GEO Score
             </Link>
           </div>
