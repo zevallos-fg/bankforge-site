@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import DemoRequestForm from './components/DemoRequestForm';
 
 // ─── Signal Card Data ───────────────────────────────────────────────
 
@@ -590,19 +589,18 @@ export default function HomePage() {
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
               The BankForge team reviews every finding before delivery. No vendor energy. No AI noise.
             </p>
-            <div className="flex flex-col items-center gap-4">
-              <DemoRequestForm
-                audienceType={tab === 'ria' ? 'ria' : 'bank'}
-                sourcePage="/"
-                sourceCta="cta_block"
-                ctaLabel="Request a Review"
-                buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-              />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/ai-seo-score"
-                className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm"
+                className="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm text-center"
               >
-                See what your AI SEO score is
+                See your AI SEO Score
+              </Link>
+              <Link
+                href="/sec-marketing-rule-audit"
+                className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm text-center"
+              >
+                2025 SEC Marketing Rule Audit
               </Link>
             </div>
           </div>
