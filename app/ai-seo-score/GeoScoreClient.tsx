@@ -87,9 +87,9 @@ const pricingTiers = [
 ];
 
 const stats = [
-  { value: '45.8 avg', label: 'Average AI SEO score across 4,300+ banks (March 2026)' },
-  { value: '16.6%', label: 'Banks scoring below 40 \u2014 invisible on AI search' },
-  { value: '78%', label: 'Community banks with no schema markup' },
+  { value: null, stacked: ['4,309', '4,374'], label: 'Banks & Credit Unions scanned' },
+  { value: '45.8 avg', stacked: null, label: 'Average AI SEO score' },
+  { value: '16.6%', stacked: null, label: 'Score below 40 \u2014 invisible on AI search' },
 ];
 
 function ArrowRight({ color = '#1B5299' }: { color?: string }) {
@@ -143,23 +143,52 @@ export default function GeoScorePageClient() {
       {/* ─── HERO — scan input ─────────────────────────────────── */}
       <section className="pt-24 pb-16 px-6" style={{ backgroundColor: '#0F2341' }}>
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-xs font-medium tracking-wide uppercase mb-4" style={{ color: '#7EB3E8' }}>
-            AI SEO Score
+          {/* Eyebrow */}
+          <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '1.3px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '14px' }}>
+            For Community Banks &amp; Credit Unions
           </p>
+
+          {/* Red pill badge */}
+          <div className="flex justify-center mb-5">
+            <span
+              className="inline-flex items-center gap-2"
+              style={{ backgroundColor: 'rgba(163,45,45,0.2)', border: '0.5px solid rgba(163,45,45,0.5)', borderRadius: '20px', padding: '5px 14px', fontSize: '11px', fontWeight: 500, color: '#F5A0A0' }}
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#F5A0A0] opacity-75" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F5A0A0]" />
+              </span>
+              16.6% of banks are invisible to AI search. Are you?
+            </span>
+          </div>
+
+          {/* H1 */}
           <h1
             className="text-4xl text-white leading-tight mb-5"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Your bank is invisible on AI search. Here&apos;s how to fix it.
+            Your bank is invisible on AI search.
+            <br />
+            <em style={{ color: '#7EB3E8' }}>BankForge helps you fix it.</em>
           </h1>
-          <p className="text-blue-200/80 text-lg leading-relaxed max-w-xl mx-auto">
-            BankForge has computed AI SEO scores across 4,300+ community banks.
-            The average score is 45.8 out of 100. 16.6% score below 40 &mdash;
-            invisible on ChatGPT, Perplexity, and Google AI Overviews when
-            customers search for local banking services.
+
+          {/* Subheadline */}
+          <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', maxWidth: '520px', lineHeight: 1.7, margin: '0 auto 28px' }}>
+            The gap between the top and bottom performer in the same market
+            averages <strong style={{ color: 'rgba(255,255,255,0.85)', fontWeight: 400 }}>35 points</strong>. The institution that fixes it first owns
+            the query &mdash; and the customer.
           </p>
+
+          {/* Scan input with gold glow */}
           {!scanResult ? (
-            <GeoScanInput onResult={setScanResult} />
+            <div>
+              <div className="bf-glow max-w-lg mx-auto mt-4">
+                <GeoScanInput onResult={setScanResult} />
+              </div>
+              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '10px' }}>
+                Reads from our March 2026 data &mdash; updated monthly
+              </p>
+            </div>
           ) : (
             <div className="mt-8 text-center">
               <p className="text-white/80 text-sm">
@@ -173,6 +202,26 @@ export default function GeoScorePageClient() {
               </button>
             </div>
           )}
+
+          {/* Stat strip */}
+          <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.07)', paddingTop: '32px', marginTop: '32px' }}>
+            <div className="grid grid-cols-3 gap-4">
+              {stats.map((s, i) => (
+                <div key={i} className="text-center" style={{ borderRight: i < 2 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
+                  {s.stacked ? (
+                    <div className="flex items-center justify-center gap-1.5">
+                      <span style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: '#7EB3E8' }}>{s.stacked[0]}</span>
+                      <span style={{ color: 'rgba(255,255,255,0.2)' }}>&middot;</span>
+                      <span style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: '#7EB3E8' }}>{s.stacked[1]}</span>
+                    </div>
+                  ) : (
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: '28px', color: '#7EB3E8' }}>{s.value}</p>
+                  )}
+                  <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.38)', fontWeight: 300, maxWidth: '140px', margin: '4px auto 0' }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -327,7 +376,15 @@ export default function GeoScorePageClient() {
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {stats.map((s, i) => (
             <div key={i}>
-              <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.value}</p>
+              {s.stacked ? (
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <span className="text-3xl" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.stacked[0]}</span>
+                  <span className="text-gray-400">&middot;</span>
+                  <span className="text-3xl" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.stacked[1]}</span>
+                </div>
+              ) : (
+                <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.value}</p>
+              )}
               <p className="text-sm text-gray-500">{s.label}</p>
             </div>
           ))}

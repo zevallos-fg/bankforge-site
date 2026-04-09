@@ -33,6 +33,25 @@ body {
   100% { background-position: -100% center; }
 }
 
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(200,168,75,0.25), 0 0 12px 3px rgba(232,192,85,0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(245,217,122,0.6), 0 0 18px 5px rgba(232,192,85,0.3);
+  }
+}
+
+.bf-glow {
+  border-radius: 9px;
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
 .bf-shimmer {
   background: linear-gradient(90deg, #C8A84B, #F5D97A, #E8C055, #F5D97A, #C8A84B);
   background-size: 250% auto;

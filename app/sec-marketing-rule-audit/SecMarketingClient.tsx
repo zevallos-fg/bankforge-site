@@ -96,35 +96,35 @@ export default function SecMarketingClient() {
 
           {/* Subheadline */}
           <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', maxWidth: '520px', lineHeight: 1.7, margin: '0 auto 32px' }}>
-            The SEC&apos;s December 2025 Risk Alert identified Marketing Rule (Rule 206(4)-1)
-            compliance gaps as a top examination deficiency. <strong className="text-white">BankForge has already scanned
-            23,000+ RIAs</strong> — testimonial disclosures, third-party ratings, performance
-            advertising, and AI search visibility. See exactly where you stand before your
-            examiner does.
+            The December 2025 Risk Alert identified Rule 206(4)-1 gaps as
+            a top examination deficiency. See exactly where you stand
+            before your examiner does.
           </p>
 
           {/* Scan input */}
           <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', marginBottom: '8px' }}>
             See your SEC Marketing Audit findings.
           </p>
-          <div className="flex max-w-md mx-auto" style={{ border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', overflow: 'hidden' }}>
-            <input
-              type="text"
-              placeholder="youradviserfirm.com"
-              value={domain}
-              onChange={(e) => setDomain(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleScan()}
-              style={{ flex: 1, background: 'rgba(255,255,255,0.06)', border: 'none', padding: '13px 16px', fontSize: '13px', color: '#fff', outline: 'none' }}
-            />
-            <button
-              onClick={handleScan}
-              style={{ background: '#1B5299', color: '#fff', padding: '13px 20px', fontSize: '12px', fontWeight: 500, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
-            >
-              See findings &darr;
-            </button>
+          <div className="bf-glow max-w-md mx-auto">
+            <div className="flex" style={{ border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', overflow: 'hidden' }}>
+              <input
+                type="text"
+                placeholder="youradviserfirm.com"
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleScan()}
+                style={{ flex: 1, background: 'rgba(255,255,255,0.06)', border: 'none', padding: '13px 16px', fontSize: '13px', color: '#fff', outline: 'none' }}
+              />
+              <button
+                onClick={handleScan}
+                style={{ background: '#1B5299', color: '#fff', padding: '13px 20px', fontSize: '12px', fontWeight: 500, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              >
+                See findings &darr;
+              </button>
+            </div>
           </div>
           <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>
-            Reads from our {getCorpusMonthLabel()} corpus scan &middot; 1 lookup per firm per 72 hrs
+            Reads from our {getCorpusMonthLabel()} data &middot; 1 lookup per firm per 72 hrs
           </p>
 
           {/* Found confirmation in hero */}
@@ -144,9 +144,9 @@ export default function SecMarketingClient() {
           <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.07)', paddingTop: '32px', marginTop: '32px' }}>
             <div className="grid grid-cols-3 gap-4">
               {[
-                { num: '23,000+', label: 'RIAs already in our corpus' },
-                { num: '10,480', label: 'RIAs with testimonial signals detected' },
-                { num: '33.3 avg', label: 'Average RIA AI SEO score out of 100' },
+                { num: '23,000+', label: 'Investment advisers scanned' },
+                { num: '10,480', label: 'With testimonial signals detected' },
+                { num: '45%', label: 'Have at least one High finding' },
               ].map((s, i) => (
                 <div key={i} className="text-center" style={{ borderRight: i < 2 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
                   <p style={{ fontFamily: 'var(--font-display)', fontSize: '28px', color: '#7EB3E8' }}>{s.num}</p>
@@ -168,7 +168,7 @@ export default function SecMarketingClient() {
                 <h3 className="text-xl font-medium text-gray-900">{firmName}</h3>
                 <p className="text-sm text-gray-500">SEC-registered &middot; $100M&ndash;$1B AUM</p>
               </div>
-              <p className="text-xs text-gray-400">{getCorpusMonth()} corpus scan</p>
+              <p className="text-xs text-gray-400">{getCorpusMonthLabel()} data</p>
             </div>
 
             {/* Two-column cards */}
