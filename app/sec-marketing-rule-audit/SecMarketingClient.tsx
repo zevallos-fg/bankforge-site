@@ -126,46 +126,16 @@ export default function SecMarketingClient() {
             Reads from our March 2026 corpus scan &middot; 1 lookup per firm per 72 hrs
           </p>
 
-          {/* Scan results panel */}
+          {/* Found confirmation in hero */}
           {showResults && (
-            <div className="mt-8 text-left" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '20px' }}>
-              <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
-                <div>
-                  <p style={{ fontSize: '13px', fontWeight: 500, color: '#fff' }}>{firmName}</p>
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>SEC-registered &middot; $320M AUM &middot; March 2026 corpus scan</p>
-                </div>
-                <span style={{ backgroundColor: 'rgba(163,45,45,0.2)', border: '1px solid rgba(163,45,45,0.5)', borderRadius: '20px', padding: '4px 12px', fontSize: '11px', color: '#F5A0A0' }}>
-                  3 High findings
-                </span>
-              </div>
-              <div className="space-y-3">
-                {DEMO_FINDINGS.map((f, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        fontWeight: 500,
-                        padding: '2px 8px',
-                        borderRadius: '4px',
-                        whiteSpace: 'nowrap',
-                        marginTop: '2px',
-                        backgroundColor: f.severity === 'HIGH' ? 'rgba(163,45,45,0.3)' : 'rgba(154,120,32,0.3)',
-                        color: f.severity === 'HIGH' ? '#F5A0A0' : '#E8C055',
-                      }}
-                    >
-                      {f.severity}
-                    </span>
-                    <div>
-                      <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>{f.text}</p>
-                      <p style={{ fontSize: '11px', color: 'rgba(126,179,232,0.7)', marginTop: '2px' }}>{f.ref}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', textAlign: 'center', marginTop: '16px' }}>
-                Full report includes 6 more findings. Request the $4,500 audit to receive
-                the complete DOCX with regulatory citations, severity grades, and peer benchmarks.
-              </p>
+            <div className="mt-8 text-center">
+              <p className="text-white/80 text-sm">{'\u2713'} Found {firmName}</p>
+              <button
+                onClick={() => document.getElementById('sec-scan-results')?.scrollIntoView({ behavior: 'smooth' })}
+                className="text-white/60 text-xs mt-2 underline cursor-pointer"
+              >
+                Jump to results &darr;
+              </button>
             </div>
           )}
 
@@ -186,6 +156,94 @@ export default function SecMarketingClient() {
           </div>
         </div>
       </section>
+
+      {/* ─── SCAN RESULTS (white section below hero) ──────────── */}
+      {showResults && (
+        <section id="sec-scan-results" className="py-16 px-6 bg-white border-b border-gray-100">
+          <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-6">
+              <div>
+                <h3 className="text-xl font-medium text-gray-900">{firmName}</h3>
+                <p className="text-sm text-gray-500">SEC-registered &middot; $100M&ndash;$1B AUM</p>
+              </div>
+              <p className="text-xs text-gray-400">2026-03 corpus scan</p>
+            </div>
+
+            {/* Two-column cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              {/* LEFT — Marketing Rule Risk */}
+              <div className="rounded-lg p-5" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Marketing Rule Risk</p>
+                <p className="text-5xl font-bold mb-2" style={{ color: '#A32D2D', fontFamily: 'var(--font-display)' }}>High</p>
+                <div className="w-full h-2.5 bg-gray-200 rounded-full mb-3">
+                  <div className="h-2.5 rounded-full" style={{ width: '75%', background: 'linear-gradient(to right, #2A7A2A, #C8820A, #A32D2D)' }} />
+                </div>
+                <p className="text-sm text-gray-600 mb-3">3 High &middot; 2 Medium findings detected</p>
+                <div className="rounded p-2.5" style={{ backgroundColor: '#FEF5F5', border: '0.5px solid #F0C0C0' }}>
+                  <p className="text-xs leading-relaxed" style={{ color: '#7A0000' }}>
+                    {'\u26A0'} Dec 2025 SEC Risk Alert — patterns match top cited deficiency categories.
+                  </p>
+                </div>
+              </div>
+
+              {/* RIGHT — Marketing Compliance Signals */}
+              <div className="rounded-lg p-5" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Marketing Compliance Signals</p>
+                <div className="flex gap-4 mb-4">
+                  <span className="text-sm"><span className="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style={{ backgroundColor: '#A32D2D' }} />3 High</span>
+                  <span className="text-sm"><span className="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style={{ backgroundColor: '#C8820A' }} />2 Medium</span>
+                </div>
+                <p className="text-xs text-gray-500 mb-2">Top flags:</p>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded mt-0.5 shrink-0" style={{ backgroundColor: '#EBF1FA', color: '#1B5299' }}>206(4)-1</span>
+                    <div>
+                      <p className="text-sm text-gray-700">Testimonial displayed without compensation disclosure or material conditions legend</p>
+                      <p className="text-xs text-gray-400">Homepage — About section</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded mt-0.5 shrink-0" style={{ backgroundColor: '#EBF1FA', color: '#1B5299' }}>206(4)-1</span>
+                    <div>
+                      <p className="text-sm text-gray-700">Third-party rating shown without criteria, date range, or compensation disclosure</p>
+                      <p className="text-xs text-gray-400">Homepage — Awards section</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-400 mt-3">Full report includes 3 more findings</p>
+              </div>
+            </div>
+
+            {/* Technical Signals */}
+            <div className="mb-6">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Technical Signals</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <SigCard icon={'\u26A0\uFE0F'} name="AI SEO Score" value="33 / 100" desc="Below average. Not visible on AI search for adviser queries." color="amber" />
+                <SigCard icon={'\u2715'} name="DMARC" value="Missing" desc="Prevents email spoofing. Missing = FFIEC flag." color="red" />
+                <SigCard icon={'\u26A0\uFE0F'} name="Reg S-P Privacy" value="Not accessible" desc="Privacy notice not linked from homepage or contact page." color="amber" />
+                <SigCard icon={'\u2713'} name="SSL / TLS" value="TLSv1.3" desc="Encrypts traffic. TLS 1.3 = gold standard." color="green" />
+                <SigCard icon={'\u26A0\uFE0F'} name="DKIM" value="Not configured" desc="Cryptographic email authentication missing." color="amber" />
+                <SigCard icon={'\u26A0\uFE0F'} name="Web Activity" value="Moderate" desc="Content freshness signal for AI search engines." color="amber" />
+              </div>
+            </div>
+
+            {/* CTA row */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-lg px-5 py-4" style={{ backgroundColor: '#F8F9FB' }}>
+              <p style={{ fontSize: '13px', color: '#555', fontWeight: 300 }}>
+                <span style={{ fontWeight: 500, color: '#1a1a1a' }}>Full report includes 3 more findings</span> with complete regulatory citations, severity grades, Form ADV cross-reference, and peer benchmarks.
+              </p>
+              <a
+                href="mailto:outreach@bankforge.ai?subject=2025%20SEC%20Marketing%20Rule%20Audit"
+                className="shrink-0 text-white font-medium rounded-md text-xs transition-colors text-center"
+                style={{ backgroundColor: '#1B5299', padding: '10px 22px' }}
+              >
+                Request Audit — $4,500
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── WHAT WE SURFACE ───────────────────────────────────── */}
       <section className="py-12 px-6">
@@ -365,6 +423,21 @@ export default function SecMarketingClient() {
           50% { opacity: 0.3; }
         }
       `}</style>
+    </div>
+  );
+}
+
+function SigCard({ icon, name, value, desc, color }: { icon: string; name: string; value: string; desc: string; color: 'green' | 'amber' | 'red' }) {
+  const bg = color === 'green' ? '#F0FDF4' : color === 'red' ? '#FEF2F2' : '#FAFAFA';
+  const bdr = color === 'green' ? '#BBF7D0' : color === 'red' ? '#FECACA' : '#E5E7EB';
+  return (
+    <div className="rounded-lg p-2.5" style={{ backgroundColor: bg, border: `1px solid ${bdr}` }}>
+      <div className="flex items-center gap-1 mb-1">
+        <span className="text-sm">{icon}</span>
+        <span className="text-xs font-medium text-gray-700">{name}</span>
+      </div>
+      <p className="text-xs text-gray-600 mb-1">{value}</p>
+      <p className="text-[10px] text-gray-400 leading-relaxed">{desc}</p>
     </div>
   );
 }
