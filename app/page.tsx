@@ -153,6 +153,7 @@ function renderSignalText(html: string) {
 export default function HomePage() {
   const [tab, setTab] = useState<'bank' | 'ria'>('bank');
   const [scanOpen, setScanOpen] = useState(false);
+  const [mobileNav, setMobileNav] = useState(false);
 
   const cards = tab === 'bank' ? bankCards : riaCards;
   const additionalSignals = tab === 'bank' ? bankAdditionalSignals : riaAdditionalSignals;
@@ -212,13 +213,31 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <Link
-            href="mailto:fernando@bankforge.ai"
-            className="bg-white text-bf-navy-deep text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            Request a Call
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="mailto:fernando@bankforge.ai"
+              className="bg-white text-bf-navy-deep text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              Request a Call
+            </Link>
+            <button
+              className="md:hidden text-white p-2 text-xl"
+              onClick={() => setMobileNav(!mobileNav)}
+              aria-label="Menu"
+            >
+              {mobileNav ? '\u2715' : '\u2630'}
+            </button>
+          </div>
         </div>
+        {mobileNav && (
+          <div className="md:hidden border-t border-white/10 py-2">
+            <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Banks</Link>
+            <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Credit Unions</Link>
+            <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Investment Advisers</Link>
+            <Link href="/insights" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Insights</Link>
+            <Link href="/geo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>GEO Score</Link>
+          </div>
+        )}
       </nav>
 
       {/* ─── HERO ──────────────────────────────────────────────── */}
@@ -250,17 +269,19 @@ export default function HomePage() {
             AI &amp; digital marketing visibility. One scan. Three perspectives &mdash; your
             examiners, your customers, and your competitors on AI.
           </p>
-          <div className="flex flex-col items-center gap-4">
-            <DemoRequestForm
-              audienceType={tab === 'ria' ? 'ria' : 'bank'}
-              sourcePage="/"
-              sourceCta="hero_primary"
-              ctaLabel="Request a Review"
-              buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-            />
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="mailto:fernando@bankforge.ai"
+              className="bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors text-center"
+            >
+              Request a Review
+            </a>
             <button
-              onClick={() => setScanOpen(true)}
-              className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm"
+              onClick={() =>
+                document.getElementById('what-bankforge-finds')
+                  ?.scrollIntoView({ behavior: 'smooth' })
+              }
+              className="border border-white/30 text-white px-6 py-3 rounded-lg text-sm hover:border-white/60 transition-colors"
             >
               See what we find
             </button>
@@ -269,7 +290,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── SIGNAL CARDS ──────────────────────────────────────── */}
-      <section className="pt-8 pb-16 px-6">
+      <section id="what-bankforge-finds" className="pt-8 pb-16 px-6">
         <div className="max-w-5xl mx-auto">
           <p className="text-bf-navy text-xs font-medium tracking-wide uppercase mb-3">
             What BankForge finds

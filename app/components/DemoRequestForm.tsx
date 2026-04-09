@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 
 interface DemoRequestFormProps {
@@ -10,24 +9,30 @@ interface DemoRequestFormProps {
   buttonClassName?: string;
 }
 
+type State = 'idle' | 'open' | 'submitting' | 'success' | 'error';
+
 export default function DemoRequestForm({
   audienceType,
   sourcePage,
   sourceCta,
   ctaLabel,
-  buttonClassName = 'bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm',
+  buttonClassName,
 }: DemoRequestFormProps) {
+  const [state, setState] = useState<State>('idle');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
+  const defaultBtnClass =
+    'bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors cursor-pointer';
 
+  async function handleSubmit() {
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid work email.');
+      return;
+    }
+    setState('submitting');
+    setError('');
     try {
       const res = await fetch('/api/demo-request', {
         method: 'POST',
@@ -40,53 +45,77 @@ export default function DemoRequestForm({
           source_cta: sourceCta,
         }),
       });
-
-      if (res.ok) {
-        setSubmitted(true);
-      } else {
-        const data = await res.json();
-        setError(data.error || 'Something went wrong. Please try again.');
-      }
+      if (!res.ok) throw new Error('Failed');
+      setState('success');
     } catch {
-      setError('Network error. Please try again.');
-    } finally {
-      setSubmitting(false);
+      setState('error');
+      setError('Something went wrong. Please try again.');
     }
   }
 
-  if (submitted) {
+  // DEFAULT: button only — no inputs visible
+  if (state === 'idle') {
     return (
-      <p className="text-sm text-gray-600">
-        We&apos;ll be in touch within one business day.
+      <button
+        onClick={() => setState('open')}
+        className={buttonClassName || defaultBtnClass}
+      >
+        {ctaLabel}
+      </button>
+    );
+  }
+
+  // SUCCESS STATE
+  if (state === 'success') {
+    return (
+      <p className="text-sm text-white/80 py-2">
+        ✓ We&apos;ll be in touch within one business day.
       </p>
     );
   }
 
+  // FORM STATE (open / submitting / error)
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-2 w-full max-w-md">
+    <div className="flex flex-col items-center gap-3 w-full max-w-sm mx-auto">
       <input
         type="email"
-        required
         placeholder="Work email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gray-400"
+        disabled={state === 'submitting'}
+        autoFocus
+        className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/50 focus:border-white/60 focus:outline-none"
       />
       <input
         type="text"
-        placeholder="Name (optional)"
+        placeholder="Your name (optional)"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gray-400"
+        disabled={state === 'submitting'}
+        className="w-full rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/50 focus:border-white/60 focus:outline-none"
       />
+      {error && (
+        <p className="w-full text-xs text-red-300">{error}</p>
+      )}
       <button
-        type="submit"
-        disabled={submitting}
-        className={`${buttonClassName} disabled:opacity-50 shrink-0 whitespace-nowrap`}
+        onClick={handleSubmit}
+        disabled={state === 'submitting'}
+        className={
+          (buttonClassName || defaultBtnClass) +
+          ' w-full disabled:opacity-60'
+        }
       >
-        {submitting ? 'Sending...' : ctaLabel}
+        {state === 'submitting' ? 'Sending...' : ctaLabel}
       </button>
-      {error && <p className="text-red-600 text-xs w-full">{error}</p>}
-    </form>
+      <button
+        onClick={() => {
+          setState('idle');
+          setError('');
+        }}
+        className="text-xs text-white/40 hover:text-white/60 transition-colors cursor-pointer"
+      >
+        ← Cancel
+      </button>
+    </div>
   );
 }
