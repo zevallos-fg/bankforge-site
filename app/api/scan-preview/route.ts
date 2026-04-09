@@ -4,23 +4,38 @@ import { createClient } from '@supabase/supabase-js';
 // Rate limit: 1 scan per IP per 72 hours
 const scanHistory = new Map<string, number>();
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+function normalizeDomain(input: string): string {
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, '')
+    .replace(/^www\./, '')
+    .replace(/\/.*$/, '');
+}
+
 export async function GET(req: NextRequest) {
-  const domain = req.nextUrl.searchParams.get('domain');
-  if (!domain) {
+  const rawDomain = req.nextUrl.searchParams.get('domain');
+  if (!rawDomain) {
     return NextResponse.json({ error: 'Missing domain parameter' }, { status: 400 });
   }
 
   // Rate limiting by IP
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? req.headers.get('x-real-ip') ?? 'unknown';
+  const ip =
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    req.headers.get('x-real-ip') ??
+    'unknown';
   const now = Date.now();
   const last = scanHistory.get(ip);
-  const WINDOW = 72 * 60 * 60 * 1000; // 72 hours
+  const WINDOW = 72 * 60 * 60 * 1000;
 
   if (last && now - last < WINDOW) {
     return NextResponse.json(
       {
         error: 'rate_limited',
-        message: 'One preview scan is available every 72 hours. Request a full review for immediate access.',
+        message:
+          'One preview scan is available every 72 hours. Request a full review for immediate access.',
         retryAfter: Math.ceil((last + WINDOW - now) / 3600000) + ' hours',
       },
       { status: 429 },
@@ -35,116 +50,167 @@ export async function GET(req: NextRequest) {
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);
+  const domain = normalizeDomain(rawDomain);
 
-  const cleanDomain = domain
-    .trim()
-    .toLowerCase()
-    .replace(/^https?:\/\//, '')
-    .replace(/^www\./, '')
-    .replace(/\/.*$/, '');
-
-  // Query entity_registry — exact match on normalized bare domain
+  // Step 1: resolve entity
   let entityResult = await supabase
     .from('entity_registry')
-    .select('entity_id, entity_name, domain, entity_type, asset_tier, primary_msa')
-    .eq('domain', cleanDomain)
+    .select('entity_id, entity_name, domain, fdic_cert, entity_type')
+    .eq('domain', domain)
     .in('entity_type', ['bank', 'ria', 'credit_union'])
-    .limit(1)
     .maybeSingle();
 
-  // Fallback: try with www. prefix if exact match misses
   if (!entityResult.data) {
     entityResult = await supabase
       .from('entity_registry')
-      .select('entity_id, entity_name, domain, entity_type, asset_tier, primary_msa')
-      .eq('domain', `www.${cleanDomain}`)
+      .select('entity_id, entity_name, domain, fdic_cert, entity_type')
+      .eq('domain', `www.${domain}`)
       .in('entity_type', ['bank', 'ria', 'credit_union'])
-      .limit(1)
       .maybeSingle();
   }
 
   const entity = entityResult.data;
-
   if (!entity) {
     return NextResponse.json({ found: false });
   }
 
-  // Query bank_monthly_baseline for March 2026 data
+  // Step 2: get baseline (most recent repdte)
   const { data: baseline } = await supabase
     .from('bank_monthly_baseline')
-    .select('geo_visibility_score, signal_checks_raw, gbp_raw, dns_security_raw, bank_compliance_raw')
+    .select(
+      'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw',
+    )
     .eq('entity_id', entity.entity_id)
-    .eq('repdte', '2026-03')
+    .is('deleted_at', null)
+    .order('repdte', { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   // Record scan in rate limit map
   scanHistory.set(ip, now);
-
-  // Cleanup old entries (older than 72 hours)
   for (const [key, timestamp] of scanHistory) {
-    if (now - timestamp > WINDOW) {
-      scanHistory.delete(key);
-    }
+    if (now - timestamp > WINDOW) scanHistory.delete(key);
   }
 
   if (!baseline) {
     return NextResponse.json({
       found: true,
-      entity_name: entity.entity_name,
-      domain: entity.domain,
-      entity_type: entity.entity_type,
-      asset_tier: entity.asset_tier,
-      primary_msa: entity.primary_msa,
-      geo_visibility_score: null,
+      entity: {
+        name: entity.entity_name,
+        domain: entity.domain,
+        fdic_cert: entity.fdic_cert,
+        entity_type: entity.entity_type,
+        asset_tier: null,
+        location: null,
+      },
+      geo: { score: null, peer_avg: null, peer_p75: null, percentile: null, peer_count: null, peer_state: null, peer_asset_tier: null, top_peer_score: null, top_peer_name: null },
+      signals: { gbp_claimed: null, gbp_rating: null, gbp_reviews: null, dmarc_present: null, dmarc_policy: null, dkim_present: null, spf_present: null, ssl_health: null, tls_version: null, cert_expiry_days: null, web_velocity: null, last_capture: null },
+      compliance: { total: 0, high: 0, medium: 0, low: 0, top_flags: [] },
+      repdte: null,
     });
   }
 
-  // Parse findings from bank_compliance_raw
-  const findings: Array<{ description: string; severity: string }> = [];
-  const complianceRaw = baseline.bank_compliance_raw as Record<string, unknown> | null;
-  if (complianceRaw) {
-    const findingsArr = (complianceRaw.findings ?? complianceRaw.complianceObservations) as Array<Record<string, unknown>> | undefined;
-    if (Array.isArray(findingsArr)) {
-      for (const f of findingsArr) {
-        findings.push({
-          description: String(f.description ?? f.observation ?? f.finding ?? ''),
-          severity: String(f.severity ?? 'MEDIUM').toUpperCase(),
-        });
-      }
+  // Step 3: parse benchmark_context
+  const bc = baseline.benchmark_context as Record<string, any> | null;
+  const geoSignals = bc?.signals?.geo_score as Record<string, any> | undefined;
+  const peerGroup = bc?.peer_group as Record<string, any> | undefined;
+
+  // Step 4: get top peer by GEO score in same state
+  let topPeerScore: number | null = null;
+  let topPeerName: string | null = null;
+  const peerState = (baseline as any).institution_state ?? peerGroup?.state ?? null;
+
+  if (peerState) {
+    const { data: topPeerBaseline } = await supabase
+      .from('bank_monthly_baseline')
+      .select('entity_id, geo_visibility_score')
+      .eq('institution_state', peerState)
+      .eq('repdte', baseline.repdte)
+      .neq('entity_id', entity.entity_id)
+      .is('deleted_at', null)
+      .not('geo_visibility_score', 'is', null)
+      .order('geo_visibility_score', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (topPeerBaseline) {
+      topPeerScore = topPeerBaseline.geo_visibility_score as number;
+      const { data: topEnt } = await supabase
+        .from('entity_registry')
+        .select('entity_name')
+        .eq('entity_id', topPeerBaseline.entity_id)
+        .single();
+      topPeerName = topEnt?.entity_name ?? null;
     }
   }
 
-  // Parse signal checks for additional findings
-  const signalChecks = baseline.signal_checks_raw as Record<string, unknown> | null;
-  if (signalChecks?.disclosures) {
-    const disclosures = signalChecks.disclosures as Record<string, unknown>;
-    if (Array.isArray(disclosures.findings)) {
-      for (const f of disclosures.findings as Array<Record<string, unknown>>) {
-        findings.push({
-          description: String(f.description ?? f.label ?? ''),
-          severity: String(f.severity ?? 'MEDIUM').toUpperCase(),
-        });
-      }
-    }
-  }
+  // Step 5: parse compliance findings
+  const complianceRaw = baseline.bank_compliance_raw as Record<string, any> | null;
+  const rawFindings = (complianceRaw?.findings ?? complianceRaw?.complianceObservations ?? []) as any[];
+  const high = rawFindings.filter((f: any) => String(f.severity ?? '').toUpperCase() === 'HIGH');
+  const medium = rawFindings.filter((f: any) => String(f.severity ?? '').toUpperCase() === 'MEDIUM');
+  const low = rawFindings.filter((f: any) => String(f.severity ?? '').toUpperCase() === 'LOW');
 
-  const gbpRaw = baseline.gbp_raw as Record<string, unknown> | null;
-  const dnsRaw = baseline.dns_security_raw as Record<string, unknown> | null;
+  const topFlags = high.slice(0, 2).map((f: any) => ({
+    category: f.category ?? f.framework ?? null,
+    location: f.location ?? f.page ?? null,
+    summary: String(f.finding ?? f.description ?? f.observation ?? '').substring(0, 120),
+  }));
+
+  // Step 6: parse signals
+  const gbp = baseline.gbp_raw as Record<string, any> | null;
+  const dns = baseline.dns_security_raw as Record<string, any> | null;
+  const webArchive = baseline.web_archive_raw as Record<string, any> | null;
+
+  // Derive location from GBP address
+  let location: string | null = null;
+  if (gbp?.address) {
+    const parts = String(gbp.address).split(',').map((s: string) => s.trim());
+    location = parts.length >= 3 ? `${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : String(gbp.address);
+  }
 
   return NextResponse.json({
     found: true,
-    entity_name: entity.entity_name,
-    domain: entity.domain,
-    entity_type: entity.entity_type,
-    asset_tier: entity.asset_tier,
-    primary_msa: entity.primary_msa,
-    geo_visibility_score: baseline.geo_visibility_score,
-    gbp_claimed: gbpRaw?.isClaimed != null ? String(gbpRaw.isClaimed) : null,
-    gbp_rating: gbpRaw?.rating != null ? String(gbpRaw.rating) : null,
-    dmarc_present: dnsRaw?.dmarc_present != null ? String(dnsRaw.dmarc_present) : null,
-    dkim_present: dnsRaw?.dkim_present != null ? String(dnsRaw.dkim_present) : null,
-    ssl_health_tier: dnsRaw?.ssl_health_tier != null ? String(dnsRaw.ssl_health_tier) : null,
-    findings: findings.slice(0, 10),
+    entity: {
+      name: entity.entity_name,
+      domain: entity.domain,
+      fdic_cert: entity.fdic_cert,
+      entity_type: entity.entity_type,
+      asset_tier: peerGroup?.asset_tier ?? null,
+      location,
+    },
+    geo: {
+      score: baseline.geo_visibility_score,
+      peer_avg: geoSignals?.peer_avg ?? null,
+      peer_p75: geoSignals?.peer_p75 ?? null,
+      percentile: geoSignals?.percentile ?? null,
+      peer_count: peerGroup?.peer_count ?? null,
+      peer_state: peerGroup?.state ?? peerState,
+      peer_asset_tier: peerGroup?.asset_tier ?? null,
+      top_peer_score: topPeerScore,
+      top_peer_name: topPeerName,
+    },
+    signals: {
+      gbp_claimed: gbp?.isClaimed ?? null,
+      gbp_rating: gbp?.rating ?? null,
+      gbp_reviews: gbp?.reviewCount ?? null,
+      dmarc_present: dns?.dmarc_present ?? null,
+      dmarc_policy: dns?.dmarc_policy ?? null,
+      dkim_present: dns?.dkim_present ?? null,
+      spf_present: dns?.spf_present ?? null,
+      ssl_health: dns?.ssl_health_tier ?? null,
+      tls_version: dns?.tls_version ?? null,
+      cert_expiry_days: dns?.days_until_expiry ?? null,
+      web_velocity: webArchive?.change_velocity_tier ?? null,
+      last_capture: webArchive?.last_capture_date ?? null,
+    },
+    compliance: {
+      total: rawFindings.length,
+      high: high.length,
+      medium: medium.length,
+      low: low.length,
+      top_flags: topFlags,
+    },
+    repdte: baseline.repdte,
   });
 }

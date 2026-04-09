@@ -262,7 +262,7 @@ export default function HomePage() {
           >
             Know what your website says about you.
             <br />
-            <em style={{ color: '#7EB3E8' }}>Before customers or regulators do.</em>
+            <em style={{ color: '#7EB3E8' }}>Before <span className="font-bold">customers</span> or <span className="font-bold">regulators</span> do.</em>
           </h1>
           <p className="text-blue-200/80 text-lg leading-relaxed mb-8 max-w-xl mx-auto">
             BankForge scans your public digital presence for regulatory compliance gaps and
@@ -479,7 +479,7 @@ export default function HomePage() {
                     className="py-4 px-4 text-gray-700 align-top"
                     style={{ backgroundColor: '#EBF1FA', borderLeft: '2px solid #0F2341', borderRight: '2px solid #0F2341' }}
                   >
-                    Proactive. We surface compliance gaps and digital performance risks before your
+                    <strong>Proactive.</strong> We surface compliance gaps and digital performance risks before your
                     examination cycle &mdash; or your website redesign launch.
                   </td>
                   <td className="py-4 px-4 text-gray-500 bg-gray-50 align-top">
@@ -493,7 +493,7 @@ export default function HomePage() {
                     className="py-4 px-4 text-gray-700 align-top"
                     style={{ backgroundColor: '#EBF1FA', borderLeft: '2px solid #0F2341', borderRight: '2px solid #0F2341' }}
                   >
-                    Compliance + digital intelligence. One scan produces regulatory findings and
+                    <strong>Compliance + digital intelligence.</strong> One scan produces regulatory findings and
                     digital performance signals. Your CCO and CMO get the same intelligence from
                     one engagement.
                   </td>
@@ -508,7 +508,7 @@ export default function HomePage() {
                     className="py-4 px-4 text-gray-700 align-top rounded-b-lg"
                     style={{ backgroundColor: '#EBF1FA', borderLeft: '2px solid #0F2341', borderRight: '2px solid #0F2341', borderBottom: '2px solid #0F2341' }}
                   >
-                    Institution-specific, peer-benchmarked. Every finding is mapped to your
+                    <strong>Institution-specific, peer-benchmarked.</strong> Every finding is mapped to your
                     specific pages and benchmarked against institutions your size in your market.
                   </td>
                   <td className="py-4 px-4 text-gray-500 bg-gray-50 rounded-b-lg align-top">
