@@ -51,7 +51,7 @@ export default function ScanDemo({ onClose }: { onClose: () => void }) {
     setLoadingStep(0);
 
     try {
-      const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/.*$/, '').trim();
+      const cleanDomain = domain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '');
       const res = await fetch(`/api/scan-preview?domain=${encodeURIComponent(cleanDomain)}`);
       const data = await res.json();
 
@@ -279,9 +279,9 @@ function NotFoundCapture({ domain }: { domain: string }) {
   return (
     <div className="py-6">
       <p className="text-gray-600 text-sm leading-relaxed mb-4">
-        We haven&apos;t scanned this domain in our March 2026 scrape. A record has been
-        logged and a manual review will be run. Provide your email address and we&apos;ll
-        get back to you.
+        We haven&apos;t scanned this institution yet. Your request has been logged
+        and we&apos;ll run a manual review. Enter your email below and we&apos;ll
+        reach out when it&apos;s ready.
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input

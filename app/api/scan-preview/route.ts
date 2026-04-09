@@ -36,16 +36,34 @@ export async function GET(req: NextRequest) {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/.*$/, '').toLowerCase().trim();
+  const cleanDomain = domain
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, '')
+    .replace(/^www\./, '')
+    .replace(/\/.*$/, '');
 
-  // Query entity_registry for domain match
-  const { data: entity } = await supabase
+  // Query entity_registry — exact match on normalized bare domain
+  let entityResult = await supabase
     .from('entity_registry')
     .select('entity_id, entity_name, domain, entity_type, asset_tier, primary_msa')
-    .or(`domain.ilike.%${cleanDomain}%`)
+    .eq('domain', cleanDomain)
     .in('entity_type', ['bank', 'ria', 'credit_union'])
     .limit(1)
-    .single();
+    .maybeSingle();
+
+  // Fallback: try with www. prefix if exact match misses
+  if (!entityResult.data) {
+    entityResult = await supabase
+      .from('entity_registry')
+      .select('entity_id, entity_name, domain, entity_type, asset_tier, primary_msa')
+      .eq('domain', `www.${cleanDomain}`)
+      .in('entity_type', ['bank', 'ria', 'credit_union'])
+      .limit(1)
+      .maybeSingle();
+  }
+
+  const entity = entityResult.data;
 
   if (!entity) {
     return NextResponse.json({ found: false });
