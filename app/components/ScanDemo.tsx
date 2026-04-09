@@ -358,7 +358,7 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
               </div>
 
               <a
-                href="mailto:fernando@bankforge.ai?subject=Full%20Findings%20Report%20Request"
+                href="mailto:outreach@bankforge.ai?subject=Full%20Findings%20Report%20Request"
                 className="block w-full text-center bg-bf-navy text-white font-medium py-3 rounded-lg hover:bg-bf-navy-deep transition-colors text-sm"
               >
                 Request your full findings report &rarr;
@@ -434,10 +434,10 @@ function NotFoundCapture({ domain }: { domain: string }) {
       if (res.ok) {
         setSubmitted(true);
       } else {
-        setSubmitError('Something went wrong \u2014 email us directly at fernando@bankforge.ai');
+        setSubmitError('Something went wrong \u2014 email us directly at outreach@bankforge.ai');
       }
     } catch {
-      setSubmitError('Something went wrong \u2014 email us directly at fernando@bankforge.ai');
+      setSubmitError('Something went wrong \u2014 email us directly at outreach@bankforge.ai');
     } finally {
       setSubmitting(false);
     }

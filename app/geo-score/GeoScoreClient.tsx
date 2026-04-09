@@ -132,7 +132,7 @@ export default function GeoScorePageClient() {
             <Link href="/insights" className="hover:text-white transition-colors">Insights</Link>
           </div>
           <Link
-            href="mailto:fernando@bankforge.ai"
+            href="mailto:outreach@bankforge.ai"
             className="bg-white text-bf-navy-deep text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             Request a Call

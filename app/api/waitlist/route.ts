@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: 'BankForge Waitlist <onboarding@resend.dev>',
-      to: 'fernando@bankforge.ai',
+      to: 'outreach@bankforge.ai',
       subject: `New GEO Waitlist — ${bankName}`,
       html: `
         <h2>New GEO Remediation Waitlist Signup</h2>

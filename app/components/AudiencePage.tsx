@@ -45,7 +45,7 @@ export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNot
           </div>
           <div className="flex items-center gap-3">
             <Link
-              href="mailto:fernando@bankforge.ai"
+              href="mailto:outreach@bankforge.ai"
               className="bg-white text-bf-navy-deep text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
               Request a Call
@@ -83,7 +83,7 @@ export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNot
             Know what your website says about you. Before customers or regulators do.
           </p>
           <a
-            href="mailto:fernando@bankforge.ai"
+            href="mailto:outreach@bankforge.ai"
             className="inline-block bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors"
           >
             {ctaText}

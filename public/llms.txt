@@ -85,7 +85,7 @@ RIA monitoring: $999/month
 
 ## Contact
 
-Email: fernando@bankforge.ai
+Email: outreach@bankforge.ai
 Website: https://bankforge.ai
 
 BankForge flags findings for compliance counsel review.
