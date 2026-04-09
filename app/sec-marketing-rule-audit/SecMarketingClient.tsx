@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { getCorpusMonth, getCorpusMonthLabel } from '@/app/lib/corpus-month';
 
 // ─── Simulated findings (always the same regardless of input) ─────────
 
@@ -123,7 +124,7 @@ export default function SecMarketingClient() {
             </button>
           </div>
           <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>
-            Reads from our March 2026 corpus scan &middot; 1 lookup per firm per 72 hrs
+            Reads from our {getCorpusMonthLabel()} corpus scan &middot; 1 lookup per firm per 72 hrs
           </p>
 
           {/* Found confirmation in hero */}
@@ -167,7 +168,7 @@ export default function SecMarketingClient() {
                 <h3 className="text-xl font-medium text-gray-900">{firmName}</h3>
                 <p className="text-sm text-gray-500">SEC-registered &middot; $100M&ndash;$1B AUM</p>
               </div>
-              <p className="text-xs text-gray-400">2026-03 corpus scan</p>
+              <p className="text-xs text-gray-400">{getCorpusMonth()} corpus scan</p>
             </div>
 
             {/* Two-column cards */}

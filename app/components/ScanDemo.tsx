@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getCorpusMonthLabel } from '@/app/lib/corpus-month';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -352,7 +353,7 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
               {/* Section E — Footer */}
               <div className="rounded-lg p-3 mb-4" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
                 <p className="text-xs text-gray-500 leading-relaxed">
-                  This preview is based on BankForge&apos;s {result.repdte ?? 'March 2026'} corpus scan.
+                  This preview is based on BankForge&apos;s {result.repdte ?? getCorpusMonthLabel()} corpus scan.
                   A live real-time scan is available with a compliance review engagement.
                 </p>
               </div>

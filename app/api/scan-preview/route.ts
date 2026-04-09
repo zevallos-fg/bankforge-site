@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getCorpusMonth } from '@/app/lib/corpus-month';
 
 // Rate limit: 1 scan per IP per 72 hours
 const scanHistory = new Map<string, number>();
@@ -74,16 +75,16 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ found: false });
   }
 
-  // Step 2: get baseline (most recent repdte)
+  // Step 2: get baseline (1 month in arrears)
+  const corpusRepdte = getCorpusMonth();
   const { data: baseline } = await supabase
     .from('bank_monthly_baseline')
     .select(
       'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw',
     )
     .eq('entity_id', entity.entity_id)
+    .eq('repdte', corpusRepdte)
     .is('deleted_at', null)
-    .order('repdte', { ascending: false })
-    .limit(1)
     .maybeSingle();
 
   // Record scan in rate limit map
