@@ -203,11 +203,20 @@ export default function BankAiScorePage() {
 
             <p>
               AI visibility isn&apos;t just an individual bank problem — it&apos;s a competitive
-              one. In the Miami MSA, the top bank scores 80 on AI visibility while the
-              bottom bank scores 10. That&apos;s an 8:1 gap within the same market. Consumers
-              asking AI engines &ldquo;what&apos;s the best bank for a checking account near me&rdquo;
-              are getting answers that favor the institutions with structured, complete,
-              authoritative digital presences.
+              one. In the Miami market, the top-ranked institution scored 80 out of 100.
+              The lowest-ranked institution in the same market scored 10. Same city.
+              Same customer base.
+            </p>
+
+            <p>
+              Average bank GEO score nationally: <strong>45.8</strong>.
+              Average RIA GEO score: <strong>33.3</strong>.
+            </p>
+
+            <p>
+              Consumers asking AI engines &ldquo;what&apos;s the best bank for a checking
+              account near me&rdquo; are getting answers that favor the institutions with
+              structured, complete, authoritative digital presences.
             </p>
 
             <h2 style={{ fontFamily: 'var(--font-display)' }}>
@@ -279,7 +288,7 @@ export default function BankAiScorePage() {
             </div>
 
             <p className="text-xs text-gray-400 italic">
-              BankForge flags for counsel review. We never conclude a violation. All
+              BankForge flags findings for compliance counsel review. We never conclude a violation. All
               compliance observations are advisory and should be reviewed by qualified
               compliance counsel before remediation.
             </p>
@@ -293,7 +302,7 @@ export default function BankAiScorePage() {
           <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
             <span style={{ color: '#1B5299' }}>BankForge</span>.ai
           </span>
-          <span>BankForge flags for counsel review. We never conclude a violation.</span>
+          <span>BankForge flags findings for compliance counsel review. We never conclude a violation.</span>
           <span>&copy; 2026</span>
         </div>
       </footer>

@@ -96,7 +96,7 @@ export default function InsightsPage() {
           <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
             <span style={{ color: '#1B5299' }}>BankForge</span>.ai
           </span>
-          <span>BankForge flags for counsel review. We never conclude a violation.</span>
+          <span>BankForge flags findings for compliance counsel review. We never conclude a violation.</span>
           <span>&copy; 2026</span>
         </div>
       </footer>

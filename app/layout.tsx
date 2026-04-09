@@ -16,9 +16,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "BankForge.ai — Compliance Intelligence for Banks & RIAs",
+  title: "BankForge.ai — Know What Your Website Says About You",
   description:
-    "BankForge scans your public digital presence for UDAAP, Reg Z, Reg DD, Fair Lending, and SEC Marketing Rule compliance gaps. Built by practitioners with examiner-side experience at $100B+ institutions.",
+    "BankForge scans bank, credit union, and RIA websites for regulatory compliance gaps and AI visibility signals. Built by practitioners from $100B+ institutions.",
   keywords: [
     "RIA compliance review",
     "Marketing Rule 206(4)-1",
@@ -26,20 +26,23 @@ export const metadata: Metadata = {
     "UDAAP website audit",
     "Reg Z compliance",
     "SEC examination prep",
+    "credit union compliance",
+    "GEO score",
+    "AI visibility",
   ],
   openGraph: {
-    title: "BankForge.ai — Compliance Intelligence for Banks & RIAs",
+    title: "BankForge.ai — Know What Your Website Says About You",
     description:
-      "We scrape your website and run a compliance Ctrl+F against the exact criteria your examiners use. Severity-graded findings. Regulatory citations. Reviewed by the BankForge team.",
+      "BankForge scans bank, credit union, and RIA websites for regulatory compliance gaps and AI visibility signals. One scan. Two lenses. Built by practitioners from $100B+ institutions.",
     url: "https://bankforge.ai",
     siteName: "BankForge.ai",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BankForge.ai — Compliance Intelligence for Banks & RIAs",
+    title: "BankForge.ai — Know What Your Website Says About You",
     description:
-      "Marketing Rule compliance reviews for RIAs. UDAAP and Reg Z monitoring for community banks.",
+      "BankForge scans bank, credit union, and RIA websites for regulatory compliance gaps and AI visibility signals.",
   },
   robots: {
     index: true,

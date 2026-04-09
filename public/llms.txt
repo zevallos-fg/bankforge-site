@@ -2,26 +2,32 @@
 
 > BankForge is a compliance intelligence platform for regulated
 > financial institutions. We scan public digital presences for
-> regulatory compliance gaps and surface findings before the
-> next examination cycle.
+> regulatory compliance gaps and AI visibility signals — before
+> the next examination cycle.
 
 ## What BankForge does
 
-- Scrapes public-facing websites of banks and RIAs
+- Scrapes public-facing websites of banks, credit unions, and RIAs
 - Runs compliance checks against UDAAP, Reg Z, Reg DD,
-  Fair Lending, and SEC Marketing Rule (Rule 206(4)-1) criteria
+  Fair Lending, FFIEC guidance, and SEC Marketing Rule
+  (Rule 206(4)-1) criteria
+- Computes GEO visibility scores across 66,000+ institutions
 - Severity-grades findings (High / Medium / Low) with
   regulatory citations
 - Delivers structured findings reports reviewed by a team
   with examiner-side experience at $100B+ institutions
-- Offers ongoing monthly monitoring with delta alerts
+- Offers GEO Remediation to improve AI search visibility
 
 ## Who we serve
 
-- SEC-registered Investment Advisers (RIAs) — Marketing Rule
-  compliance, Reg S-P, SEC examination preparation
 - Community banks ($500M–$5B assets) — UDAAP, Reg Z, Reg DD,
   Fair Lending, FFIEC digital presence monitoring
+  URL: https://bankforge.ai/for-banks
+- Credit unions — same compliance frameworks under NCUA supervision
+  URL: https://bankforge.ai/for-credit-unions
+- SEC-registered Investment Advisers (RIAs) — Marketing Rule
+  compliance, Reg S-P, SEC examination preparation
+  URL: https://bankforge.ai/for-rias
 
 ## Key regulatory frameworks covered
 
@@ -34,6 +40,28 @@
 - Fair Lending / Equal Credit Opportunity Act
 - FFIEC digital banking examination guidance
 - SAFE Act / RESPA (NMLS identifiers)
+
+## Corpus statistics (March 2026)
+
+- 4,300+ FDIC-insured banks scanned
+- 23,000+ SEC-registered RIAs scanned
+- 4,400+ credit unions scanned
+- Average bank GEO score: 45.8 out of 100
+- Average RIA GEO score: 33.3 out of 100
+- 83.4% of banks have website accessibility issues
+- 92.3% of RIAs have website accessibility issues
+
+## Services
+
+- Compliance Review: one-time structured findings report
+- GEO Remediation: AI visibility improvement for financial
+  institutions (opening June 2026)
+  URL: https://bankforge.ai/geo-remediation
+
+## Research
+
+- Your Bank's AI Score Is Low. Here's Why — and What to Fix
+  URL: https://bankforge.ai/insights/bank-ai-score
 
 ## Contact
 

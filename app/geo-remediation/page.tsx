@@ -87,7 +87,7 @@ export default function GeoRemediationPage() {
 
       {/* Stats */}
       <section className="py-12 px-6 bg-bf-slate">
-        <div className="max-w-3xl mx-auto grid grid-cols-3 gap-6 text-center">
+        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div>
             <p
               className="text-3xl text-bf-navy"
@@ -114,6 +114,15 @@ export default function GeoRemediationPage() {
               80 vs 10
             </p>
             <p className="text-xs text-gray-500 mt-1">Miami MSA top vs bottom</p>
+          </div>
+          <div>
+            <p
+              className="text-3xl text-bf-navy"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              92.3%
+            </p>
+            <p className="text-xs text-gray-500 mt-1">RIAs with accessibility gaps</p>
           </div>
         </div>
       </section>
@@ -162,7 +171,7 @@ export default function GeoRemediationPage() {
                 You&apos;re on the list.
               </p>
               <p className="text-sm text-gray-500">
-                Fernando will follow up within 48 hours.
+                The BankForge team will follow up within 48 hours.
               </p>
             </div>
           ) : (
@@ -225,7 +234,7 @@ export default function GeoRemediationPage() {
           <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
             <span style={{ color: '#1B5299' }}>BankForge</span>.ai
           </span>
-          <span>BankForge flags for counsel review. We never conclude a violation.</span>
+          <span>BankForge flags findings for compliance counsel review. We never conclude a violation.</span>
           <span>&copy; 2026</span>
         </div>
       </footer>
