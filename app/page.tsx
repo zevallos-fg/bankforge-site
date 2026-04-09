@@ -525,6 +525,58 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── ABOUT BANKFORGE ──────────────────────────────────── */}
+      <section className="py-8 px-8" style={{ borderTop: '0.5px solid #e5e5e5', borderBottom: '0.5px solid #e5e5e5' }}>
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div>
+            <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '1.3px', textTransform: 'uppercase', color: '#999', marginBottom: '6px' }}>
+              About BankForge
+            </p>
+            <h2
+              style={{ fontSize: '28px', fontWeight: 400, color: '#1a1a1a', letterSpacing: '-0.3px', lineHeight: 1.2, marginBottom: '20px', fontFamily: 'var(--font-display)' }}
+            >
+              30+ years of experience. Built for what your examiners and customers actually see.
+            </h2>
+            <p style={{ fontSize: '13px', color: '#555', lineHeight: 1.75, fontWeight: 300 }}>
+              BankForge was built by practitioners with 30+ years of combined experience across
+              risk, compliance, marketing, and digital banking &mdash; at financial institutions
+              exceeding $100 billion in assets. Our team brings together deep Risk &amp; Compliance
+              program design alongside hands-on digital marketing and product leadership in
+              financial services. Every finding we surface reflects the way both regulators and
+              customers evaluate your institution&apos;s digital presence.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <div style={{ border: '0.5px solid #e5e5e5', borderLeft: '1.5px solid #1B5299', borderRadius: '10px', padding: '12px 16px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 500, color: '#1a1a1a', marginBottom: '3px', lineHeight: 1.35 }}>
+                $100B+ institution experience
+              </p>
+              <p style={{ fontSize: '11px', color: '#777', fontWeight: 300, lineHeight: 1.55 }}>
+                ERM, ORM, and Board reporting across top-20 U.S. institutions
+              </p>
+            </div>
+            <div style={{ border: '0.5px solid #e5e5e5', borderLeft: '1.5px solid #1B5299', borderRadius: '10px', padding: '12px 16px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 500, color: '#1a1a1a', marginBottom: '3px', lineHeight: 1.35 }}>
+                Digital banking and marketing program leadership
+              </p>
+              <p style={{ fontSize: '11px', color: '#777', fontWeight: 300, lineHeight: 1.55 }}>
+                P&amp;L management, multi-product launches, and go-to-market execution
+                in regulated financial services
+              </p>
+            </div>
+            <div style={{ border: '0.5px solid #e5e5e5', borderLeft: '1.5px solid #1B5299', borderRadius: '10px', padding: '12px 16px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 500, color: '#1a1a1a', marginBottom: '3px', lineHeight: 1.35 }}>
+                Every finding reviewed before delivery
+              </p>
+              <p style={{ fontSize: '11px', color: '#777', fontWeight: 300, lineHeight: 1.55 }}>
+                We flag for compliance counsel and never conclude a violation &mdash;
+                because we know what that language means in an exam room.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── BOTTOM CTA ────────────────────────────────────────── */}
       <section className="mx-7 mb-12 mt-12">
         <div className="bg-bf-navy-deep rounded-[10px] py-12 px-10 text-center">
