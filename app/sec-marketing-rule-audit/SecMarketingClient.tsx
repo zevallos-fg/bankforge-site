@@ -1,0 +1,370 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+
+// ─── Simulated findings (always the same regardless of input) ─────────
+
+const DEMO_FINDINGS = [
+  { severity: 'HIGH', text: 'Testimonial displayed without compensation disclosure or material conditions legend', ref: 'Rule 206(4)-1(b)(1)' },
+  { severity: 'HIGH', text: 'Third-party rating shown without criteria, date range, or compensation disclosure', ref: 'Rule 206(4)-1(c)(1)' },
+  { severity: 'MEDIUM', text: 'Reg S-P privacy notice not readily accessible from homepage or contact page', ref: 'Reg S-P / 17 CFR 248' },
+];
+
+const FINDING_CARDS = [
+  { tag: 'HIGH', tagColor: 'red', title: 'Testimonial displayed without required legend', desc: 'Client quote or endorsement present without compensation disclosure and material conditions legend. Top Risk Alert deficiency.', ref: 'Rule 206(4)-1(b)(1)' },
+  { tag: 'HIGH', tagColor: 'red', title: 'Third-party rating without required context', desc: 'Star rating or ranking displayed without criteria, date range, or compensation disclosure. Cited directly in December 2025 Risk Alert.', ref: 'Rule 206(4)-1(c)(1)' },
+  { tag: 'HIGH', tagColor: 'red', title: 'Performance advertising without required disclosures', desc: 'Hypothetical or extracted performance presented without prominent disclosure of material assumptions and limitations.', ref: 'Rule 206(4)-1(d)' },
+  { tag: 'MEDIUM', tagColor: 'amber', title: 'Reg S-P privacy notice accessibility gap', desc: 'Privacy notice not readily accessible or absent from digital presence. Cross-referenced against Form ADV Part 2A disclosures.', ref: 'Reg S-P / 17 CFR 248' },
+];
+
+function deriveFirmName(domain: string): string {
+  const clean = domain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '');
+  const seg = clean.split('.')[0] ?? 'firm';
+  return seg.charAt(0).toUpperCase() + seg.slice(1) + ' Advisers';
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────
+
+export default function SecMarketingClient() {
+  const [domain, setDomain] = useState('');
+  const [showResults, setShowResults] = useState(false);
+  const [firmName, setFirmName] = useState('');
+
+  function handleScan() {
+    if (!domain.trim()) return;
+    setFirmName(deriveFirmName(domain));
+    setShowResults(true);
+  }
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* ─── NAV ───────────────────────────────────────────────── */}
+      <nav
+        className="fixed top-0 inset-x-0 z-50 px-6 py-3"
+        style={{ backgroundColor: 'rgba(15,35,65,0.92)', backdropFilter: 'blur(12px)' }}
+      >
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <Link href="/" className="text-xl tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
+            <span style={{ color: '#7EB3E8' }}>BankForge</span>
+            <span className="text-white">.ai</span>
+          </Link>
+          <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
+            <Link href="/for-banks" className="hover:text-white transition-colors">Banks</Link>
+            <Link href="/for-credit-unions" className="hover:text-white transition-colors">Credit Unions</Link>
+            <Link href="/for-rias" className="hover:text-white transition-colors">Investment Advisers</Link>
+            <Link href="/insights" className="hover:text-white transition-colors">Insights</Link>
+          </div>
+          <Link
+            href="mailto:outreach@bankforge.ai"
+            className="bg-white text-bf-navy-deep text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            Request a Call
+          </Link>
+        </div>
+      </nav>
+
+      {/* ─── HERO ──────────────────────────────────────────────── */}
+      <section className="pt-24 pb-16 px-6" style={{ backgroundColor: '#0F2341' }}>
+        <div className="max-w-xl mx-auto text-center">
+          {/* Eyebrow */}
+          <p style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1.3px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>
+            For Registered Investment Advisers
+          </p>
+
+          {/* Alert badge */}
+          <div className="flex justify-center mb-6">
+            <span
+              className="inline-flex items-center gap-2"
+              style={{ backgroundColor: 'rgba(163,45,45,0.2)', border: '1px solid rgba(163,45,45,0.5)', borderRadius: '20px', padding: '5px 14px', fontSize: '11px', color: '#F5A0A0' }}
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#F5A0A0] opacity-75" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F5A0A0]" />
+              </span>
+              December 2025 SEC Risk Alert — Marketing Rule deficiencies identified
+            </span>
+          </div>
+
+          {/* H1 */}
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '38px', fontWeight: 400, lineHeight: 1.1, color: '#fff', marginBottom: '20px' }}>
+            Your marketing is already under review.
+            <br />
+            <em style={{ color: '#7EB3E8' }}>BankForge finds it first.</em>
+          </h1>
+
+          {/* Subheadline */}
+          <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', maxWidth: '520px', lineHeight: 1.7, margin: '0 auto 32px' }}>
+            The SEC&apos;s December 2025 Risk Alert identified Marketing Rule (Rule 206(4)-1)
+            compliance gaps as a top examination deficiency. <strong className="text-white">BankForge has already scanned
+            23,000+ RIAs</strong> — testimonial disclosures, third-party ratings, performance
+            advertising, and AI search visibility. See exactly where you stand before your
+            examiner does.
+          </p>
+
+          {/* Scan input */}
+          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px', marginBottom: '8px' }}>
+            See your SEC Marketing Audit findings.
+          </p>
+          <div className="flex max-w-md mx-auto" style={{ border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', overflow: 'hidden' }}>
+            <input
+              type="text"
+              placeholder="youradviserfirm.com"
+              value={domain}
+              onChange={(e) => setDomain(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleScan()}
+              style={{ flex: 1, background: 'rgba(255,255,255,0.06)', border: 'none', padding: '13px 16px', fontSize: '13px', color: '#fff', outline: 'none' }}
+            />
+            <button
+              onClick={handleScan}
+              style={{ background: '#1B5299', color: '#fff', padding: '13px 20px', fontSize: '12px', fontWeight: 500, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              See findings &darr;
+            </button>
+          </div>
+          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>
+            Reads from our March 2026 corpus scan &middot; 1 lookup per firm per 72 hrs
+          </p>
+
+          {/* Scan results panel */}
+          {showResults && (
+            <div className="mt-8 text-left" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '20px' }}>
+              <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+                <div>
+                  <p style={{ fontSize: '13px', fontWeight: 500, color: '#fff' }}>{firmName}</p>
+                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>SEC-registered &middot; $320M AUM &middot; March 2026 corpus scan</p>
+                </div>
+                <span style={{ backgroundColor: 'rgba(163,45,45,0.2)', border: '1px solid rgba(163,45,45,0.5)', borderRadius: '20px', padding: '4px 12px', fontSize: '11px', color: '#F5A0A0' }}>
+                  3 High findings
+                </span>
+              </div>
+              <div className="space-y-3">
+                {DEMO_FINDINGS.map((f, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span
+                      style={{
+                        fontSize: '10px',
+                        fontWeight: 500,
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        whiteSpace: 'nowrap',
+                        marginTop: '2px',
+                        backgroundColor: f.severity === 'HIGH' ? 'rgba(163,45,45,0.3)' : 'rgba(154,120,32,0.3)',
+                        color: f.severity === 'HIGH' ? '#F5A0A0' : '#E8C055',
+                      }}
+                    >
+                      {f.severity}
+                    </span>
+                    <div>
+                      <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>{f.text}</p>
+                      <p style={{ fontSize: '11px', color: 'rgba(126,179,232,0.7)', marginTop: '2px' }}>{f.ref}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', textAlign: 'center', marginTop: '16px' }}>
+                Full report includes 6 more findings. Request the $4,500 audit to receive
+                the complete DOCX with regulatory citations, severity grades, and peer benchmarks.
+              </p>
+            </div>
+          )}
+
+          {/* Stat strip */}
+          <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.07)', paddingTop: '32px', marginTop: '32px' }}>
+            <div className="grid grid-cols-3 gap-4">
+              {[
+                { num: '23,000+', label: 'RIAs already in our corpus' },
+                { num: '10,480', label: 'RIAs with testimonial signals detected' },
+                { num: '33.3 avg', label: 'Average RIA AI SEO score out of 100' },
+              ].map((s, i) => (
+                <div key={i} className="text-center" style={{ borderRight: i < 2 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
+                  <p style={{ fontFamily: 'var(--font-display)', fontSize: '28px', color: '#7EB3E8' }}>{s.num}</p>
+                  <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: 300, maxWidth: '140px', margin: '0 auto' }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── WHAT WE SURFACE ───────────────────────────────────── */}
+      <section className="py-12 px-6">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-bf-navy text-xs font-medium tracking-wide uppercase mb-3">What we surface</p>
+          <h2 className="text-3xl text-gray-900 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+            The deficiency patterns the December 2025 Risk Alert flagged.
+          </h2>
+          <p className="text-sm text-gray-500 mb-10">
+            Every finding mapped to its rule citation. Reviewed by our team before delivery.
+            We flag for counsel — never conclude a violation.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {FINDING_CARDS.map((card, i) => (
+              <div
+                key={i}
+                className="rounded-lg p-5"
+                style={{
+                  backgroundColor: card.tagColor === 'amber' ? '#FFF4E5' : '#fff',
+                  border: card.tagColor === 'amber' ? '1px solid #E8C055' : '1px solid #d1dbe8',
+                  borderLeft: card.tagColor === 'amber' ? '3px solid #E8C055' : '3px solid #1B5299',
+                }}
+              >
+                <span
+                  className="inline-block text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded mb-2"
+                  style={{
+                    backgroundColor: card.tagColor === 'red' ? '#FEE2E2' : '#FFF4E5',
+                    color: card.tagColor === 'red' ? '#991B1B' : '#9A5820',
+                  }}
+                >
+                  {card.tag}
+                </span>
+                <h3 className="text-sm font-medium text-gray-900 mb-1">{card.title}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed mb-2">{card.desc}</p>
+                <p className="text-xs text-gray-400">{card.ref}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── WHAT WE DELIVER ───────────────────────────────────── */}
+      <section className="py-12 px-6" style={{ backgroundColor: '#F8F9FB' }}>
+        <div className="max-w-5xl mx-auto">
+          <p className="text-bf-navy text-xs font-medium tracking-wide uppercase mb-3">What we deliver</p>
+          <h2 className="text-3xl text-gray-900 mb-10" style={{ fontFamily: 'var(--font-display)' }}>
+            From audit to ongoing protection.
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* SKU 1 */}
+            <div className="rounded-xl p-6 bg-white flex flex-col" style={{ border: '2px solid #1B5299' }}>
+              <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase', color: '#7EB3E8', marginBottom: '8px' }}>
+                Step 1 — Start here
+              </p>
+              <h3 className="text-lg text-gray-900 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                2025 SEC Marketing Rule Audit
+              </h3>
+              <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0F2341' }}>$4,500</p>
+              <p className="text-xs text-gray-400 mb-4">One-time &middot; Delivered within 5 business days</p>
+              <hr className="border-gray-100 mb-4" />
+              <ul className="space-y-2 mb-6 flex-1">
+                {[
+                  'Full marketing footprint audit against Rule 206(4)-1',
+                  'Testimonial, endorsement, and third-party rating analysis',
+                  'Performance advertising disclosure review',
+                  'Form ADV Part 2A cross-reference',
+                  'Reg S-P privacy notice signal check',
+                  'AI SEO score and visibility report included',
+                  'DOCX — severity-graded, regulatory citations, peer benchmarks',
+                  'Reviewed by our team before delivery',
+                ].map((item, i) => (
+                  <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
+                    <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="mailto:outreach@bankforge.ai?subject=2025%20SEC%20Marketing%20Rule%20Audit"
+                className="block w-full text-center text-white font-medium py-3 rounded-lg text-sm transition-colors"
+                style={{ backgroundColor: '#1B5299' }}
+              >
+                Request Audit — $4,500
+              </a>
+            </div>
+
+            {/* SKU 2 */}
+            <div className="rounded-xl p-6 bg-white flex flex-col" style={{ border: '1px solid #e5e7eb' }}>
+              <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase', color: '#7EB3E8', marginBottom: '8px' }}>
+                Step 2 — After audit delivery
+              </p>
+              <h3 className="text-lg text-gray-900 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                Monthly Marketing Monitoring
+              </h3>
+              <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0F2341' }}>$999/mo</p>
+              <p className="text-xs text-gray-400 mb-3">No contract &middot; Cancel anytime</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                <span className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: '#EBF1FA', color: '#1B5299' }}>Coming May 2026</span>
+                <span className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: '#FFF4E5', color: '#9A5820' }}>Available only after audit delivery</span>
+              </div>
+              <hr className="border-gray-100 mb-4" />
+              <ul className="space-y-2 mb-6 flex-1">
+                {[
+                  'Month-over-month marketing compliance delta',
+                  'Immediate alert on new High findings',
+                  'AI SEO score tracking across ChatGPT, Perplexity, Google',
+                  'Meta Ad Library signals — testimonials and performance claims in paid ads',
+                  'Google Ads Library signals — targeting and disclosure compliance',
+                  'Monthly DOCX report regardless of changes',
+                ].map((item, i) => (
+                  <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
+                    <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="mailto:outreach@bankforge.ai?subject=SEC%20Monitoring%20May%202026%20Notification"
+                className="block w-full text-center font-medium py-3 rounded-lg text-sm transition-colors"
+                style={{ border: '1px solid #1B5299', color: '#1B5299' }}
+              >
+                Notify Me for May Launch
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CTA BLOCK ─────────────────────────────────────────── */}
+      <section className="px-7 py-9">
+        <div className="bg-bf-navy-deep rounded-[10px] py-10 px-10 text-center">
+          <div className="max-w-xl mx-auto">
+            <h2 className="text-white text-3xl mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+              Your marketing is already being evaluated.
+              <br />
+              See what we find before your examiner does.
+            </h2>
+            <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
+              BankForge reviews every finding before delivery. No vendor energy. No AI noise.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a
+                href="mailto:outreach@bankforge.ai?subject=2025%20SEC%20Marketing%20Rule%20Audit"
+                className="bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors text-center"
+              >
+                Request Audit — $4,500
+              </a>
+              <a
+                href="mailto:outreach@bankforge.ai?subject=Sample%20RIA%20Findings%20Request"
+                className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg text-sm hover:border-white/60 transition-colors text-center"
+              >
+                See sample findings
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FOOTER ────────────────────────────────────────────── */}
+      <footer className="py-6 px-6 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
+          <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
+            <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+          </span>
+          <span className="text-center">
+            BankForge flags findings for compliance counsel review. We never conclude a violation.
+          </span>
+          <span>&copy; 2026</span>
+        </div>
+      </footer>
+
+      {/* Pulse animation for alert badge */}
+      <style jsx>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.3; }
+        }
+      `}</style>
+    </div>
+  );
+}
