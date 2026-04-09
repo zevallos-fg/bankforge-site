@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description:
     'BankForge scans bank websites for UDAAP, Reg Z, Reg DD, Fair Lending, and FFIEC compliance gaps. Built by practitioners from $100B+ institutions. Know what your examiners see before they do.',
   alternates: { canonical: 'https://bankforge.ai/for-banks' },
+  openGraph: { url: 'https://bankforge.ai/for-banks' },
 };
 
 const faqSchema = {
@@ -79,7 +80,7 @@ export default function ForBanksPage() {
         description="BankForge scans bank websites for UDAAP, Reg Z, Reg DD, Fair Lending, and FFIEC compliance gaps."
         ctaText="Request a Bank Compliance Review"
         faqItems={faqItems}
-        extraNote="BankForge also serves credit unions under NCUA supervision \u2014 same frameworks, same rigour."
+        extraNote="BankForge also serves credit unions under NCUA supervision — same frameworks, same rigour."
       />
     </>
   );

@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description:
     'BankForge scans credit union websites for compliance gaps and AI visibility signals. NCUA exam prep. Built by practitioners from regulated financial institutions.',
   alternates: { canonical: 'https://bankforge.ai/for-credit-unions' },
+  openGraph: { url: 'https://bankforge.ai/for-credit-unions' },
 };
 
 const faqSchema = {

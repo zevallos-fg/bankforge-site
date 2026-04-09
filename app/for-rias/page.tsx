@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description:
     'BankForge reviews RIA websites against SEC Marketing Rule Rule 206(4)-1 criteria. December 2025 Risk Alert. Built by practitioners from $100B+ institutions.',
   alternates: { canonical: 'https://bankforge.ai/for-rias' },
+  openGraph: { url: 'https://bankforge.ai/for-rias' },
 };
 
 const faqSchema = {

@@ -267,7 +267,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── SIGNAL CARDS ──────────────────────────────────────── */}
-      <section className="py-16 px-6">
+      <section className="pt-8 pb-16 px-6">
         <div className="max-w-5xl mx-auto">
           <p className="text-bf-navy text-xs font-medium tracking-wide uppercase mb-3">
             What BankForge finds

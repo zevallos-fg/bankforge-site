@@ -36,10 +36,10 @@ export default function InsightsPage() {
           <span className="text-white">.ai</span>
         </Link>
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
+          <Link href="/for-banks" className="hover:text-white transition-colors">Banks</Link>
+          <Link href="/for-credit-unions" className="hover:text-white transition-colors">Credit Unions</Link>
+          <Link href="/for-rias" className="hover:text-white transition-colors">Investment Advisers</Link>
           <Link href="/insights" className="text-white">Insights</Link>
-          <Link href="/geo-remediation" className="hover:text-white transition-colors">GEO Remediation</Link>
-          <Link href="/#how-it-works" className="hover:text-white transition-colors">How it Works</Link>
-          <Link href="/#about" className="hover:text-white transition-colors">About</Link>
         </div>
         <Link
           href="mailto:fernando@bankforge.ai"
