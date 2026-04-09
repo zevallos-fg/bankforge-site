@@ -56,7 +56,7 @@ const LOADING_STEPS = [
   'Generating findings...',
 ];
 
-export default function ScanDemo({ onClose }: { onClose: () => void }) {
+export default function ScanDemo({ onClose, inline = false }: { onClose?: () => void; inline?: boolean }) {
   const [domain, setDomain] = useState('');
   const [tosAccepted, setTosAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -108,13 +108,11 @@ export default function ScanDemo({ onClose }: { onClose: () => void }) {
   const geoColor = geoScore >= 60 ? '#16A34A' : geoScore >= 40 ? '#D97706' : '#DC2626';
   const geoGap = geo?.top_peer_score != null && geo.score != null ? geo.top_peer_score - geo.score : null;
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          {/* Close button */}
-          <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+  const innerContent = (
+    <div className={inline ? 'w-full' : 'p-6'}>
+      {!inline && (
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+      )}
 
           {/* ─── INPUT FORM ──────────────────────────────────── */}
           {!result && !loading && (
@@ -367,7 +365,18 @@ export default function ScanDemo({ onClose }: { onClose: () => void }) {
               </a>
             </div>
           )}
-        </div>
+    </div>
+  );
+
+  if (inline) {
+    return <div className="w-full max-w-2xl mx-auto bg-white rounded-xl border border-gray-200">{innerContent}</div>;
+  }
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        {innerContent}
       </div>
     </div>
   );

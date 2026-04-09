@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import DemoRequestForm from '../components/DemoRequestForm';
+import InlineScanSection from './GeoScoreClient';
 
 export const metadata: Metadata = {
   title: 'Bank GEO Score — AI Search Visibility for Community Banks | BankForge.ai',
@@ -73,7 +74,7 @@ const signalCards = [
 
 const pricingTiers = [
   {
-    step: '01',
+    step: '1',
     name: 'GEO Baseline Report',
     price: '$3,000',
     founding: 'Founding rate $2,500 \u2014 available to first 5 clients. Expires September 1, 2026.',
@@ -91,7 +92,7 @@ const pricingTiers = [
     highlight: true,
   },
   {
-    step: '02',
+    step: '2',
     name: 'Remediation Spec + Working Session',
     price: '$2,000',
     founding: null,
@@ -108,11 +109,11 @@ const pricingTiers = [
     highlight: false,
   },
   {
-    step: '03',
+    step: '3',
     name: 'GEO Monitoring',
     price: '$999/mo',
     founding: null,
-    note: 'No contract \u00b7 Cancel anytime \u00b7 Available after Step 02 complete',
+    note: 'No contract \u00b7 Cancel anytime \u00b7 Available after Step 2',
     items: [
       'Month-over-month GEO score tracking',
       'Competitor delta report',
@@ -120,7 +121,7 @@ const pricingTiers = [
       'Covers ChatGPT, Perplexity, Google AI Overviews',
     ],
     ctaType: 'disabled' as const,
-    ctaLabel: 'Included after Step 02',
+    ctaLabel: 'Available after Step 2',
     ctaKey: 'pricing_geo3',
     highlight: false,
   },
@@ -131,6 +132,24 @@ const stats = [
   { value: '16.6%', label: 'Banks scoring below 40 \u2014 invisible on AI search' },
   { value: '78%', label: 'Community banks with no schema markup' },
 ];
+
+function ArrowRight({ className }: { className?: string }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className={className}>
+      <path d="M5 12h14M13 6l6 6-6 6" stroke="#1B5299" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ArrowDown() {
+  return (
+    <div className="flex justify-center py-2 md:hidden">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 5v14M6 13l6 6 6-6" stroke="#1B5299" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+}
 
 export default function GeoScorePage() {
   return (
@@ -230,6 +249,9 @@ export default function GeoScorePage() {
         </div>
       </section>
 
+      {/* ─── CHECK YOUR SCORE (inline scan demo) ───────────────── */}
+      <InlineScanSection />
+
       {/* ─── PRICING ───────────────────────────────────────────── */}
       <section className="py-16 px-6" style={{ backgroundColor: '#F8F9FB' }}>
         <div className="max-w-5xl mx-auto">
@@ -243,58 +265,114 @@ export default function GeoScorePage() {
             From score to fixed. Three steps.
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {pricingTiers.map((tier) => (
-              <div
-                key={tier.step}
-                className="rounded-xl p-6 bg-white flex flex-col"
-                style={{
-                  border: tier.highlight ? '2px solid #1B5299' : '1px solid #e5e7eb',
-                  opacity: tier.ctaType === 'disabled' ? 0.75 : 1,
-                }}
-              >
-                <p className="text-xs font-medium mb-2" style={{ color: '#7EB3E8' }}>
-                  Step {tier.step}
-                </p>
-                <h3
-                  className="text-lg text-gray-900 mb-2"
-                  style={{ fontFamily: 'var(--font-display)' }}
+          {/* Desktop: flex row with arrows */}
+          <div className="hidden md:flex items-start">
+            {pricingTiers.map((tier, idx) => (
+              <div key={tier.step} className="contents">
+                <div
+                  className="flex-1 rounded-xl p-6 bg-white flex flex-col"
+                  style={{
+                    border: tier.highlight ? '2px solid #1B5299' : '1px solid #e5e7eb',
+                    opacity: tier.ctaType === 'disabled' ? 0.75 : 1,
+                  }}
                 >
-                  {tier.name}
-                </h3>
-                <p
-                  className="text-3xl mb-1"
-                  style={{ fontFamily: 'var(--font-display)', color: '#0F2341' }}
-                >
-                  {tier.price}
-                </p>
-                {tier.founding && (
-                  <p className="text-xs text-gray-500 mb-3 leading-relaxed">{tier.founding}</p>
-                )}
-                {tier.note && (
-                  <p className="text-xs text-gray-400 mb-3">{tier.note}</p>
-                )}
-                <ul className="space-y-2 mb-6 flex-1">
-                  {tier.items.map((item, i) => (
-                    <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
-                      <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                {tier.ctaType === 'active' ? (
-                  <DemoRequestForm
-                    audienceType="bank"
-                    sourcePage="/geo-score"
-                    sourceCta={tier.ctaKey}
-                    ctaLabel={tier.ctaLabel}
-                    buttonClassName="w-full bg-bf-navy-deep text-white font-medium px-4 py-3 rounded-lg hover:bg-bf-navy-deep/90 transition-colors text-sm text-center"
-                  />
-                ) : (
-                  <p className="w-full text-center text-sm text-gray-400 py-3">
-                    {tier.ctaLabel}
+                  <p className="text-xs font-medium mb-2" style={{ color: '#7EB3E8' }}>
+                    Step {tier.step}
                   </p>
+                  <div className="min-h-[56px] flex items-start">
+                    <h3 className="text-lg text-gray-900" style={{ fontFamily: 'var(--font-display)' }}>
+                      {tier.name}
+                    </h3>
+                  </div>
+                  <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0F2341' }}>
+                    {tier.price}
+                  </p>
+                  {tier.founding && (
+                    <p className="text-xs text-gray-500 mb-3 leading-relaxed">{tier.founding}</p>
+                  )}
+                  {tier.note && (
+                    <p className="text-xs text-gray-400 mb-3">{tier.note}</p>
+                  )}
+                  <ul className="space-y-2 mb-6 flex-1">
+                    {tier.items.map((item, i) => (
+                      <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
+                        <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {tier.ctaType === 'active' ? (
+                    <DemoRequestForm
+                      audienceType="bank"
+                      sourcePage="/geo-score"
+                      sourceCta={tier.ctaKey}
+                      ctaLabel={tier.ctaLabel}
+                      buttonClassName="w-full bg-bf-navy-deep text-white font-medium px-4 py-3 rounded-lg hover:bg-bf-navy-deep/90 transition-colors text-sm text-center cursor-pointer"
+                    />
+                  ) : (
+                    <p className="w-full text-center text-sm text-gray-400 py-3">
+                      {tier.ctaLabel}
+                    </p>
+                  )}
+                </div>
+                {idx < pricingTiers.length - 1 && (
+                  <div className="flex items-center justify-center w-10 pt-20 shrink-0">
+                    <ArrowRight />
+                  </div>
                 )}
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: stacked with vertical arrows */}
+          <div className="md:hidden space-y-0">
+            {pricingTiers.map((tier, idx) => (
+              <div key={tier.step}>
+                <div
+                  className="rounded-xl p-6 bg-white flex flex-col"
+                  style={{
+                    border: tier.highlight ? '2px solid #1B5299' : '1px solid #e5e7eb',
+                    opacity: tier.ctaType === 'disabled' ? 0.75 : 1,
+                  }}
+                >
+                  <p className="text-xs font-medium mb-2" style={{ color: '#7EB3E8' }}>
+                    Step {tier.step}
+                  </p>
+                  <h3 className="text-lg text-gray-900 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                    {tier.name}
+                  </h3>
+                  <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0F2341' }}>
+                    {tier.price}
+                  </p>
+                  {tier.founding && (
+                    <p className="text-xs text-gray-500 mb-3 leading-relaxed">{tier.founding}</p>
+                  )}
+                  {tier.note && (
+                    <p className="text-xs text-gray-400 mb-3">{tier.note}</p>
+                  )}
+                  <ul className="space-y-2 mb-6 flex-1">
+                    {tier.items.map((item, i) => (
+                      <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
+                        <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {tier.ctaType === 'active' ? (
+                    <DemoRequestForm
+                      audienceType="bank"
+                      sourcePage="/geo-score"
+                      sourceCta={tier.ctaKey}
+                      ctaLabel={tier.ctaLabel}
+                      buttonClassName="w-full bg-bf-navy-deep text-white font-medium px-4 py-3 rounded-lg hover:bg-bf-navy-deep/90 transition-colors text-sm text-center cursor-pointer"
+                    />
+                  ) : (
+                    <p className="w-full text-center text-sm text-gray-400 py-3">
+                      {tier.ctaLabel}
+                    </p>
+                  )}
+                </div>
+                {idx < pricingTiers.length - 1 && <ArrowDown />}
               </div>
             ))}
           </div>

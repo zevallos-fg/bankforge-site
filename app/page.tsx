@@ -543,12 +543,12 @@ export default function HomePage() {
                 ctaLabel="Request a Review"
                 buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
               />
-              <button
-                onClick={() => setScanOpen(true)}
+              <Link
+                href="/geo-score"
                 className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm"
               >
-                See sample findings
-              </button>
+                See what your GEO score is
+              </Link>
             </div>
           </div>
         </div>
