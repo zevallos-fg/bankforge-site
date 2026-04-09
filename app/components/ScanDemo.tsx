@@ -191,10 +191,10 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
                 </p>
               </div>
 
-              {/* Section B — GEO Score */}
+              {/* Section B — AI SEO Score */}
               <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">GEO Score</p>
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">AI SEO Score</p>
                   <p className="text-xs text-gray-400">{result.repdte ? `Data: ${result.repdte}` : ''}</p>
                 </div>
                 <div className="flex items-end gap-2 mb-2">
@@ -223,7 +223,7 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
                   <div className="rounded p-2.5 mb-3" style={{ backgroundColor: '#FEF3C7', border: '1px solid #F59E0B' }}>
                     <p className="text-xs text-amber-800 leading-relaxed">
                       <strong>\u26A0\uFE0F Top competitor{geo?.top_peer_name ? ` (${geo.top_peer_name})` : ''} scores {geo?.top_peer_score}</strong> &mdash; a {geoGap}-point gap.
-                      Institutions with higher GEO scores capture more AI search results when customers search for banking services in your market.
+                      Institutions with higher AI SEO scores capture more AI search results when customers search for banking services in your market.
                     </p>
                   </div>
                 )}

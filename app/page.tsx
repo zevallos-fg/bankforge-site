@@ -52,7 +52,7 @@ const riaCards = [
     accent: 'blue',
     tag: 'AI SEO Score',
     stat: '33.3 avg',
-    title: 'Average RIA AI SEO score out of 100',
+    title: 'Average RIAn AI SEO score out of 100',
     desc: '37.2% of RIAs score below 40 \u2014 invisible on ChatGPT, Perplexity, and Google AI Overviews when prospects search for investment advisers.',
     ref: 'March 2026',
   },
@@ -88,7 +88,7 @@ const jsonLd = [
     description: 'Compliance intelligence platform for regulated financial institutions. We scan public digital presences for regulatory compliance gaps and AI visibility signals across 66,000+ institutions.',
     foundingDate: '2026',
     areaServed: 'United States',
-    serviceType: ['Compliance Review', 'GEO Remediation', 'RIA Marketing Rule Compliance', 'Bank Digital Compliance Monitoring'],
+    serviceType: ['Compliance Review', 'AI SEO Remediation', 'RIA Marketing Rule Compliance', 'Bank Digital Compliance Monitoring'],
   },
   {
     '@context': 'https://schema.org',
@@ -101,10 +101,10 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: 'GEO Remediation',
+    name: 'AI SEO Remediation',
     provider: { '@type': 'Organization', name: 'BankForge.ai' },
-    description: 'AI visibility remediation for financial institutions. Improves GEO scores across ChatGPT, Perplexity, Google AI Overviews, and other AI search engines.',
-    serviceType: 'GEO Remediation',
+    description: 'AI visibility remediation for financial institutions. Improves AI SEO scores across ChatGPT, Perplexity, Google AI Overviews, and other AI search engines.',
+    serviceType: 'AI SEO Remediation',
   },
   {
     '@context': 'https://schema.org',
@@ -117,8 +117,8 @@ const jsonLd = [
       },
       {
         '@type': 'Question',
-        name: 'What is a GEO score?',
-        acceptedAnswer: { '@type': 'Answer', text: 'A GEO score measures how visible your institution is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. BankForge computes GEO scores across 66,000+ institutions. The average bank scores 45.8 out of 100. The average RIA scores 33.3.' },
+        name: 'What is an AI SEO score?',
+        acceptedAnswer: { '@type': 'Answer', text: 'An AI SEO score measures how visible your institution is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. BankForge computes AI SEO scores across 66,000+ institutions. The average bank scores 45.8 out of 100. The average RIA scores 33.3.' },
       },
       {
         '@type': 'Question',
@@ -185,7 +185,7 @@ export default function HomePage() {
             <Link href="/insights" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
               Insights
             </Link>
-            <Link href="/geo-score" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
+            <Link href="/ai-seo-score" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
               AI SEO Score
             </Link>
             <span className="w-px h-4 bg-white/20 mx-3" />
@@ -219,7 +219,7 @@ export default function HomePage() {
         {mobileNav && (
           <div className="md:hidden border-t border-white/10 py-2">
             <Link href="/insights" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Insights</Link>
-            <Link href="/geo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO Score</Link>
+            <Link href="/ai-seo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO Score</Link>
             <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Banks</Link>
             <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Credit Unions</Link>
             <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ RIAs</Link>
@@ -599,10 +599,10 @@ export default function HomePage() {
                 buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
               />
               <Link
-                href="/geo-score"
+                href="/ai-seo-score"
                 className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm"
               >
-                See what your GEO score is
+                See what your AI SEO score is
               </Link>
             </div>
           </div>

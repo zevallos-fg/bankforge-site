@@ -39,10 +39,10 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'What is a GEO score for a credit union?',
+      name: 'What is an AI SEO score for a credit union?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'A GEO score measures how visible your credit union is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. It is driven by structured data, Google Business Profile completeness, content authority, and technical signals. BankForge computes GEO scores across 4,400+ credit unions as part of our monthly corpus scan.',
+        text: 'An AI SEO score measures how visible your credit union is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. It is driven by structured data, Google Business Profile completeness, content authority, and technical signals. BankForge computes AI SEO scores across 4,400+ credit unions as part of our monthly corpus scan.',
       },
     },
   ],
@@ -62,8 +62,8 @@ const faqItems = [
     a: 'Yes. BankForge serves credit unions under NCUA supervision with the same compliance frameworks applied to FDIC-supervised banks \u2014 UDAAP, Reg Z, Reg DD, FFIEC interagency guidance, and Fair Lending. Our corpus includes 4,400+ credit unions alongside 4,300+ banks and 23,000+ RIAs.',
   },
   {
-    q: 'What is a GEO score for a credit union?',
-    a: 'A GEO score measures how visible your credit union is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. It is driven by structured data, Google Business Profile completeness, content authority, and technical signals.',
+    q: 'What is an AI SEO score for a credit union?',
+    a: 'An AI SEO score measures how visible your credit union is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. It is driven by structured data, Google Business Profile completeness, content authority, and technical signals.',
   },
 ];
 

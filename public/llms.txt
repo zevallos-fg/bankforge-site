@@ -18,7 +18,7 @@ financial institutions as of March 2026:
 
 ## Key Findings — Banks (March 2026)
 
-- Average GEO score: 45.8 / 100 (measures AI search visibility)
+- Average AI SEO score: 45.8 / 100 (measures AI search visibility)
 - 16.6% of banks score below 40 — invisible on ChatGPT, Perplexity, and Google AI Overviews
 - 78% of community bank websites have no schema markup
 - 89% of community bank websites have at least one compliance gap
@@ -30,7 +30,7 @@ financial institutions as of March 2026:
 
 ## Key Findings — RIAs (March 2026)
 
-- Average GEO score: 33.3 / 100
+- Average AI SEO score: 33.3 / 100
 - 37.2% of RIAs score below 40 — invisible on AI search for local investment adviser queries
 - 92.3% of RIA websites have accessibility issues (highest rate across all institution types)
 - Top Marketing Rule finding: testimonial displayed without required compensation legend
@@ -57,8 +57,8 @@ BankForge flags findings for counsel review — never concludes a violation.
 Bank/CU pricing: from $1,750/month (founding rate)
 RIA pricing: $4,500 one-time
 
-### GEO Monitoring (ongoing)
-Ongoing AI visibility monitoring for financial institutions. Tracks GEO score
+### AI SEO Monitoring (ongoing)
+Ongoing AI visibility monitoring for financial institutions. Tracks AI SEO score
 changes across ChatGPT, Perplexity, and Google AI Overviews month-over-month.
 RIA monitoring: $999/month
 
@@ -81,7 +81,7 @@ RIA monitoring: $999/month
 - For Investment Advisers (RIAs): https://bankforge.ai/for-rias
 - Research & Insights: https://bankforge.ai/insights
 - Why Your Bank's AI Score Is Low: https://bankforge.ai/insights/bank-ai-score
-- GEO Score: https://bankforge.ai/geo-score
+- AI SEO Score: https://bankforge.ai/ai-seo-score
 
 ## Contact
 

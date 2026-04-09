@@ -34,19 +34,19 @@ const signalCards = [
 const pricingTiers = [
   {
     step: '1',
-    name: 'GEO Baseline Report',
+    name: 'AI SEO Baseline Report',
     price: '$3,000',
     founding: 'Founding rate $2,500 \u2014 available to first 5 clients. Expires September 1, 2026.',
     note: null,
     items: [
-      "Your institution\u2019s GEO score vs. peer average",
+      "Your institution\u2019s AI SEO score vs. peer average",
       'Competitor gap analysis (nearest 5 institutions by market)',
       '10 prioritized fixes ranked by impact',
       'Peer benchmark context from 4,300+ bank corpus',
       'DOCX report \u2014 delivered within 5 business days',
     ],
     ctaType: 'active' as const,
-    ctaLabel: 'Request GEO Report',
+    ctaLabel: 'Request AI SEO Report',
     ctaKey: 'pricing_geo1',
     highlight: true,
   },
@@ -55,26 +55,26 @@ const pricingTiers = [
     name: 'Remediation Spec + Working Session',
     price: '$2,000',
     founding: null,
-    note: 'Add-on after GEO 1 delivery',
+    note: 'Add-on after AI SEO 1 delivery',
     items: [
       'Technical remediation spec your marketing/IT team executes',
       '60-minute live working session \u2014 we walk through every fix',
-      'Fixes prioritized by GEO score impact',
+      'Fixes prioritized by AI SEO score impact',
       'No vendor dependency \u2014 your team owns execution',
     ],
     ctaType: 'active' as const,
-    ctaLabel: 'Request GEO Report',
+    ctaLabel: 'Request AI SEO Report',
     ctaKey: 'pricing_geo2',
     highlight: false,
   },
   {
     step: '3',
-    name: 'GEO Monitoring',
+    name: 'AI SEO Monitoring',
     price: '$999/mo',
     founding: null,
     note: 'No contract \u00b7 Cancel anytime \u00b7 Available after Step 2',
     items: [
-      'Month-over-month GEO score tracking',
+      'Month-over-month AI SEO score tracking',
       'Competitor delta report',
       'Alert on score drops above 5 points',
       'Covers ChatGPT, Perplexity, Google AI Overviews',
@@ -87,7 +87,7 @@ const pricingTiers = [
 ];
 
 const stats = [
-  { value: '45.8 avg', label: 'Average GEO score across 4,300+ banks (March 2026)' },
+  { value: '45.8 avg', label: 'Average AI SEO score across 4,300+ banks (March 2026)' },
   { value: '16.6%', label: 'Banks scoring below 40 \u2014 invisible on AI search' },
   { value: '78%', label: 'Community banks with no schema markup' },
 ];
@@ -144,7 +144,7 @@ export default function GeoScorePageClient() {
       <section className="pt-24 pb-16 px-6" style={{ backgroundColor: '#0F2341' }}>
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs font-medium tracking-wide uppercase mb-4" style={{ color: '#7EB3E8' }}>
-            GEO Score
+            AI SEO Score
           </p>
           <h1
             className="text-4xl text-white leading-tight mb-5"
@@ -153,7 +153,7 @@ export default function GeoScorePageClient() {
             Your bank is invisible on AI search. Here&apos;s how to fix it.
           </h1>
           <p className="text-blue-200/80 text-lg leading-relaxed max-w-xl mx-auto">
-            BankForge has computed GEO scores across 4,300+ community banks.
+            BankForge has computed AI SEO scores across 4,300+ community banks.
             The average score is 45.8 out of 100. 16.6% score below 40 &mdash;
             invisible on ChatGPT, Perplexity, and Google AI Overviews when
             customers search for local banking services.
@@ -261,7 +261,7 @@ export default function GeoScorePageClient() {
                   {tier.ctaType === 'active' ? (
                     <DemoRequestForm
                       audienceType="bank"
-                      sourcePage="/geo-score"
+                      sourcePage="/ai-seo-score"
                       sourceCta={tier.ctaKey}
                       ctaLabel={tier.ctaLabel}
                       buttonClassName="w-full bg-bf-navy-deep text-white font-medium px-4 py-3 rounded-lg hover:bg-bf-navy-deep/90 transition-colors text-sm text-center cursor-pointer"
@@ -306,7 +306,7 @@ export default function GeoScorePageClient() {
                   {tier.ctaType === 'active' ? (
                     <DemoRequestForm
                       audienceType="bank"
-                      sourcePage="/geo-score"
+                      sourcePage="/ai-seo-score"
                       sourceCta={tier.ctaKey}
                       ctaLabel={tier.ctaLabel}
                       buttonClassName="w-full bg-bf-navy-deep text-white font-medium px-4 py-3 rounded-lg hover:bg-bf-navy-deep/90 transition-colors text-sm text-center cursor-pointer"
@@ -344,14 +344,14 @@ export default function GeoScorePageClient() {
               The first bank to fix it owns the query.
             </h2>
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
-              BankForge has already computed your institution&apos;s GEO score.
+              BankForge has already computed your institution&apos;s AI SEO score.
               Request the report and see exactly where you stand.
             </p>
             <DemoRequestForm
               audienceType="bank"
-              sourcePage="/geo-score"
+              sourcePage="/ai-seo-score"
               sourceCta="cta_block"
-              ctaLabel="Get Your GEO Score Report"
+              ctaLabel="Get Your AI SEO Score Report"
             />
           </div>
         </div>

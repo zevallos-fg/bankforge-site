@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "Reg Z compliance",
     "SEC examination prep",
     "credit union compliance",
-    "GEO score",
+    "AI SEO score",
     "AI visibility",
   ],
   openGraph: {

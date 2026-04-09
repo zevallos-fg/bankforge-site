@@ -37,7 +37,7 @@ export default function GeoScanInput({ onResult }: Props) {
       await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName: 'GEO Score Request', bankName: domain, email, source: 'geo_not_found' }),
+        body: JSON.stringify({ firstName: 'AI SEO Score Request', bankName: domain, email, source: 'geo_not_found' }),
       });
       setEmailSent(true);
     } catch { /* silent */ }
@@ -60,7 +60,7 @@ export default function GeoScanInput({ onResult }: Props) {
           disabled={state === 'loading' || !domain.trim()}
           className="bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors disabled:opacity-60 whitespace-nowrap cursor-pointer"
         >
-          {state === 'loading' ? 'Checking...' : 'See your GEO score'}
+          {state === 'loading' ? 'Checking...' : 'See your AI SEO score'}
         </button>
       </div>
     );

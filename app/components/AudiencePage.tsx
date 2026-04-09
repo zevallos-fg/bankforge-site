@@ -65,7 +65,7 @@ export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNot
             <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Credit Unions</Link>
             <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Investment Advisers</Link>
             <Link href="/insights" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Insights</Link>
-            <Link href="/geo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>GEO Score</Link>
+            <Link href="/ai-seo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO Score</Link>
           </div>
         )}
       </nav>

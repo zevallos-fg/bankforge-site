@@ -52,7 +52,7 @@ export default function GeoRemediationPage() {
         </Link>
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
           <Link href="/insights" className="hover:text-white transition-colors">Insights</Link>
-          <Link href="/geo-remediation" className="text-white">GEO Remediation</Link>
+          <Link href="/ai-seo-remediation" className="text-white">AI SEO Remediation</Link>
           <Link href="/#how-it-works" className="hover:text-white transition-colors">How it Works</Link>
           <Link href="/#about" className="hover:text-white transition-colors">About</Link>
         </div>
@@ -68,13 +68,13 @@ export default function GeoRemediationPage() {
       <section className="pt-24 pb-16 px-6 bg-bf-navy-deep text-white">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block bg-white/10 text-blue-200 text-xs font-medium tracking-wider uppercase px-4 py-1.5 rounded-full mb-5 border border-white/10">
-            GEO Remediation — Opening June 2026
+            AI SEO Remediation — Opening June 2026
           </span>
           <h1
             className="text-4xl mb-5 leading-tight"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Is your bank&apos;s GEO score in the{' '}
+            Is your bank&apos;s AI SEO score in the{' '}
             <em style={{ color: '#7EB3E8' }}>bottom quartile?</em>
           </h1>
           <p className="text-blue-200/80 text-lg leading-relaxed max-w-xl mx-auto">
@@ -156,7 +156,7 @@ export default function GeoRemediationPage() {
             className="text-2xl text-gray-900 mb-2 text-center"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Join the GEO Remediation waitlist
+            Join the AI SEO Remediation waitlist
           </h2>
           <p className="text-sm text-gray-500 text-center mb-8">
             First clients onboard June 2026. We&apos;ll reach out when it&apos;s your turn.

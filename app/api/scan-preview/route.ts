@@ -115,7 +115,7 @@ export async function GET(req: NextRequest) {
   const geoSignals = bc?.signals?.geo_score as Record<string, any> | undefined;
   const peerGroup = bc?.peer_group as Record<string, any> | undefined;
 
-  // Step 4: get top peer by GEO score in same state
+  // Step 4: get top peer by AI SEO score in same state
   let topPeerScore: number | null = null;
   let topPeerName: string | null = null;
   const peerState = (baseline as any).institution_state ?? peerGroup?.state ?? null;

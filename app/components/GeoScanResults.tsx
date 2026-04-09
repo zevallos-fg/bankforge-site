@@ -30,9 +30,9 @@ export default function GeoScanResults({ result }: Props) {
 
       {/* Two-column: GEO + Compliance */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* GEO Score */}
+        {/* AI SEO Score */}
         <div className="rounded-lg p-5" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">GEO Score</p>
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">AI SEO Score</p>
           <div className="flex items-end gap-2 mb-2">
             <span className="text-5xl font-bold" style={{ color: geoColor, fontFamily: 'var(--font-display)' }}>
               {geo?.score ?? 'N/A'}

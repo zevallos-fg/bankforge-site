@@ -16,9 +16,9 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: 'BankForge Waitlist <onboarding@resend.dev>',
       to: 'outreach@bankforge.ai',
-      subject: `New GEO Waitlist — ${bankName}`,
+      subject: `New AI SEO Waitlist — ${bankName}`,
       html: `
-        <h2>New GEO Remediation Waitlist Signup</h2>
+        <h2>New AI SEO Remediation Waitlist Signup</h2>
         <p><strong>Name:</strong> ${firstName}</p>
         <p><strong>Bank:</strong> ${bankName}</p>
         <p><strong>Email:</strong> ${email}</p>

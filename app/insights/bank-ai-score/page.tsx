@@ -209,8 +209,8 @@ export default function BankAiScorePage() {
             </p>
 
             <p>
-              Average bank GEO score nationally: <strong>45.8</strong>.
-              Average RIA GEO score: <strong>33.3</strong>.
+              Average bank AI SEO score nationally: <strong>45.8</strong>.
+              Average RIAn AI SEO score: <strong>33.3</strong>.
             </p>
 
             <p>
@@ -280,10 +280,10 @@ export default function BankAiScorePage() {
                 gaps your current site has — so your new site launches clean.
               </p>
               <Link
-                href="/geo-remediation"
+                href="/ai-seo-remediation"
                 className="inline-block bg-bf-navy text-white font-medium px-5 py-2.5 rounded-lg hover:bg-bf-navy-deep transition-colors text-sm"
               >
-                Learn about GEO Remediation &rarr;
+                Learn about AI SEO Remediation &rarr;
               </Link>
             </div>
 

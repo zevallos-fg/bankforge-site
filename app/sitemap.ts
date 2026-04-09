@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: 'https://bankforge.ai/for-rias',                lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.9 },
     { url: 'https://bankforge.ai/insights',                lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: 'https://bankforge.ai/insights/bank-ai-score',  lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: 'https://bankforge.ai/geo-remediation',         lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: 'https://bankforge.ai/geo-score',               lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: 'https://bankforge.ai/ai-seo-remediation',         lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: 'https://bankforge.ai/ai-seo-score',               lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   ];
 }
