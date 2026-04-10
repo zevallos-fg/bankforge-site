@@ -2,47 +2,65 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Your Bank's AI Score Is Low. Here's Why — and What to Fix | BankForge.ai",
+  title: 'Bank AI SEO Score — What It Is and How to Fix It | BankForge',
   description:
-    "AI-powered search engines are reshaping how consumers discover financial institutions. Most community banks are invisible. Here's what drives your AI score and how to fix it.",
+    "BankForge has computed GEO scores across 4,300+ community banks. The median score is 34 out of 100. See what drives your bank's AI visibility and what to fix first.",
   alternates: { canonical: 'https://bankforge.ai/insights/bank-ai-score' },
+  openGraph: {
+    title: 'Bank AI SEO Score — What It Is and How to Fix It | BankForge',
+    url: 'https://bankforge.ai/insights/bank-ai-score',
+  },
 };
 
-const faqSchema = {
+const jsonLdGraph = {
   '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
+  '@graph': [
     {
-      '@type': 'Question',
-      name: 'What is a bank AI score?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'A bank AI score measures how likely your institution is to appear in AI-powered search results — Google AI Overviews, Perplexity, ChatGPT, and similar platforms. It is driven by structured data (schema markup), Google Business Profile completeness, content authority, and technical signals like HTTPS, page speed, and mobile responsiveness.',
-      },
+      '@type': 'Article',
+      headline: "Your Bank's AI Score Is Low. Here's Why — and What to Fix.",
+      datePublished: '2026-04-01',
+      dateModified: '2026-04-09',
+      url: 'https://www.bankforge.ai/insights/bank-ai-score',
+      author: { '@type': 'Organization', name: 'BankForge Research Team', url: 'https://www.bankforge.ai' },
+      publisher: { '@type': 'Organization', name: 'BankForge', url: 'https://www.bankforge.ai' },
+      about: 'Bank GEO score and AI search visibility for community banks',
     },
     {
-      '@type': 'Question',
-      name: "Why doesn't my bank show up in AI search results?",
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Most community bank websites lack the structured data that AI engines rely on. Without JSON-LD schema markup, a complete Google Business Profile, and authoritative content, AI systems cannot extract or reference your institution. BankForge analysis shows 64% of community banks have significant Google Business Profile gaps.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: "How do I improve my bank's Google Business Profile?",
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Start by claiming and verifying your profile if you haven't already. Then ensure all fields are complete: business hours, services offered, products (checking, savings, mortgage, etc.), photos, and a detailed business description. Respond to reviews regularly. Post updates at least monthly. BankForge scans show that top-quartile banks maintain 90%+ profile completeness versus bottom-quartile banks at under 40%.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What is schema markup for a bank website?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Schema markup (JSON-LD) is structured data embedded in your website's HTML that tells search engines and AI systems exactly what your institution offers. For banks, this includes Organization schema (name, address, contact info), FinancialProduct schema (account types, rates), and LocalBusiness schema (branch locations, hours). Without it, AI engines must guess — and they usually don't guess in your favor.",
-      },
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is a bank AI SEO score?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: "A bank AI SEO score measures how visible a financial institution is in AI-generated search results from ChatGPT, Perplexity, and Google AI Overviews. BankForge scores community banks from 0\u2013100 based on schema markup, Google Business Profile completeness, content freshness, technical signals, and third-party citation density.",
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the average bank GEO score?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The median community bank scores 34 out of 100. The top quartile averages 72. The bottom quartile averages 11, which means those institutions are effectively invisible when consumers search for local banking services on AI platforms.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Why do community banks score low on AI search?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: '78% of community banks have no schema markup, 64% have significant Google Business Profile gaps, and most have not updated their website content in over 12 months. Banks with content updated in the last 90 days score 2.4x higher on AI visibility than banks with stale content.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: "How do I improve my bank's AI search visibility?",
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The three highest-impact actions are: add JSON-LD schema markup (Organization, LocalBusiness, FinancialProduct), complete your Google Business Profile, and publish authoritative content monthly. BankForge offers a GEO Baseline Report that scores your institution against peer banks and delivers 10 prioritized fixes.',
+          },
+        },
+      ],
     },
   ],
 };
@@ -50,10 +68,10 @@ const faqSchema = {
 export default function BankAiScorePage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* FAQ Schema */}
+      {/* Article + FAQ Schema */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGraph) }}
       />
 
       {/* Nav */}
