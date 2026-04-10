@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
   const { data: baseline } = await supabase
     .from('bank_monthly_baseline')
     .select(
-      'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw',
+      'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, signal_checks_raw, serp_raw',
     )
     .eq('entity_id', entity.entity_id)
     .eq('repdte', corpusRepdte)
@@ -107,6 +107,7 @@ export async function GET(req: NextRequest) {
       geo: { score: null, peer_avg: null, peer_p75: null, percentile: null, peer_count: null, peer_state: null, peer_asset_tier: null, top_peer_score: null, top_peer_name: null },
       signals: { gbp_claimed: null, gbp_rating: null, gbp_reviews: null, dmarc_present: null, dmarc_policy: null, dkim_present: null, spf_present: null, ssl_health: null, tls_version: null, cert_expiry_days: null, web_velocity: null, last_capture: null },
       compliance: { total: 0, high: 0, medium: 0, low: 0, top_flags: [] },
+      seoSignals: { https: null, pageTitle: null, metaDescription: null, h1Tag: null, schemaMarkup: null, brandVisibility: null, gbpListed: null },
       repdte: null,
     });
   }
@@ -162,6 +163,23 @@ export async function GET(req: NextRequest) {
   const gbp = baseline.gbp_raw as Record<string, any> | null;
   const dns = baseline.dns_security_raw as Record<string, any> | null;
   const webArchive = baseline.web_archive_raw as Record<string, any> | null;
+  const signalChecks = baseline.signal_checks_raw as Record<string, any> | null;
+  const serpRaw = baseline.serp_raw as Record<string, any> | null;
+
+  // Derive SEO signals from signal_checks_raw
+  const seoSignals = {
+    https: signalChecks?.hasHttps ?? null,
+    pageTitle: signalChecks?.hasPageTitle ?? null,
+    metaDescription: signalChecks?.hasMetaDescription ?? null,
+    h1Tag: signalChecks?.hasH1 ?? null,
+    schemaMarkup: signalChecks?.hasSchemaMarkup ?? null,
+    brandVisibility: serpRaw?.organic_results
+      ? (serpRaw.organic_results as any[]).some(
+          (r: any) => (r.position ?? 99) <= 10,
+        )
+      : null,
+    gbpListed: gbp?.place_id != null || gbp?.isClaimed === true,
+  };
 
   // Derive location from GBP address
   let location: string | null = null;
@@ -212,6 +230,7 @@ export async function GET(req: NextRequest) {
       low: low.length,
       top_flags: topFlags,
     },
+    seoSignals,
     repdte: baseline.repdte,
   });
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import GeoScanInput from '../components/GeoScanInput';
 import GeoScanResults from '../components/GeoScanResults';
+import AiSeoScorecard from '../components/AiSeoScorecard';
 import DemoRequestForm from '../components/DemoRequestForm';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -223,6 +224,33 @@ export default function GeoScorePageClient() {
           </div>
         </div>
       </section>
+
+      {/* ─── AI SEO SCORECARD ──────────────────────────────────── */}
+      {scanResult && (
+        <section className="px-6 pb-0 -mt-4" style={{ backgroundColor: '#0F2341' }}>
+          <div className="max-w-3xl mx-auto pb-12">
+            <AiSeoScorecard
+              entityName={scanResult.entity?.name ?? 'Unknown'}
+              geoScore={scanResult.geo?.score ?? 0}
+              peerMedianScore={scanResult.geo?.peer_avg ?? null}
+              signals={{
+                https: scanResult.seoSignals?.https ?? null,
+                pageTitle: scanResult.seoSignals?.pageTitle ?? null,
+                metaDescription: scanResult.seoSignals?.metaDescription ?? null,
+                h1Tag: scanResult.seoSignals?.h1Tag ?? null,
+                schemaMarkup: scanResult.seoSignals?.schemaMarkup ?? null,
+                brandVisibility: scanResult.seoSignals?.brandVisibility ?? null,
+                gbpListed: scanResult.seoSignals?.gbpListed ?? null,
+              }}
+              complianceCount={{
+                high: scanResult.compliance?.high ?? 0,
+                medium: scanResult.compliance?.medium ?? 0,
+                low: scanResult.compliance?.low ?? 0,
+              }}
+            />
+          </div>
+        </section>
+      )}
 
       {/* ─── SCAN RESULTS (conditional) ────────────────────────── */}
       {scanResult && (
