@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import ComplianceReviewClient from './ComplianceReviewClient';
 
 export const metadata: Metadata = {
-  title: 'Banking Compliance Review — Website Compliance Audit | BankForge.ai',
+  title: 'FDIC-Insured Bank Compliance Review — Website Compliance Audit | BankForge.ai',
   description:
-    "BankForge has scanned 4,300+ community banks for Reg DD, UDAAP, Equal Housing, and FFIEC compliance gaps. 89.5% have Reg DD findings. $1,750/mo founding rate — first 5 institutions.",
+    "BankForge has scanned 4,300+ FDIC-insured banks for Reg DD, UDAAP, Equal Housing, and FFIEC compliance gaps. 89.5% have Reg DD findings. $1,750/mo founding rate — first 5 institutions.",
   alternates: { canonical: 'https://bankforge.ai/compliance-review' },
   openGraph: {
-    title: 'Banking Compliance Review — Website Compliance Audit | BankForge.ai',
+    title: 'FDIC-Insured Bank Compliance Review — Website Compliance Audit | BankForge.ai',
     description:
-      '89.5% of community banks have Reg DD findings on their website. BankForge scans your public digital presence against examiner criteria.',
+      '89.5% of FDIC-insured banks have Reg DD findings on their website. BankForge scans your public digital presence against examiner criteria.',
     url: 'https://bankforge.ai/compliance-review',
   },
 };

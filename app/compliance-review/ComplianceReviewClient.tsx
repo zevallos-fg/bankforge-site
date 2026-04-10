@@ -28,7 +28,7 @@ const TIERS = [
       'Up to 20 pages scanned',
       'Severity-graded findings: Low / Medium / High',
       'Regulatory citation on every finding',
-      'Peer benchmark \u2014 4,300+ bank corpus',
+      'Peer benchmark \u2014 4,300+ FDIC-Insured Bank corpus',
       'DOCX delivered within 5 business days',
     ],
     unlocks: null,
@@ -143,7 +143,7 @@ export default function ComplianceReviewClient() {
       <section className="pt-24 pb-16 px-6 min-h-[600px]" style={{ backgroundColor: '#0F2341' }}>
         <div className="max-w-xl mx-auto text-center">
           <p style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1.3px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>
-            For Community Banks &amp; Credit Unions
+            For FDIC-Insured Banks
           </p>
 
           <div className="flex justify-center mb-6">
@@ -155,7 +155,7 @@ export default function ComplianceReviewClient() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-[#F5A0A0] opacity-75" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F5A0A0]" />
               </span>
-              67% of community banks have at least one High compliance finding
+              67% of FDIC-Insured Banks have at least one High compliance finding
             </span>
           </div>
 
@@ -211,7 +211,7 @@ export default function ComplianceReviewClient() {
           <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.07)', paddingTop: '32px', marginTop: '32px' }}>
             <div className="grid grid-cols-3 gap-4">
               {[
-                { num: '4,300+', label: 'Banks & Credit Unions scanned' },
+                { num: '4,300+', label: 'FDIC-Insured Banks scanned' },
                 { num: '89.5%', label: 'Have Reg DD findings on their website' },
                 { num: '83.4%', label: 'Have website accessibility issues' },
               ].map((s, i) => (
@@ -434,7 +434,7 @@ export default function ComplianceReviewClient() {
                   </div>
                 </div>
                 <p className="text-xs text-gray-400 border-t border-gray-200 pt-3">
-                  As many sessions as needed. A bank with 5 High findings needs 3 sessions &mdash;
+                  As many sessions as needed. An FDIC-Insured Bank with 5 High findings needs 3 sessions &mdash;
                   $2,250 standard, $3,000 with full memo documentation.
                 </p>
                 <a
