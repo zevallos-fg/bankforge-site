@@ -11,12 +11,12 @@ import DemoRequestForm from '../components/DemoRequestForm';
 const signalCards = [
   {
     stat: '78%',
-    statLabel: 'of community banks have no schema markup',
+    statLabel: 'of FDIC-Insured Banks have no schema markup',
     body: "Schema tells AI systems exactly what your institution offers. Without it, AI engines must infer your products from unstructured text \u2014 and they rarely get it right.",
   },
   {
     stat: '64%',
-    statLabel: 'of banks have significant GBP gaps',
+    statLabel: 'of FDIC-Insured Banks have significant GBP gaps',
     body: 'GBP is one of the primary data sources AI search engines draw from when answering questions about local financial services.',
   },
   {
@@ -42,7 +42,7 @@ const pricingTiers: Array<{ step: string; name: string; price: string; founding:
       "Your institution\u2019s AI SEO score vs. peer average",
       'Competitor gap analysis (nearest 5 institutions by market)',
       '10 prioritized fixes ranked by impact',
-      'Peer benchmark context from 4,300+ bank corpus',
+      'Peer benchmark context from 4,300+ FDIC-Insured Bank corpus',
       'DOCX report \u2014 delivered within 5 business days',
     ],
     ctaType: 'active' as const,
@@ -87,7 +87,7 @@ const pricingTiers: Array<{ step: string; name: string; price: string; founding:
 ];
 
 const stats = [
-  { value: null, stacked: ['4,309', '4,374'], label: 'Banks & Credit Unions scanned' },
+  { value: '4,309', stacked: null, label: 'FDIC-Insured Banks scanned' },
   { value: '45.8 avg', stacked: null, label: 'Average AI SEO score' },
   { value: '16.6%', stacked: null, label: 'Score below 40 \u2014 invisible on AI search' },
 ];
@@ -145,7 +145,7 @@ export default function GeoScorePageClient() {
         <div className="max-w-3xl mx-auto text-center">
           {/* Eyebrow */}
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '1.3px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '14px' }}>
-            For Community Banks &amp; Credit Unions
+            For FDIC-Insured Banks
           </p>
 
           {/* Red pill badge */}
@@ -158,7 +158,7 @@ export default function GeoScorePageClient() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-[#F5A0A0] opacity-75" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F5A0A0]" />
               </span>
-              16.6% of banks are invisible to AI search. Are you?
+              16.6% of FDIC-Insured Banks are invisible to AI search. Are you?
             </span>
           </div>
 
@@ -466,7 +466,7 @@ export default function GeoScorePageClient() {
             <h2 className="text-white text-3xl mb-4" style={{ fontFamily: 'var(--font-display)' }}>
               Your competitors are invisible on AI search too.
               <br />
-              The first bank to fix it owns the query.
+              The first FDIC-Insured Bank to fix it owns the query.
             </h2>
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
               BankForge has already computed your institution&apos;s AI SEO score.
