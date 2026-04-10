@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import GeoScorePageClient from './GeoScoreClient';
 
 export const metadata: Metadata = {
-  title: 'Bank AI SEO Score — AI Search Visibility for Community Banks | BankForge.ai',
+  title: 'AI SEO + Marketing Intelligence — Community Banks | BankForge.ai',
   description:
-    'BankForge has computed AI SEO scores across 4,300+ community banks. The average score is 45.8 out of 100. Find out where your institution stands on ChatGPT, Perplexity, and Google AI Overviews.',
+    "BankForge tracks 37 AI visibility and marketing intelligence signals across 4,300+ community banks. Average score: 45.8. See where your institution stands on ChatGPT, Perplexity, and Google AI Overviews.",
   keywords:
-    'bank AI search visibility, AI SEO score community bank, ChatGPT bank search, Perplexity bank visibility, AI search optimization financial institution',
+    'bank AI search visibility, AI SEO score community bank, ChatGPT bank search, Perplexity bank visibility, AI search optimization financial institution, marketing intelligence',
   openGraph: {
-    title: 'Bank AI SEO Score — AI Search Visibility | BankForge.ai',
+    title: 'AI SEO + Marketing Intelligence | BankForge.ai',
     description:
       '16.6% of community banks score below 40 on AI search — invisible when customers search for local banking services. See where your institution stands.',
     url: 'https://bankforge.ai/ai-seo-score',

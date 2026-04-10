@@ -298,10 +298,10 @@ export default function BankAiScorePage() {
                 gaps your current site has — so your new site launches clean.
               </p>
               <Link
-                href="/ai-seo-remediation"
+                href="/ai-seo-score"
                 className="inline-block bg-bf-navy text-white font-medium px-5 py-2.5 rounded-lg hover:bg-bf-navy-deep transition-colors text-sm"
               >
-                Learn about AI SEO Remediation &rarr;
+                Learn about AI SEO + Marketing Intelligence &rarr;
               </Link>
             </div>
 

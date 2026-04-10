@@ -321,7 +321,7 @@ export default function HomePage() {
             className="text-3xl text-gray-900 mb-8"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            One Scan. Two Lenses.
+            One Scan. Three Perspectives.
           </h2>
 
           {/* Column headers */}

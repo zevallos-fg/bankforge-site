@@ -141,7 +141,7 @@ export default function GeoScorePageClient() {
       </nav>
 
       {/* ─── HERO — scan input ─────────────────────────────────── */}
-      <section className="pt-24 pb-16 px-6" style={{ backgroundColor: '#0F2341' }}>
+      <section className="pt-24 pb-16 px-6 min-h-[600px]" style={{ backgroundColor: '#0F2341' }}>
         <div className="max-w-3xl mx-auto text-center">
           {/* Eyebrow */}
           <p style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '1.3px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '14px' }}>

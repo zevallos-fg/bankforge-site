@@ -140,7 +140,7 @@ export default function ComplianceReviewClient() {
       </nav>
 
       {/* ─── HERO ──────────────────────────────────────────────── */}
-      <section className="pt-24 pb-16 px-6" style={{ backgroundColor: '#0F2341' }}>
+      <section className="pt-24 pb-16 px-6 min-h-[600px]" style={{ backgroundColor: '#0F2341' }}>
         <div className="max-w-xl mx-auto text-center">
           <p style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1.3px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>
             For Community Banks &amp; Credit Unions
@@ -193,7 +193,7 @@ export default function ComplianceReviewClient() {
             </div>
           </div>
           <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '8px' }}>
-            Reads from our {getCorpusMonthLabel()} data &middot; 1 lookup per firm per 72 hrs
+            Reads from our {getCorpusMonthLabel()}{' '}data &middot; 1 lookup per firm per 72 hrs
           </p>
 
           {showResults && (

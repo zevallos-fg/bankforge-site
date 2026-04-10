@@ -149,6 +149,15 @@ export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNot
               ctaLabel={ctaText}
               buttonClassName="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm"
             />
+            {pageType === 'ria' ? (
+              <Link href="/sec-marketing-rule-audit" className="block mt-4 text-blue-200/70 text-sm hover:text-white transition-colors">
+                &rarr; See the 2025 SEC Marketing Audit
+              </Link>
+            ) : (
+              <Link href="/compliance-review" className="block mt-4 text-blue-200/70 text-sm hover:text-white transition-colors">
+                &rarr; See Compliance Review pricing
+              </Link>
+            )}
           </div>
         </div>
       </section>
