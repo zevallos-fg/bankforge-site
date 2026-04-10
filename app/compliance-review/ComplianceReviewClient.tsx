@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { getCorpusMonthLabel } from '@/app/lib/corpus-month';
+import ComplianceScanResult from '../components/ComplianceScanResult';
 
 // ─── Finding cards data ───────────────────────────────────────────────
 
@@ -101,15 +102,46 @@ function deriveBankName(input: string): string {
 
 // ─── Component ────────────────────────────────────────────────────────
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function ComplianceReviewClient() {
   const [domain, setDomain] = useState('');
-  const [showResults, setShowResults] = useState(false);
+  const [scanState, setScanState] = useState<'idle' | 'loading' | 'found' | 'not_found' | 'error'>('idle');
+  const [scanResult, setScanResult] = useState<any>(null);
   const [bankName, setBankName] = useState('');
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [notifySent, setNotifySent] = useState(false);
 
-  function handleScan() {
+  async function handleScan() {
     if (!domain.trim()) return;
+    const clean = domain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '');
     setBankName(deriveBankName(domain));
-    setShowResults(true);
+    setScanState('loading');
+    try {
+      const res = await fetch(`/api/scan-preview?domain=${encodeURIComponent(clean)}`);
+      if (res.status === 429) { setScanState('error'); return; }
+      const data = await res.json();
+      if (data.found) {
+        setScanResult(data);
+        setScanState('found');
+      } else {
+        setScanState('not_found');
+      }
+    } catch {
+      setScanState('error');
+    }
+  }
+
+  async function handleNotify() {
+    if (!notifyEmail.includes('@')) return;
+    try {
+      await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName: 'Compliance Scan Request', bankName: domain, email: notifyEmail, source: 'compliance_not_found' }),
+      });
+      setNotifySent(true);
+    } catch { /* silent */ }
   }
 
   return (
@@ -186,9 +218,10 @@ export default function ComplianceReviewClient() {
               />
               <button
                 onClick={handleScan}
-                style={{ background: '#1B5299', color: '#fff', padding: '13px 20px', fontSize: '12px', fontWeight: 500, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                disabled={scanState === 'loading' || !domain.trim()}
+                style={{ background: '#1B5299', color: '#fff', padding: '13px 20px', fontSize: '12px', fontWeight: 500, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', opacity: scanState === 'loading' ? 0.6 : 1 }}
               >
-                See your findings &darr;
+                {scanState === 'loading' ? 'Checking...' : 'See your findings \u2193'}
               </button>
             </div>
           </div>
@@ -196,15 +229,41 @@ export default function ComplianceReviewClient() {
             Reads from our {getCorpusMonthLabel()}{' '}data &middot; 1 lookup per firm per 72 hrs
           </p>
 
-          {showResults && (
+          {scanState === 'found' && scanResult && (
             <div className="mt-8 text-center">
-              <p className="text-white/80 text-sm">{'\u2713'} Found {bankName}</p>
+              <p className="text-white/80 text-sm">{'\u2713'} Found {scanResult.entity?.name ?? bankName}</p>
               <button
                 onClick={() => document.getElementById('compliance-scan-results')?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-white/60 text-xs mt-2 underline cursor-pointer"
               >
                 Jump to results &darr;
               </button>
+            </div>
+          )}
+
+          {scanState === 'not_found' && !notifySent && (
+            <div className="max-w-md mx-auto mt-8 text-center">
+              <p className="text-white/70 text-sm mb-4">
+                We haven&apos;t scanned this institution yet. Enter your email and we&apos;ll reach out when it&apos;s ready.
+              </p>
+              <div className="flex gap-2">
+                <input type="email" placeholder="your@email.com" value={notifyEmail} onChange={(e) => setNotifyEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleNotify()} className="flex-1 rounded-lg border border-white/30 bg-white/10 px-4 py-3 text-sm text-white placeholder-white/50 focus:border-white/60 focus:outline-none" />
+                <button onClick={handleNotify} className="bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm cursor-pointer">Notify me</button>
+              </div>
+              <button onClick={() => { setScanState('idle'); setDomain(''); }} className="text-xs text-white/40 hover:text-white/60 mt-3 cursor-pointer">&larr; Try a different domain</button>
+            </div>
+          )}
+
+          {scanState === 'not_found' && notifySent && (
+            <div className="max-w-md mx-auto mt-8 text-center">
+              <p className="text-white/80 text-sm">Got it. We&apos;ll reach out when your scan is ready.</p>
+            </div>
+          )}
+
+          {scanState === 'error' && (
+            <div className="max-w-md mx-auto mt-8 text-center">
+              <p className="text-white/70 text-sm mb-2">One preview scan is available every 72 hours.</p>
+              <button onClick={() => { setScanState('idle'); setDomain(''); }} className="text-xs text-white/40 hover:text-white/60 cursor-pointer">&larr; Try again later</button>
             </div>
           )}
 
@@ -226,37 +285,10 @@ export default function ComplianceReviewClient() {
       </section>
 
       {/* ─── SCAN RESULTS (conditional) ────────────────────────── */}
-      {showResults && (
+      {scanState === 'found' && scanResult && (
         <section id="compliance-scan-results" className="py-16 px-6 bg-white border-b border-gray-100">
           <div className="max-w-4xl mx-auto">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-6">
-              <div>
-                <h3 className="text-xl font-medium text-gray-900">{bankName}</h3>
-                <p className="text-sm text-gray-500">Community bank &middot; {getCorpusMonthLabel()} data</p>
-              </div>
-              <span className="text-[10px] font-medium px-2.5 py-1 rounded" style={{ backgroundColor: '#FEE2E2', color: '#991B1B' }}>3 High findings</span>
-            </div>
-            <div className="space-y-3">
-              {[
-                { sev: 'HIGH', text: 'Rate advertisement missing Reg DD triggering terms \u2014 APY without effective date or minimum balance', ref: 'Reg DD / 12 CFR 1030', loc: 'Homepage \u2014 Rates section' },
-                { sev: 'HIGH', text: 'Equal Housing Lender disclosure absent from consumer lending pages', ref: 'ECOA / Reg B / FFIEC', loc: 'Mortgage page' },
-                { sev: 'MEDIUM', text: 'Privacy notice not linked from homepage footer or account-opening pages', ref: 'Gramm-Leach-Bliley / Reg P', loc: 'Site-wide footer' },
-              ].map((f, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <span className="text-[10px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded mt-0.5 shrink-0" style={{ backgroundColor: f.sev === 'HIGH' ? '#FEE2E2' : '#FEF3C7', color: f.sev === 'HIGH' ? '#991B1B' : '#92400E' }}>{f.sev}</span>
-                  <div>
-                    <p className="text-sm text-gray-700">{f.text}</p>
-                    <p className="text-xs text-gray-400">{f.ref} &middot; {f.loc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="text-xs text-gray-400 mt-4">Full report includes additional findings with complete regulatory citations and peer benchmarks.</p>
-            <div className="text-center pt-4 mt-4 border-t border-gray-100">
-              <button onClick={() => document.getElementById('pricing-section')?.scrollIntoView({ behavior: 'smooth' })} className="text-bf-navy font-medium text-sm hover:underline cursor-pointer">
-                See pricing &darr;
-              </button>
-            </div>
+            <ComplianceScanResult result={scanResult} />
           </div>
         </section>
       )}

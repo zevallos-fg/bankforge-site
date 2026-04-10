@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
   const { data: baseline } = await supabase
     .from('bank_monthly_baseline')
     .select(
-      'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, signal_checks_raw, serp_raw',
+      'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, signal_checks_raw, serp_raw, fdic_enforcement_raw, exam_cycle_signal, risk_indicators',
     )
     .eq('entity_id', entity.entity_id)
     .eq('repdte', corpusRepdte)
@@ -181,6 +181,55 @@ export async function GET(req: NextRequest) {
     gbpListed: gbp?.place_id != null || gbp?.isClaimed === true,
   };
 
+  // Parse enforcement, exam cycle, risk indicators
+  const enforcementRaw = baseline.fdic_enforcement_raw as Record<string, any> | null;
+  const examCycle = baseline.exam_cycle_signal as Record<string, any> | null;
+  const riskIndicators = baseline.risk_indicators as Record<string, any> | null;
+
+  const enforcement = {
+    hasActive: enforcementRaw?.data_status !== 'source_unavailable' && (enforcementRaw?.actions?.length ?? 0) > 0,
+    count: enforcementRaw?.actions?.length ?? 0,
+  };
+
+  const examCycleSignal = {
+    tier: examCycle?.tier ?? null,
+    daysEstimate: examCycle?.days_until_exam ?? null,
+  };
+
+  const riskTier = riskIndicators?.risk_tier ?? baseline.risk_tier ?? null;
+
+  // Enrich findings with canonical bank finding types
+  const CANONICAL: Record<string, { regTag: string; examinerLanguage: string; frequency: string }> = {
+    reg_dd_rate_advertisement: { regTag: 'REG DD', examinerLanguage: "On the examiner's checklist every cycle. APY displayed without effective date, minimum balance, or fee disclosure triggers a Reg DD deficiency under 12 CFR 1030.4.", frequency: 'Very common' },
+    reg_dd_apy_calculation: { regTag: 'REG DD', examinerLanguage: "APY must be calculated using the exact formula in Appendix A of Reg DD. Inaccurate or missing APY is a direct examination deficiency.", frequency: 'Common' },
+    equal_housing_disclosure: { regTag: 'ECOA', examinerLanguage: "Required statement or logo not detected on consumer lending pages. Consistent examiner flag across FDIC, OCC, and CFPB supervised institutions.", frequency: 'Common' },
+    udaap_dark_pattern: { regTag: 'UDAAP', examinerLanguage: "Teaser rate or promotional language without clear conditions. Post-2022 CFPB focus area.", frequency: 'Elevated' },
+    nmls_disclosure: { regTag: 'SAFE ACT', examinerLanguage: "NMLS unique identifier must be displayed on all pages advertising mortgage loan products.", frequency: 'Common' },
+    privacy_notice_accessibility: { regTag: 'REG P', examinerLanguage: "Privacy notice absent from footer or not linked from account-opening pages. Examiners verify link placement during consumer compliance exams.", frequency: 'Very common' },
+    non_deposit_disclaimer: { regTag: 'FDIC', examinerLanguage: "Investment or insurance products displayed without required non-deposit disclaimer.", frequency: 'Common' },
+    accessibility_wcag: { regTag: 'ADA', examinerLanguage: "FFIEC guidance and DOJ ADA enforcement position require WCAG 2.1 AA standards. Enforcement activity increasing since 2023.", frequency: 'Very common' },
+    schema_markup_missing: { regTag: 'FFIEC', examinerLanguage: "Structured data helps AI search engines accurately categorize your institution's products. Absence signals low digital maturity.", frequency: 'Very common' },
+    https_failure: { regTag: 'FFIEC IT', examinerLanguage: "HTTPS required for all consumer-facing pages. FFIEC IT examiners flag HTTP as a cybersecurity control failure.", frequency: 'Rare on primary domain' },
+    cra_performance_context: { regTag: 'CRA', examinerLanguage: "Digital accessibility in LMI areas is an emerging CRA examination consideration.", frequency: 'Emerging' },
+    fdic_membership_display: { regTag: 'FDIC', examinerLanguage: "FDIC Part 328 requires the official FDIC digital sign on bank home page and deposit pages.", frequency: 'Common' },
+  };
+
+  const enrichedFindings = rawFindings.map((f: any) => {
+    const cat = String(f.category ?? f.finding_type ?? '').toLowerCase().replace(/[\s-]+/g, '_');
+    const canonical = CANONICAL[cat] ?? null;
+    const citation = String(f.regulatory_citation ?? f.regulation ?? f.framework ?? '');
+    return {
+      severity: String(f.severity ?? 'MEDIUM').toUpperCase(),
+      category: f.category ?? f.finding_type ?? null,
+      finding: String(f.finding ?? f.description ?? f.observation ?? ''),
+      regulatoryCitation: citation,
+      location: f.location ?? f.page ?? null,
+      regTag: canonical?.regTag ?? citation.split('/')[0]?.trim().toUpperCase().slice(0, 12) ?? '',
+      examinerLanguage: canonical?.examinerLanguage ?? null,
+      frequency: canonical?.frequency ?? null,
+    };
+  });
+
   // Derive location from GBP address
   let location: string | null = null;
   if (gbp?.address) {
@@ -229,7 +278,13 @@ export async function GET(req: NextRequest) {
       medium: medium.length,
       low: low.length,
       top_flags: topFlags,
+      enrichedFindings,
+      peerAvgFindingCount: bc?.signals?.compliance?.peer_avg_finding_count ?? null,
+      peerPercentile: bc?.signals?.compliance?.percentile ?? null,
     },
+    enforcement,
+    examCycleSignal,
+    riskTier,
     seoSignals,
     repdte: baseline.repdte,
   });
