@@ -185,9 +185,9 @@ export default function HomePage() {
               Insights
             </Link>
             <span className="w-px h-4 bg-white/20 mx-2" />
-            {/* Banks / Credit Unions group */}
+            {/* FDIC Banks group */}
             <div className="flex flex-col items-center gap-0.5 px-2">
-              <span style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.35)' }}>Banks / Credit Unions</span>
+              <span style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.35)' }}>FDIC Banks</span>
               <div className="flex items-center gap-1">
                 <Link href="/ai-seo-score" className="px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
                   AI SEO + Marketing Intelligence
