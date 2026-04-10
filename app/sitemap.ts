@@ -11,5 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: 'https://bankforge.ai/ai-seo-remediation',         lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: 'https://bankforge.ai/ai-seo-score',               lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: 'https://bankforge.ai/sec-marketing-rule-audit',  lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: 'https://bankforge.ai/compliance-review',         lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   ];
 }
