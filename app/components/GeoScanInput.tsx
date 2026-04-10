@@ -60,7 +60,7 @@ export default function GeoScanInput({ onResult }: Props) {
           disabled={state === 'loading' || !domain.trim()}
           className="bg-white text-[#0F2341] font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors disabled:opacity-60 whitespace-nowrap cursor-pointer"
         >
-          {state === 'loading' ? 'Checking...' : 'See your AI SEO score'}
+          {state === 'loading' ? 'Checking...' : 'See your AI SEO + Marketing Intelligence'}
         </button>
       </div>
     );

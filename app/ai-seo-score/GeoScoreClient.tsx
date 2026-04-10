@@ -34,7 +34,7 @@ const signalCards = [
 const pricingTiers = [
   {
     step: '1',
-    name: 'AI SEO Baseline Report',
+    name: 'AI SEO + Marketing Intelligence Report',
     price: '$3,000',
     founding: 'Founding rate $2,500 \u2014 available to first 5 clients. Expires September 1, 2026.',
     note: null,
@@ -69,7 +69,7 @@ const pricingTiers = [
   },
   {
     step: '3',
-    name: 'AI SEO Monitoring',
+    name: 'AI SEO + Marketing Intelligence Monitoring',
     price: '$999/mo',
     founding: null,
     note: 'No contract \u00b7 Cancel anytime \u00b7 Available after Step 2',
@@ -176,7 +176,7 @@ export default function GeoScorePageClient() {
           <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.55)', maxWidth: '520px', lineHeight: 1.7, margin: '0 auto 28px' }}>
             The gap between the top and bottom performer in the same market
             averages <strong style={{ color: 'rgba(255,255,255,0.85)', fontWeight: 400 }}>35 points</strong>. The institution that fixes it first owns
-            the query &mdash; and the customer.
+            the query &mdash; and the customer. And with Marketing Intelligence, you keep them too.
           </p>
 
           {/* Scan input with gold glow */}
@@ -209,10 +209,9 @@ export default function GeoScorePageClient() {
               {stats.map((s, i) => (
                 <div key={i} className="text-center" style={{ borderRight: i < 2 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
                   {s.stacked ? (
-                    <div className="flex items-center justify-center gap-1.5">
+                    <div className="flex flex-col items-center">
                       <span style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: '#7EB3E8' }}>{s.stacked[0]}</span>
-                      <span style={{ color: 'rgba(255,255,255,0.2)' }}>&middot;</span>
-                      <span style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: '#7EB3E8' }}>{s.stacked[1]}</span>
+                      <span style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: '#7EB3E8' }}>&middot; {s.stacked[1]}</span>
                     </div>
                   ) : (
                     <p style={{ fontFamily: 'var(--font-display)', fontSize: '28px', color: '#7EB3E8' }}>{s.value}</p>
@@ -371,16 +370,65 @@ export default function GeoScorePageClient() {
         </div>
       </section>
 
+      {/* ─── MARKETING INTELLIGENCE ───────────────────────────── */}
+      <section className="py-16 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="rounded-xl bg-white border border-gray-200 p-8">
+            <h3 className="text-xl text-gray-900 mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+              What marketing intelligence means in practice
+            </h3>
+            <p className="text-sm text-gray-600 leading-relaxed mb-8">
+              Every month, BankForge runs 37 signals across your institution&apos;s digital presence
+              and compares them to your nearest competitors. You get a summary of what changed,
+              what AI engines are citing about you vs. peers, and where you&apos;re losing ground
+              before it shows up in your deposit pipeline.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Left — Signals include */}
+              <div>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Signals include</p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'AI search citations', 'Local pack position', 'Competitor site changes',
+                    'Schema & structured data drift', 'Third-party vendor presence', 'App store ratings',
+                    'Web content authority signals', 'SEO ranking signals', 'Mobile performance', 'Page speed scores',
+                  ].map((s) => (
+                    <span key={s} className="text-xs px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">{s}</span>
+                  ))}
+                  <span className="text-xs px-3 py-1.5 rounded-full border border-dashed border-gray-300 text-gray-400 italic">+ more to come</span>
+                </div>
+              </div>
+              {/* Right — By the numbers */}
+              <div>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">By the numbers</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { num: '37', label: 'Signals tracked monthly' },
+                    { num: '4,300+', label: 'Institutions in corpus' },
+                    { num: '5', label: 'Nearest competitors tracked' },
+                    { num: 'Monthly', label: 'Report cadence' },
+                  ].map((s) => (
+                    <div key={s.num} className="rounded-lg p-3" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+                      <p className="text-xl mb-0.5" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.num}</p>
+                      <p className="text-xs text-gray-500">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── STAT ROW ──────────────────────────────────────────── */}
       <section className="py-12 px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {stats.map((s, i) => (
             <div key={i}>
               {s.stacked ? (
-                <div className="flex items-center justify-center gap-1.5 mb-1">
+                <div className="flex flex-col items-center mb-1">
                   <span className="text-3xl" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.stacked[0]}</span>
-                  <span className="text-gray-400">&middot;</span>
-                  <span className="text-3xl" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.stacked[1]}</span>
+                  <span className="text-3xl" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>&middot; {s.stacked[1]}</span>
                 </div>
               ) : (
                 <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#1B5299' }}>{s.value}</p>
@@ -408,7 +456,7 @@ export default function GeoScorePageClient() {
               audienceType="bank"
               sourcePage="/ai-seo-score"
               sourceCta="cta_block"
-              ctaLabel="Get Your AI SEO Score Report"
+              ctaLabel="Get Your AI SEO + Intelligence Report"
             />
           </div>
         </div>

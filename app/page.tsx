@@ -192,7 +192,7 @@ export default function HomePage() {
                 <Link href="/ai-seo-score" className="px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
                   AI SEO Score
                 </Link>
-                <Link href="#" className="relative px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
+                <Link href="/compliance-review" className="relative px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
                   Compliance Review
                   <span className="absolute -top-1.5 -right-1 text-[8px] font-medium px-1 rounded" style={{ backgroundColor: '#C8A84B', color: '#0F2341' }}>JUNE</span>
                 </Link>
