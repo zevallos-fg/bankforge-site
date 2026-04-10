@@ -184,13 +184,29 @@ export default function HomePage() {
             <Link href="/insights" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
               Insights
             </Link>
-            <Link href="/ai-seo-score" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
-              AI SEO Score
-            </Link>
-            <Link href="/sec-marketing-rule-audit" className="px-3 py-2 text-sm text-white hover:text-white/80 transition-colors">
-              2025 SEC Marketing Audit
-            </Link>
-            <span className="w-px h-4 bg-white/20 mx-3" />
+            <span className="w-px h-4 bg-white/20 mx-2" />
+            {/* Banks / Credit Unions group */}
+            <div className="flex flex-col items-center gap-0.5 px-2">
+              <span style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.35)' }}>Banks / Credit Unions</span>
+              <div className="flex items-center gap-1">
+                <Link href="/ai-seo-score" className="px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
+                  AI SEO Score
+                </Link>
+                <Link href="#" className="relative px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
+                  Compliance Review
+                  <span className="absolute -top-1.5 -right-1 text-[8px] font-medium px-1 rounded" style={{ backgroundColor: '#C8A84B', color: '#0F2341' }}>JUNE</span>
+                </Link>
+              </div>
+            </div>
+            <span className="w-px h-4 bg-white/20 mx-2" />
+            {/* RIAs group */}
+            <div className="flex flex-col items-center gap-0.5 px-2">
+              <span style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.35)' }}>RIAs</span>
+              <Link href="/sec-marketing-rule-audit" className="px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
+                2025 SEC Marketing Audit
+              </Link>
+            </div>
+            <span className="w-px h-4 bg-white/20 mx-2" />
             <Link href="/for-banks" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
               FAQ Banks
             </Link>
