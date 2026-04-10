@@ -190,7 +190,7 @@ export default function HomePage() {
               <span style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.35)' }}>Banks / Credit Unions</span>
               <div className="flex items-center gap-1">
                 <Link href="/ai-seo-score" className="px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
-                  AI SEO Score
+                  AI SEO + Marketing Intelligence
                 </Link>
                 <Link href="/compliance-review" className="relative px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
                   Compliance Review
@@ -237,7 +237,7 @@ export default function HomePage() {
         {mobileNav && (
           <div className="md:hidden border-t border-white/10 py-2">
             <Link href="/insights" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Insights</Link>
-            <Link href="/ai-seo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO Score</Link>
+            <Link href="/ai-seo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO + Marketing Intelligence</Link>
             <Link href="/sec-marketing-rule-audit" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>2025 SEC Marketing Audit</Link>
             <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Banks</Link>
             <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Credit Unions</Link>
