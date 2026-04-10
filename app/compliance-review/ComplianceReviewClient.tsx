@@ -329,7 +329,7 @@ export default function ComplianceReviewClient() {
                 <div className="rounded-lg px-3 py-2 mb-4" style={{ backgroundColor: '#EBF1FA' }}>
                   <p className="text-xs text-bf-navy">
                     <span className="mr-1">{'\u2605'}</span>
-                    AI SEO + Marketing Intelligence included from Month 1
+                    AI SEO + Marketing Intelligence monitoring included ($999/mo value) — built into every tier
                   </p>
                 </div>
 

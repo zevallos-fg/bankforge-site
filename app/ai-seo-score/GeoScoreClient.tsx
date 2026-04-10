@@ -31,13 +31,13 @@ const signalCards = [
   },
 ];
 
-const pricingTiers = [
+const pricingTiers: Array<{ step: string; name: string; price: string; founding: string | null; note: string | null; items: string[]; ctaType: 'active' | 'disabled'; ctaLabel: string; ctaKey: string; highlight: boolean }> = [
   {
     step: '1',
     name: 'AI SEO + Marketing Intelligence Report',
     price: '$3,000',
     founding: 'Founding rate $2,500 \u2014 available to first 5 clients. Expires September 1, 2026.',
-    note: null,
+    note: 'No subscription, no compliance scope \u2014 the CMO owns it, delivered in 5 business days.',
     items: [
       "Your institution\u2019s AI SEO score vs. peer average",
       'Competitor gap analysis (nearest 5 institutions by market)',
@@ -55,7 +55,7 @@ const pricingTiers = [
     name: 'Remediation Spec + Working Session',
     price: '$2,000',
     founding: null,
-    note: 'Add-on after AI SEO 1 delivery',
+    note: 'Optional add-on \u00b7 Available any time after Step 1',
     items: [
       'Technical remediation spec your marketing/IT team executes',
       '60-minute live working session \u2014 we walk through every fix',
@@ -72,15 +72,15 @@ const pricingTiers = [
     name: 'AI SEO + Marketing Intelligence Monitoring',
     price: '$999/mo',
     founding: null,
-    note: 'No contract \u00b7 Cancel anytime \u00b7 Available after Step 2',
+    note: 'No contract \u00b7 Cancel anytime \u00b7 Available after Step 1',
     items: [
       'Month-over-month AI SEO score tracking',
       'Competitor delta report',
       'Alert on score drops above 5 points',
       'Covers ChatGPT, Perplexity, Google AI Overviews',
     ],
-    ctaType: 'disabled' as const,
-    ctaLabel: 'Available after Step 2',
+    ctaType: 'active' as const,
+    ctaLabel: 'Start Monitoring',
     ctaKey: 'pricing_geo3',
     highlight: false,
   },
@@ -416,6 +416,26 @@ export default function GeoScorePageClient() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CROSS-LINK: COMPLIANCE REVIEW ─────────────────────── */}
+      <section className="px-6 pb-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="rounded-xl bg-white border border-gray-200 p-8">
+            <p className="text-bf-navy text-xs font-medium tracking-wide uppercase mb-3">Going deeper</p>
+            <h3 className="text-xl text-gray-900 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              Need compliance findings alongside your AI SEO score?
+            </h3>
+            <p className="text-sm text-gray-600 leading-relaxed mb-4">
+              The BankForge Compliance Review includes AI SEO + Marketing Intelligence
+              monitoring from Month 1 &mdash; alongside Reg DD, UDAAP, Equal Housing, and FFIEC
+              findings. Starting at $1,750/mo for community banks.
+            </p>
+            <Link href="/compliance-review" className="text-bf-navy text-sm font-medium hover:underline">
+              &rarr; See Compliance Review pricing
+            </Link>
           </div>
         </div>
       </section>
