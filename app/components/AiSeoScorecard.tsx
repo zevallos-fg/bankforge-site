@@ -67,7 +67,7 @@ function Tooltip({ text }: { text: string }) {
 function ScoreRing({ score }: { score: number }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
-  const pct = Math.min(score / 100, 1);
+  const pct = Math.min(score / 65, 1);
   const dashOffset = circumference * (1 - pct);
   const color = getScoreColor(score);
   const tier = getTierLabel(score);
@@ -94,7 +94,7 @@ function ScoreRing({ score }: { score: number }) {
           {score}
         </text>
         <text x="64" y="78" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="11">
-          / 100
+          / 65
         </text>
       </svg>
       <span className="text-sm font-medium mt-1" style={{ color: tier.color }}>

@@ -37,10 +37,10 @@ export default function GeoScanResults({ result }: Props) {
             <span className="text-5xl font-bold" style={{ color: geoColor, fontFamily: 'var(--font-display)' }}>
               {geo?.score ?? 'N/A'}
             </span>
-            <span className="text-gray-400 text-xl mb-1">/ 100</span>
+            <span className="text-gray-400 text-xl mb-1">/ 65</span>
           </div>
           <div className="w-full h-2.5 bg-gray-200 rounded-full mb-3">
-            <div className="h-2.5 rounded-full" style={{ width: `${Math.min((geoScore / 100) * 100, 100)}%`, backgroundColor: geoColor }} />
+            <div className="h-2.5 rounded-full" style={{ width: `${Math.min((geoScore / 65) * 100, 100)}%`, backgroundColor: geoColor }} />
           </div>
           <div className="space-y-1 text-sm text-gray-600">
             {geo?.peer_avg != null && <p>Peer avg: <strong className="text-gray-800">{geo.peer_avg}</strong></p>}

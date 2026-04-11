@@ -166,7 +166,7 @@ export default function ComplianceScanResult({ result }: Props) {
                 color: examCycle.tier === 'imminent' ? '#991B1B' : examCycle.tier === 'near' ? '#92400E' : examCycle.tier === 'approaching' ? '#1E40AF' : '#475569',
               }}>
                 Exam window: {examCycle.tier === 'imminent' ? '<60 days' : examCycle.tier === 'near' ? '60\u2013120 days' : examCycle.tier === 'approaching' ? '120\u2013270 days' : '>270 days'}
-                <Tip text="Estimated based on CRA examination cycle. BankForge flags for counsel \u2014 never concludes a schedule." />
+                <Tip text="Estimated based on CRA examination cycle. BankForge flags for counsel — never concludes a schedule." />
               </span>
             </div>
           )}
@@ -176,12 +176,12 @@ export default function ComplianceScanResult({ result }: Props) {
             {enforcement?.hasActive ? (
               <span className="text-[10px] font-medium px-2.5 py-1 rounded" style={{ backgroundColor: '#FEE2E2', color: '#991B1B' }}>
                 {enforcement.count} active enforcement order{enforcement.count !== 1 ? 's' : ''} on record
-                <Tip text="Source: FDIC EDOOrders.csv \u2014 10,548 enforcement actions 1975\u20132026." />
+                <Tip text="Source: FDIC EDOOrders.csv — 10,548 enforcement actions 1975–2026." />
               </span>
             ) : (
               <span className="text-[10px] font-medium px-2.5 py-1 rounded" style={{ backgroundColor: '#DCFCE7', color: '#166534' }}>
-                Clean \u2014 no enforcement history
-                <Tip text="Source: FDIC EDOOrders.csv \u2014 10,548 enforcement actions 1975\u20132026." />
+                Clean — no enforcement history
+                <Tip text="Source: FDIC EDOOrders.csv — 10,548 enforcement actions 1975–2026." />
               </span>
             )}
           </div>
