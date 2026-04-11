@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
 
   // Step 2: get baseline — 1 month in arrears, merge if data split across rows
   const corpusRepdte = getCorpusMonth();
-  const selectCols = 'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, serp_raw, fdic_enforcement_raw, exam_cycle_signal, risk_indicators';
+  const selectCols = 'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, serp_raw, fdic_enforcement_raw, exam_cycle_signal, risk_indicators, sc_https_failure, sc_missing_schema_markup, sc_missing_nmls, sc_missing_equal_housing, sc_missing_fdic_membership, signal_checks';
   const { data: baselineRows } = await supabase
     .from('bank_monthly_baseline')
     .select(selectCols)
@@ -175,22 +175,25 @@ export async function GET(req: NextRequest) {
   const gbp = baseline.gbp_raw as Record<string, any> | null;
   const dns = baseline.dns_security_raw as Record<string, any> | null;
   const webArchive = baseline.web_archive_raw as Record<string, any> | null;
-  const signalChecks = baseline.signal_checks_raw as Record<string, any> | null;
   const serpRaw = baseline.serp_raw as Record<string, any> | null;
+  const signalChecks = baseline.signal_checks as Record<string, any> | null;
 
-  // Derive SEO signals from signal_checks_raw
+  // Derive SEO signals from sc_* promoted columns + signal_checks JSONB
   const seoSignals = {
-    https: signalChecks?.hasHttps ?? null,
-    pageTitle: signalChecks?.hasPageTitle ?? null,
-    metaDescription: signalChecks?.hasMetaDescription ?? null,
-    h1Tag: signalChecks?.hasH1 ?? null,
-    schemaMarkup: signalChecks?.hasSchemaMarkup ?? null,
+    https: baseline.sc_https_failure != null ? !baseline.sc_https_failure : null,
+    schemaMarkup: baseline.sc_missing_schema_markup != null ? !baseline.sc_missing_schema_markup : null,
+    nmls: baseline.sc_missing_nmls != null ? !baseline.sc_missing_nmls : null,
+    equalHousing: baseline.sc_missing_equal_housing != null ? !baseline.sc_missing_equal_housing : null,
+    fdicMembership: baseline.sc_missing_fdic_membership != null ? !baseline.sc_missing_fdic_membership : null,
+    pageTitle: signalChecks?.seo?.hasTitle ?? null,
+    metaDescription: signalChecks?.seo?.hasMetaDescription ?? null,
+    h1Tag: signalChecks?.seo?.hasH1 ?? null,
     brandVisibility: serpRaw?.organic_results
       ? (serpRaw.organic_results as any[]).some(
           (r: any) => (r.position ?? 99) <= 10,
         )
       : null,
-    gbpListed: gbp?.place_id != null || gbp?.isClaimed === true,
+    gbpListed: !!(gbp?.in_pack || gbp?.place_id || gbp?.isClaimed),
   };
 
   // Parse enforcement, exam cycle, risk indicators

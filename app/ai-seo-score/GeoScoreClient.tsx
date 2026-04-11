@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import GeoScanInput from '../components/GeoScanInput';
-import GeoScanResults from '../components/GeoScanResults';
-import AiSeoScorecard from '../components/AiSeoScorecard';
 import DemoRequestForm from '../components/DemoRequestForm';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -110,6 +108,162 @@ function ArrowDown({ color = '#1B5299' }: { color?: string }) {
     </div>
   );
 }
+
+/* ─── Tooltip ───────────────────────────────────────────────────────── */
+
+function Tip({ text }: { text: string }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span className="relative inline-flex cursor-help ml-1" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" className="text-gray-400 hover:text-gray-600 transition-colors">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
+        <text x="8" y="11.5" textAnchor="middle" fill="currentColor" fontSize="9" fontWeight="600">?</text>
+      </svg>
+      {show && (
+        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 bg-slate-800 text-white text-xs rounded-lg p-2 max-w-[220px] shadow-lg whitespace-normal leading-relaxed pointer-events-none">{text}</span>
+      )}
+    </span>
+  );
+}
+
+/* ─── SEO Signal definitions ────────────────────────────────────────── */
+
+const SEO_SIGNALS: Array<{ key: string; label: string; tooltip: string }> = [
+  { key: 'https', label: 'HTTPS', tooltip: 'Secure connection required. AI engines deprioritize HTTP sites.' },
+  { key: 'pageTitle', label: 'Page Title', tooltip: 'Descriptive title tag helps AI engines categorize your institution.' },
+  { key: 'metaDescription', label: 'Meta Description', tooltip: 'Summary snippet AI engines use to describe your page in results.' },
+  { key: 'h1Tag', label: 'H1 Tag', tooltip: 'Primary heading signals your page topic to AI crawlers.' },
+  { key: 'brandVisibility', label: 'Brand Visibility', tooltip: 'Whether your institution appears in the top 10 organic search results.' },
+  { key: 'schemaMarkup', label: 'Schema Markup', tooltip: 'Structured data that tells AI exactly what products you offer.' },
+  { key: 'gbpListed', label: 'GBP Listed', tooltip: 'Google Business Profile — the primary source for local AI search answers.' },
+];
+
+/* ─── AI SEO Result Panel ───────────────────────────────────────────── */
+
+function AiSeoResultPanel({ result }: { result: any }) {
+  const geo = result.geo;
+  const seoSigs = result.seoSignals ?? {};
+  const compliance = result.compliance;
+  const geoScore = geo?.score ?? 0;
+  const geoColor = geoScore >= 60 ? '#10b981' : geoScore >= 40 ? '#BA7517' : geoScore >= 25 ? '#BA7517' : '#E24B4A';
+  const geoLabel = geoScore >= 60 ? 'Strong' : geoScore >= 40 ? 'Moderate' : geoScore >= 25 ? 'Developing' : 'Needs Work';
+  const geoGap = geo?.top_peer_score != null && geo?.score != null ? geo.top_peer_score - geo.score : null;
+
+  return (
+    <section id="geo-scan-results" className="py-16 px-6 bg-white border-b border-gray-100">
+      <div className="max-w-4xl mx-auto animate-fadeIn">
+        {/* Panel 1 — Entity header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-6">
+          <div>
+            <h3 className="text-xl font-medium text-gray-900" style={{ fontFamily: 'var(--font-display)' }}>{result.entity?.name}</h3>
+            <p className="text-sm text-gray-500">
+              {result.entity?.asset_tier && `${result.entity.asset_tier} \u00B7 `}
+              {result.entity?.location ?? result.entity?.domain}
+            </p>
+          </div>
+          <p className="text-xs text-gray-400">{result.repdte ? `${result.repdte} corpus scan` : ''}</p>
+        </div>
+
+        {/* Panel 2 — Two-column: AI SEO Score + SEO Signals */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          {/* LEFT — AI SEO Score */}
+          <div className="rounded-lg p-5" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">AI SEO Score</p>
+            <div className="flex items-end gap-2 mb-2">
+              <span className="text-5xl font-bold" style={{ color: geoColor, fontFamily: 'var(--font-display)' }}>
+                {geo?.score ?? 'N/A'}
+              </span>
+              <span className="text-gray-400 text-xl mb-1">/ 65</span>
+            </div>
+            <p className="text-xs font-medium mb-3" style={{ color: geoColor }}>{geoLabel}</p>
+            <div className="w-full h-2.5 bg-gray-200 rounded-full mb-3">
+              <div className="h-2.5 rounded-full" style={{ width: `${Math.min((geoScore / 65) * 100, 100)}%`, backgroundColor: geoColor }} />
+            </div>
+            <div className="space-y-1 text-sm text-gray-600">
+              {geo?.peer_avg != null && <p>Peer avg: <strong className="text-gray-800">{geo.peer_avg}</strong></p>}
+              {geo?.percentile != null && geo?.peer_count != null && geo?.peer_state && (
+                <p>Top <strong className="text-gray-800">{Math.max(1, Math.round(100 - geo.percentile))}%</strong> of {geo.peer_count} {geo.peer_state} peers</p>
+              )}
+            </div>
+            {geoGap != null && geoGap > 15 && (
+              <div className="mt-3 rounded p-2.5" style={{ backgroundColor: '#FEF3C7', border: '1px solid #F59E0B' }}>
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  <strong>{'\u26A0\uFE0F'} Top competitor{geo?.top_peer_name ? ` (${geo.top_peer_name})` : ''} scores {geo?.top_peer_score}</strong> — a {geoGap}-point gap.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT — SEO Signals */}
+          <div className="rounded-lg p-5" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">SEO Signals</p>
+            <div className="space-y-2.5">
+              {SEO_SIGNALS.map((def) => {
+                const val = seoSigs[def.key];
+                const pass = val === true;
+                const unknown = val == null;
+                return (
+                  <div key={def.key} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {unknown ? (
+                        <span className="text-gray-300 text-sm">&mdash;</span>
+                      ) : pass ? (
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      ) : (
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" /></svg>
+                      )}
+                      <span className="text-sm" style={{ color: unknown ? '#D1D5DB' : '#374151' }}>{def.label}</span>
+                    </div>
+                    <Tip text={def.tooltip} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Panel 4 — Compliance strip */}
+        {compliance && compliance.total > 0 && (
+          <div className="rounded-lg p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" style={{ backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+            <div className="flex items-center gap-4">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Compliance</p>
+              {compliance.high > 0 && (
+                <span className="text-sm"><span className="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style={{ backgroundColor: '#DC2626' }} />{compliance.high} High</span>
+              )}
+              {compliance.medium > 0 && (
+                <span className="text-sm"><span className="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style={{ backgroundColor: '#D97706' }} />{compliance.medium} Medium</span>
+              )}
+              {compliance.low > 0 && (
+                <span className="text-sm"><span className="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style={{ backgroundColor: '#9CA3AF' }} />{compliance.low} Low</span>
+              )}
+            </div>
+            <Link href="/compliance-review" className="text-bf-navy text-sm font-medium hover:underline whitespace-nowrap">
+              Learn more about compliance reviews &rarr;
+            </Link>
+          </div>
+        )}
+
+        {/* Footnote */}
+        <p className="text-[10px] text-gray-400 text-center leading-relaxed">
+          Source: BankForge March 2026 corpus &middot; Updated monthly &middot; PageSpeed and performance scores available after April 2026 sweep
+        </p>
+
+        {/* CTA */}
+        <div className="text-center pt-4 mt-4 border-t border-gray-100">
+          <p className="text-sm text-gray-600 mb-3">Ready to fix this?</p>
+          <button
+            onClick={() => document.getElementById('what-we-deliver')?.scrollIntoView({ behavior: 'smooth' })}
+            className="text-bf-navy font-medium text-sm hover:underline cursor-pointer"
+          >
+            See what we deliver &darr;
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Main page component ───────────────────────────────────────────── */
 
 export default function GeoScorePageClient() {
   const [scanResult, setScanResult] = useState<any>(null);
@@ -225,41 +379,8 @@ export default function GeoScorePageClient() {
         </div>
       </section>
 
-      {/* ─── AI SEO SCORECARD ──────────────────────────────────── */}
-      {scanResult && (
-        <section className="px-6 pb-0 -mt-4" style={{ backgroundColor: '#0F2341' }}>
-          <div className="max-w-3xl mx-auto pb-12">
-            <AiSeoScorecard
-              entityName={scanResult.entity?.name ?? 'Unknown'}
-              geoScore={scanResult.geo?.score ?? 0}
-              peerMedianScore={scanResult.geo?.peer_avg ?? null}
-              signals={{
-                https: scanResult.seoSignals?.https ?? null,
-                pageTitle: scanResult.seoSignals?.pageTitle ?? null,
-                metaDescription: scanResult.seoSignals?.metaDescription ?? null,
-                h1Tag: scanResult.seoSignals?.h1Tag ?? null,
-                schemaMarkup: scanResult.seoSignals?.schemaMarkup ?? null,
-                brandVisibility: scanResult.seoSignals?.brandVisibility ?? null,
-                gbpListed: scanResult.seoSignals?.gbpListed ?? null,
-              }}
-              complianceCount={{
-                high: scanResult.compliance?.high ?? 0,
-                medium: scanResult.compliance?.medium ?? 0,
-                low: scanResult.compliance?.low ?? 0,
-              }}
-            />
-          </div>
-        </section>
-      )}
-
-      {/* ─── SCAN RESULTS (conditional) ────────────────────────── */}
-      {scanResult && (
-        <section id="geo-scan-results" className="py-16 px-6 bg-white border-b border-gray-100">
-          <div className="max-w-4xl mx-auto">
-            <GeoScanResults result={scanResult} />
-          </div>
-        </section>
-      )}
+      {/* ─── SCAN RESULTS ────────────────────────────────────────── */}
+      {scanResult && <AiSeoResultPanel result={scanResult} />}
 
       {/* ─── HOW IT WORKS ──────────────────────────────────────── */}
       <section className="py-16 px-6">
