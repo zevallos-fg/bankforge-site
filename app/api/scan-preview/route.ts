@@ -31,7 +31,9 @@ export async function GET(req: NextRequest) {
   const last = scanHistory.get(ip);
   const WINDOW = 72 * 60 * 60 * 1000;
 
-  if (last && now - last < WINDOW) {
+  const bypassRateLimit = process.env.DISABLE_SCAN_RATE_LIMIT === 'true';
+
+  if (!bypassRateLimit && last && now - last < WINDOW) {
     return NextResponse.json(
       {
         error: 'rate_limited',
