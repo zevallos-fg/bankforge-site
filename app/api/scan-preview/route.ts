@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
 
   // Step 2: get baseline — 1 month in arrears, merge if data split across rows
   const corpusRepdte = getCorpusMonth();
-  const selectCols = 'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, signal_checks_raw, serp_raw, fdic_enforcement_raw, exam_cycle_signal, risk_indicators';
+  const selectCols = 'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, serp_raw, fdic_enforcement_raw, exam_cycle_signal, risk_indicators';
   const { data: baselineRows } = await supabase
     .from('bank_monthly_baseline')
     .select(selectCols)
