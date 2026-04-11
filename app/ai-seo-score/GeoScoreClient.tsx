@@ -86,7 +86,7 @@ const pricingTiers: Array<{ step: string; name: string; price: string; founding:
 ];
 
 const stats = [
-  { value: '4,309', stacked: null, label: 'FDIC-Insured Banks scanned' },
+  { value: '4,300+', stacked: null, label: 'FDIC-Insured Banks scanned' },
   { value: '45.8 avg', stacked: null, label: 'Average AI SEO score' },
   { value: '16.6%', stacked: null, label: 'Score below 40 \u2014 invisible on AI search' },
 ];
@@ -123,6 +123,24 @@ function Tip({ text }: { text: string }) {
         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 bg-slate-800 text-white text-xs rounded-lg p-2 max-w-[220px] shadow-lg whitespace-normal leading-relaxed pointer-events-none">{text}</span>
       )}
     </span>
+  );
+}
+
+/* ─── Technical signal cell ─────────────────────────────────────────── */
+
+function TechSigCell({ label, status, value, good, tip, extra }: {
+  label: string; status: string; value: string; good: boolean; tip: string; extra?: string;
+}) {
+  return (
+    <div className="rounded-lg p-2.5" style={{ backgroundColor: good ? '#F0FDF4' : '#FAFAFA', border: `1px solid ${good ? '#BBF7D0' : '#E5E7EB'}` }}>
+      <div className="flex items-center gap-1 mb-1">
+        <span className="text-sm">{status}</span>
+        <span className="text-xs font-medium text-gray-700">{label}</span>
+      </div>
+      <p className="text-xs text-gray-600">{value}</p>
+      {extra && <p className="text-xs text-amber-600">{extra}</p>}
+      <p className="text-[10px] text-gray-400 leading-relaxed mt-1">{tip}</p>
+    </div>
   );
 }
 
@@ -219,6 +237,56 @@ function AiSeoResultPanel({ result }: { result: any }) {
                 );
               })}
             </div>
+          </div>
+        </div>
+
+        {/* Panel 3 — Technical Signals */}
+        <div className="mb-6">
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Technical Signals</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <TechSigCell
+              label="GBP"
+              status={result.signals?.gbp_claimed === true ? '\u2705' : result.signals?.gbp_claimed === false ? '\u26A0\uFE0F' : '\u2014'}
+              value={result.signals?.gbp_claimed ? `${result.signals.gbp_rating ?? '\u2014'}\u2605 \u00B7 ${result.signals.gbp_reviews ?? 0} reviews` : 'Unclaimed'}
+              good={result.signals?.gbp_claimed === true}
+              tip="Primary AI data source for local search."
+            />
+            <TechSigCell
+              label="DMARC"
+              status={!result.signals?.dmarc_present ? '\u274C' : result.signals?.dmarc_policy === 'reject' ? '\u2705' : '\u26A0\uFE0F'}
+              value={!result.signals?.dmarc_present ? 'Missing' : `Policy: ${result.signals.dmarc_policy ?? 'unknown'}`}
+              good={!!result.signals?.dmarc_present && result.signals?.dmarc_policy === 'reject'}
+              tip="Prevents email spoofing. Missing = FFIEC flag."
+            />
+            <TechSigCell
+              label="DKIM"
+              status={result.signals?.dkim_present ? '\u2705' : '\u26A0\uFE0F'}
+              value={result.signals?.dkim_present ? 'Configured' : 'Not configured'}
+              good={result.signals?.dkim_present === true}
+              tip="Cryptographic email authentication."
+            />
+            <TechSigCell
+              label="SPF"
+              status={result.signals?.spf_present ? '\u2705' : '\u26A0\uFE0F'}
+              value={result.signals?.spf_present ? 'Configured' : 'Missing'}
+              good={result.signals?.spf_present === true}
+              tip="Authorizes email sending servers."
+            />
+            <TechSigCell
+              label="SSL / TLS"
+              status={result.signals?.ssl_health === 'strong' ? '\u2705' : '\u26A0\uFE0F'}
+              value={result.signals?.tls_version ?? result.signals?.ssl_health ?? 'Unknown'}
+              good={result.signals?.ssl_health === 'strong' || result.signals?.ssl_health === 'adequate'}
+              tip="Encrypts traffic. TLS 1.3 = gold standard."
+              extra={result.signals?.cert_expiry_days != null && result.signals.cert_expiry_days < 90 ? `Cert: ${result.signals.cert_expiry_days}d` : undefined}
+            />
+            <TechSigCell
+              label="Web Activity"
+              status={result.signals?.web_velocity === 'active' ? '\u2705' : '\u26A0\uFE0F'}
+              value={result.signals?.web_velocity ? `${result.signals.web_velocity.charAt(0).toUpperCase() + result.signals.web_velocity.slice(1)}` : 'No data'}
+              good={result.signals?.web_velocity === 'active'}
+              tip="Content freshness signal for AI engines."
+            />
           </div>
         </div>
 
