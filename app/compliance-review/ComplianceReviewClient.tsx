@@ -29,7 +29,7 @@ const TIERS = [
       'Up to 20 pages scanned',
       'Severity-graded findings: Low / Medium / High',
       'Regulatory citation on every finding',
-      'Peer benchmark \u2014 4,300+ FDIC-Insured Bank corpus',
+      'Peer benchmarks from 4,300+ FDIC-Insured Banks',
       'DOCX delivered within 5 business days',
     ],
     unlocks: null,
@@ -271,7 +271,7 @@ export default function ComplianceReviewClient() {
             <div className="grid grid-cols-3 gap-4">
               {[
                 { num: '4,300+', label: 'FDIC-Insured Banks scanned' },
-                { num: '89.5%', label: 'Have Reg DD findings on their website' },
+                { num: '78%', label: 'Fail a basic Reg DD disclosure check' },
                 { num: '83.4%', label: 'Have website accessibility issues' },
               ].map((s, i) => (
                 <div key={i} className="text-center" style={{ borderRight: i < 2 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
@@ -427,16 +427,15 @@ export default function ComplianceReviewClient() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="rounded-xl p-5" style={{ backgroundColor: '#F2F4F7' }}>
                 <p className="text-sm text-gray-600 leading-relaxed mb-3">
-                  Structured as working sessions &mdash; each covering up to 2 High findings &mdash; with an optional
-                  examiner-ready memo for exam prep, MRA responses, or self-assessment documentation.
+                  One session. All High findings. Your team owns execution.
                 </p>
                 <ul className="space-y-2">
                   {[
-                    'Structured remediation roadmap for each finding',
-                    'Working session with your compliance or legal team',
-                    'Prioritized by exam cycle proximity',
-                    'No vendor dependency \u2014 your team owns execution',
-                    'Examiner-ready memo available on High findings',
+                    '60-minute live session with your compliance or legal team',
+                    'Full remediation roadmap \u2014 every High finding prioritized by exam cycle proximity',
+                    'Regulatory basis for each fix \u2014 your team knows exactly what to do and why',
+                    'DOCX session summary delivered within 48 hours',
+                    'No vendor dependency, no ongoing obligation',
                   ].map((item, i) => (
                     <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
                       <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
@@ -450,24 +449,14 @@ export default function ComplianceReviewClient() {
                 <div className="border-b border-gray-200 pb-3 mb-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">Per session</p>
-                      <p className="text-xs text-gray-400">Up to 2 High findings &middot; 30-min working session</p>
+                      <p className="text-sm font-semibold text-gray-900">One engagement</p>
+                      <p className="text-xs text-gray-400">All High findings &middot; 60-min working session &middot; DOCX summary</p>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-display)' }}>$750</p>
-                  </div>
-                </div>
-                <div className="pb-3 mb-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">+ Examiner-ready memo</p>
-                      <p className="text-xs text-gray-400">Exam prep &middot; MRA response &middot; Self-assessment</p>
-                    </div>
-                    <p className="text-2xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-display)' }}>+$250</p>
+                    <p className="text-2xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-display)' }}>$1,500</p>
                   </div>
                 </div>
                 <p className="text-xs text-gray-400 border-t border-gray-200 pt-3">
-                  As many sessions as needed. An FDIC-Insured Bank with 5 High findings needs 3 sessions &mdash;
-                  $2,250 standard, $3,000 with full memo documentation.
+                  Most subscribers complete remediation in a single engagement.
                 </p>
                 <a
                   href="mailto:outreach@bankforge.ai?subject=Compliance%20Remediation%20September%202026"
@@ -490,14 +479,13 @@ export default function ComplianceReviewClient() {
               Your website is already being evaluated.
             </h2>
             <p className="text-gray-300 text-sm leading-relaxed mb-6">
-              BankForge reviews every finding before delivery. No vendor energy. No AI noise.
-              Examiner-side methodology from an institution-side compliance professional.
+              Every finding reviewed for regulatory accuracy before delivery. No false positives. No generic checklists.
             </p>
             <a
               href="mailto:outreach@bankforge.ai?subject=Compliance%20Review%20Early%20Access"
               className="inline-block bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg text-sm hover:bg-gray-50 transition-colors"
             >
-              Get Early Access &mdash; Launching June 2026
+              Reserve Your Spot &mdash; June 2026
             </a>
           </div>
         </div>
@@ -506,13 +494,17 @@ export default function ComplianceReviewClient() {
       {/* ─── FOOTER ────────────────────────────────────────────── */}
       <footer className="py-6 px-6 border-t border-gray-100">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
-          <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
-            <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+          <span className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
+              <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+            </span>
+            <span className="text-gray-300">·</span>
+            <a href="https://www.linkedin.com/company/bankforge-ai" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700 transition-colors">LinkedIn</a>
           </span>
           <span className="text-center">
             BankForge flags findings for compliance counsel review. We never conclude a violation.
           </span>
-          <span>&copy; 2026</span>
+          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms</a></span>
         </div>
       </footer>
     </div>

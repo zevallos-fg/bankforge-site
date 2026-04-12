@@ -4,12 +4,12 @@ import ComplianceReviewClient from './ComplianceReviewClient';
 export const metadata: Metadata = {
   title: 'FDIC-Insured Bank Compliance Review — Website Compliance Audit | BankForge.ai',
   description:
-    "BankForge has scanned 4,300+ FDIC-insured banks for Reg DD, UDAAP, Equal Housing, and FFIEC compliance gaps. 89.5% have Reg DD findings. $1,750/mo founding rate — first 5 institutions.",
+    "BankForge has scanned 4,300+ FDIC-insured banks for Reg DD, UDAAP, Equal Housing, and FFIEC compliance gaps. 78% fail a basic Reg DD disclosure check. $1,750/mo founding rate — first 5 institutions.",
   alternates: { canonical: 'https://bankforge.ai/compliance-review' },
   openGraph: {
     title: 'FDIC-Insured Bank Compliance Review — Website Compliance Audit | BankForge.ai',
     description:
-      '89.5% of FDIC-insured banks have Reg DD findings on their website. BankForge scans your public digital presence against examiner criteria.',
+      '78% of FDIC-insured banks fail a basic Reg DD disclosure check. BankForge scans your public digital presence against examiner criteria.',
     url: 'https://bankforge.ai/compliance-review',
   },
 };
@@ -39,7 +39,7 @@ const faqSchema = {
       name: 'What is included in each compliance review?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Each review includes a full website scan, severity-graded findings with regulatory citations, peer benchmark context from 4,300+ bank corpus, and a DOCX report delivered within 5 business days. AI SEO and Marketing Intelligence monitoring are included from Month 1 at all tiers.',
+        text: 'Each review includes a full website scan, severity-graded findings with regulatory citations, peer benchmarks from 4,300+ FDIC-Insured Banks, and a DOCX report delivered within 5 business days. AI SEO and Marketing Intelligence monitoring are included from Month 1 at all tiers.',
       },
     },
     {
@@ -47,7 +47,7 @@ const faqSchema = {
       name: 'When does compliance remediation launch?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Compliance Remediation launches September 2026, available to active Compliance Review subscribers only. Sessions are $750 each, covering up to 2 High findings with a 30-minute working session. An optional examiner-ready memo (exam prep, MRA response, or self-assessment) is available for +$250 per session.',
+        text: 'Compliance Remediation launches September 2026, available to active Compliance Review subscribers only. Remediation is a single $1,500 engagement covering all High findings in a 60-minute working session with a DOCX summary delivered within 48 hours. Most subscribers complete remediation in one engagement.',
       },
     },
   ],
@@ -59,6 +59,19 @@ export default function ComplianceReviewPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: 'Bank Website Compliance Review',
+            provider: { '@type': 'Organization', name: 'BankForge', url: 'https://www.bankforge.ai' },
+            description: 'Website compliance audit for FDIC-insured banks and credit unions against Reg DD, UDAAP, Equal Housing Lender, FFIEC, and Fair Lending standards.',
+            serviceType: 'Regulatory Compliance Audit',
+          }),
+        }}
       />
       <ComplianceReviewClient />
     </>

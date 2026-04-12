@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import AudiencePage from '../components/AudiencePage';
 
 export const metadata: Metadata = {
-  title: 'Bank Website Compliance Monitoring — BankForge.ai',
+  title: 'Bank Website Compliance Review — BankForge.ai',
   description:
     'BankForge scans bank websites for UDAAP, Reg Z, Reg DD, Fair Lending, and FFIEC compliance gaps. Built by practitioners from $100B+ institutions. Know what your examiners see before they do.',
   alternates: { canonical: 'https://bankforge.ai/for-banks' },

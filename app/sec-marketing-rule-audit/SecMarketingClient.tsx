@@ -343,7 +343,7 @@ export default function SecMarketingClient() {
               <p className="text-3xl mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0F2341' }}>$999/mo</p>
               <p className="text-xs text-gray-400 mb-3">No contract &middot; Cancel anytime</p>
               <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: '#EBF1FA', color: '#1B5299' }}>Coming May 2026</span>
+                <span className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: '#EBF1FA', color: '#1B5299' }}>Available May 2026</span>
                 <span className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: '#FFF4E5', color: '#9A5820' }}>Available only after audit delivery</span>
               </div>
               <hr className="border-gray-100 mb-4" />
@@ -384,7 +384,7 @@ export default function SecMarketingClient() {
               See what we find before your examiner does.
             </h2>
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
-              BankForge reviews every finding before delivery. No vendor energy. No AI noise.
+              Every finding reviewed for regulatory accuracy before delivery. No false positives. No generic checklists.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
@@ -407,13 +407,17 @@ export default function SecMarketingClient() {
       {/* ─── FOOTER ────────────────────────────────────────────── */}
       <footer className="py-6 px-6 border-t border-gray-100">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
-          <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
-            <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+          <span className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
+              <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+            </span>
+            <span className="text-gray-300">·</span>
+            <a href="https://www.linkedin.com/company/bankforge-ai" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700 transition-colors">LinkedIn</a>
           </span>
           <span className="text-center">
             BankForge flags findings for compliance counsel review. We never conclude a violation.
           </span>
-          <span>&copy; 2026</span>
+          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms</a></span>
         </div>
       </footer>
 

@@ -15,5 +15,32 @@ export const metadata: Metadata = {
 };
 
 export default function SecMarketingRuleAuditPage() {
-  return <SecMarketingClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'Organization',
+                name: 'BankForge',
+                url: 'https://www.bankforge.ai',
+                description: 'Compliance intelligence and AI search visibility platform for regulated financial institutions.',
+              },
+              {
+                '@type': 'Service',
+                name: '2025 SEC Marketing Rule Audit',
+                provider: { '@type': 'Organization', name: 'BankForge', url: 'https://www.bankforge.ai' },
+                description: 'Marketing footprint audit for registered investment advisers against SEC Rule 206(4)-1. Covers testimonials, endorsements, third-party ratings, and performance advertising.',
+                serviceType: 'Regulatory Compliance Audit',
+              },
+            ],
+          }),
+        }}
+      />
+      <SecMarketingClient />
+    </>
+  );
 }

@@ -22,7 +22,7 @@ const audienceTypeMap = { bank: 'bank', cu: 'credit_union', ria: 'ria' } as cons
 const sourcePageMap = { bank: '/for-banks', cu: '/for-credit-unions', ria: '/for-rias' } as const;
 
 export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNote }: AudiencePageProps) {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set([0, 1]));
   const [mobileNav, setMobileNav] = useState(false);
 
   return (
@@ -107,15 +107,22 @@ export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNot
             {faqItems.map((item, i) => (
               <div key={i} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  onClick={() => {
+                    setOpenFaqs(prev => {
+                      const next = new Set(prev);
+                      if (next.has(i)) next.delete(i);
+                      else next.add(i);
+                      return next;
+                    });
+                  }}
                   className="w-full text-left px-5 py-4 flex items-center justify-between"
                 >
                   <span className="text-sm font-medium text-gray-900">{item.q}</span>
                   <span className="text-gray-400 text-lg ml-4">
-                    {openFaq === i ? '\u2212' : '+'}
+                    {openFaqs.has(i) ? '\u2212' : '+'}
                   </span>
                 </button>
-                {openFaq === i && (
+                {openFaqs.has(i) && (
                   <div className="px-5 pb-4">
                     <p className="text-sm text-gray-600 leading-relaxed">{item.a}</p>
                   </div>
@@ -140,7 +147,7 @@ export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNot
               Your website already has an audience you&apos;re not preparing for.
             </h2>
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
-              The BankForge team reviews every finding before delivery. No vendor energy. No AI noise.
+              Every finding reviewed for regulatory accuracy before delivery. No false positives. No generic checklists.
             </p>
             <DemoRequestForm
               audienceType={audienceTypeMap[pageType]}
@@ -165,13 +172,17 @@ export default function AudiencePage({ pageType, h1, ctaText, faqItems, extraNot
       {/* Footer */}
       <footer className="py-6 px-6 border-t border-gray-100">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
-          <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
-            <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+          <span className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
+              <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+            </span>
+            <span className="text-gray-300">·</span>
+            <a href="https://www.linkedin.com/company/bankforge-ai" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700 transition-colors">LinkedIn</a>
           </span>
           <span className="text-center">
             BankForge flags findings for compliance counsel review. We never conclude a violation.
           </span>
-          <span>&copy; 2026</span>
+          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms</a></span>
         </div>
       </footer>
     </div>

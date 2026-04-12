@@ -33,7 +33,7 @@ const faqSchema = {
       name: "How does BankForge compute a bank's AI SEO score?",
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'BankForge measures five factors: schema markup (JSON-LD structured data), Google Business Profile completeness, content authority and freshness, AI crawler access, and web archive history. Each factor is weighted by its observed impact on AI search engine citation rates across the BankForge corpus of 4,300+ institutions.',
+        text: 'BankForge measures five factors: schema markup (JSON-LD structured data), Google Business Profile completeness, content authority and freshness, AI crawler access, and web archive history. Each factor is weighted by its observed impact on AI search engine citation rates across the BankForge peer benchmarks from 4,300+ FDIC-insured banks.',
       },
     },
     {
@@ -53,6 +53,19 @@ export default function GeoScorePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: 'AI SEO + Marketing Intelligence Report',
+            provider: { '@type': 'Organization', name: 'BankForge', url: 'https://www.bankforge.ai' },
+            description: 'AI search visibility scoring and peer benchmarking for community banks and credit unions. Scores institutions against 4,300+ FDIC-insured bank dataset.',
+            serviceType: 'Digital Marketing Intelligence',
+          }),
+        }}
       />
       <GeoScorePageClient />
     </>

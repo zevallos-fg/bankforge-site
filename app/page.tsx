@@ -127,7 +127,7 @@ const jsonLd = [
       {
         '@type': 'Question',
         name: 'How does BankForge find compliance gaps on a website?',
-        acceptedAnswer: { '@type': 'Answer', text: 'BankForge crawls public-facing pages without requiring any login or IT access. Every page is processed against UDAAP, Reg Z, Reg DD, FFIEC, Fair Lending, and SEC Marketing Rule criteria and scored for AI visibility across a corpus of 66,000+ institutions. Findings include specific regulatory citations, not marketing opinions.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'BankForge crawls public-facing pages without requiring any login or IT access. Every page is processed against UDAAP, Reg Z, Reg DD, FFIEC, Fair Lending, and SEC Marketing Rule criteria and scored for AI visibility across institutions your size and market. Findings include specific regulatory citations, not marketing opinions.' },
       },
     ],
   },
@@ -194,7 +194,7 @@ export default function HomePage() {
                 </Link>
                 <Link href="/compliance-review" className="relative px-2 py-1 text-sm text-white hover:text-white/80 transition-colors">
                   Compliance Review
-                  <span className="absolute -top-1.5 -right-1 text-[8px] font-medium px-1 rounded" style={{ backgroundColor: '#C8A84B', color: '#0F2341' }}>JUNE</span>
+                  <span className="absolute -top-1.5 -right-1 text-[8px] font-medium px-1 rounded" style={{ backgroundColor: '#C8A84B', color: '#0F2341' }}>Jun 2026</span>
                 </Link>
               </div>
             </div>
@@ -208,13 +208,13 @@ export default function HomePage() {
             </div>
             <span className="w-px h-4 bg-white/20 mx-2" />
             <Link href="/for-banks" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
-              FAQ Banks
+              For Banks
             </Link>
             <Link href="/for-credit-unions" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
-              FAQ Credit Unions
+              For Credit Unions
             </Link>
             <Link href="/for-rias" className="px-3 py-2 text-sm text-white/50 hover:text-white/80 transition-colors">
-              FAQ RIAs
+              For Investment Advisers
             </Link>
           </div>
 
@@ -239,9 +239,9 @@ export default function HomePage() {
             <Link href="/insights" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>Insights</Link>
             <Link href="/ai-seo-score" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>AI SEO + Marketing Intelligence</Link>
             <Link href="/sec-marketing-rule-audit" className="block px-6 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>2025 SEC Marketing Audit</Link>
-            <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Banks</Link>
-            <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ Credit Unions</Link>
-            <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>FAQ RIAs</Link>
+            <Link href="/for-banks" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>For Banks</Link>
+            <Link href="/for-credit-unions" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>For Credit Unions</Link>
+            <Link href="/for-rias" className="block px-6 py-3 text-sm text-white/50 hover:text-white hover:bg-white/5" onClick={() => setMobileNav(false)}>For Investment Advisers</Link>
           </div>
         )}
       </nav>
@@ -435,11 +435,8 @@ export default function HomePage() {
               <p className="text-blue-200/70 text-sm leading-relaxed mb-3">
                 Every page is processed against UDAAP, Reg Z, Reg DD, FFIEC interagency guidance,
                 Fair Lending, and SEC Marketing Rule criteria &mdash; and scored for AI visibility,
-                digital performance, and accessibility across our corpus of 66,000+ institutions.
+                digital performance, and accessibility across institutions your size and market.
                 Specific regulatory citations. Not marketing opinions.
-              </p>
-              <p className="text-xs text-blue-300/50">
-                Corpus: 4,300+ banks &middot; 23,000+ RIAs &middot; 4,400+ credit unions
               </p>
             </div>
             {/* Step 03 */}
@@ -607,22 +604,8 @@ export default function HomePage() {
               Your website already has an audience you&apos;re not preparing for.
             </h2>
             <p className="text-blue-200/70 text-sm leading-relaxed mb-6">
-              The BankForge team reviews every finding before delivery. No vendor energy. No AI noise.
+              The BankForge team reviews every finding before delivery. Every finding reviewed for regulatory accuracy before delivery. No false positives. No generic checklists.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/ai-seo-score"
-                className="bg-white text-bf-navy-deep font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors text-sm text-center"
-              >
-                See your AI SEO Score
-              </Link>
-              <Link
-                href="/sec-marketing-rule-audit"
-                className="border border-white/30 text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors text-sm text-center"
-              >
-                2025 SEC Marketing Rule Audit
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -630,13 +613,17 @@ export default function HomePage() {
       {/* ─── FOOTER ────────────────────────────────────────────── */}
       <footer className="py-6 px-6 border-t border-gray-100">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
-          <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
-            <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+          <span className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
+              <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+            </span>
+            <span className="text-gray-300">·</span>
+            <a href="https://www.linkedin.com/company/bankforge-ai" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700 transition-colors">LinkedIn</a>
           </span>
           <span className="text-center">
             BankForge flags findings for compliance counsel review. We never conclude a violation.
           </span>
-          <span>&copy; 2026</span>
+          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms</a></span>
         </div>
       </footer>
 

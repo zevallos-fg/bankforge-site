@@ -15,12 +15,12 @@ const signalCards = [
   },
   {
     stat: '64%',
-    statLabel: 'of FDIC-Insured Banks have significant GBP gaps',
-    body: 'GBP is one of the primary data sources AI search engines draw from when answering questions about local financial services.',
+    statLabel: 'of FDIC-Insured Banks have significant Google Business Profile gaps',
+    body: 'Your Google Business Profile is one of the primary data sources AI search engines draw from when answering questions about local financial services.',
   },
   {
-    stat: '3,800+',
-    statLabel: 'institutions with web archive data',
+    stat: '\u2713',
+    statLabel: 'Historical digital presence signals included in every analysis.',
     body: 'AI engines prioritize content that demonstrates expertise. A stale website with a single rate table signals low authority.',
   },
   {
@@ -39,9 +39,9 @@ const pricingTiers: Array<{ step: string; name: string; price: string; founding:
     note: 'No subscription, no compliance scope \u2014 the CMO owns it, delivered in 5 business days.',
     items: [
       "Your institution\u2019s AI SEO score vs. peer average",
+      '__GOLD__Peer benchmarks from 4,300+ FDIC-Insured Banks',
       'Competitor gap analysis (nearest 5 institutions by market)',
       '10 prioritized fixes ranked by impact',
-      'Peer benchmark context from 4,300+ FDIC-Insured Bank corpus',
       'DOCX report \u2014 delivered within 5 business days',
     ],
     ctaType: 'active' as const,
@@ -62,7 +62,7 @@ const pricingTiers: Array<{ step: string; name: string; price: string; founding:
       'No vendor dependency \u2014 your team owns execution',
     ],
     ctaType: 'active' as const,
-    ctaLabel: 'Request AI SEO Report',
+    ctaLabel: 'Book a Remediation Session',
     ctaKey: 'pricing_geo2',
     highlight: false,
   },
@@ -179,7 +179,7 @@ function AiSeoResultPanel({ result }: { result: any }) {
               {result.entity?.location ?? result.entity?.domain}
             </p>
           </div>
-          <p className="text-xs text-gray-400">{result.repdte ? `${result.repdte} corpus scan` : ''}</p>
+          <p className="text-xs text-gray-400">{result.repdte ? `${result.repdte} peer benchmarks` : ''}</p>
         </div>
 
         {/* Panel 2 — Two-column: AI SEO Score + SEO Signals */}
@@ -313,7 +313,7 @@ function AiSeoResultPanel({ result }: { result: any }) {
 
         {/* Footnote */}
         <p className="text-[10px] text-gray-400 text-center leading-relaxed">
-          Source: BankForge March 2026 corpus &middot; Updated monthly &middot; PageSpeed and performance scores available after April 2026 sweep
+          Source: BankForge March 2026 peer benchmarks &middot; Updated monthly &middot; PageSpeed and performance scores available after April 2026 sweep
         </p>
 
         {/* CTA */}
@@ -501,6 +501,14 @@ export default function GeoScorePageClient() {
           <div className="hidden md:flex items-start">
             {pricingTiers.map((tier, idx) => (
               <div key={tier.step} className="contents">
+                {tier.step === '2' && (
+                  <div className="flex items-center justify-center mb-2">
+                    <div className="flex items-center gap-1.5 bg-amber-50 border border-[#c8a84b]/40 text-[#0f2341] text-xs font-medium px-3 py-1 rounded-full">
+                      <span className="text-[#c8a84b]">★</span>
+                      <span>Most Clients Add This</span>
+                    </div>
+                  </div>
+                )}
                 <div
                   className="flex-1 rounded-xl p-6 bg-white flex flex-col"
                   style={{
@@ -516,12 +524,20 @@ export default function GeoScorePageClient() {
                   {tier.founding && <p className="text-xs text-gray-500 mb-3 leading-relaxed">{tier.founding}</p>}
                   {tier.note && <p className="text-xs text-gray-400 mb-3">{tier.note}</p>}
                   <ul className="space-y-2 mb-6 flex-1">
-                    {tier.items.map((item, i) => (
-                      <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
-                        <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
+                    {tier.items.map((item, i) => {
+                      const isGold = item.startsWith('__GOLD__');
+                      const text = isGold ? item.replace('__GOLD__', '') : item;
+                      return (
+                        <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
+                          <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
+                          {isGold ? (
+                            <span className="font-semibold text-[#c8a84b]">{text}</span>
+                          ) : (
+                            <span>{text}</span>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                   {tier.ctaType === 'active' ? (
                     <DemoRequestForm
@@ -548,6 +564,14 @@ export default function GeoScorePageClient() {
           <div className="md:hidden space-y-0">
             {pricingTiers.map((tier, idx) => (
               <div key={tier.step}>
+                {tier.step === '2' && (
+                  <div className="flex items-center justify-center mb-2 mt-4">
+                    <div className="flex items-center gap-1.5 bg-amber-50 border border-[#c8a84b]/40 text-[#0f2341] text-xs font-medium px-3 py-1 rounded-full">
+                      <span className="text-[#c8a84b]">★</span>
+                      <span>Most Clients Add This</span>
+                    </div>
+                  </div>
+                )}
                 <div
                   className="rounded-xl p-6 bg-white flex flex-col"
                   style={{
@@ -561,12 +585,20 @@ export default function GeoScorePageClient() {
                   {tier.founding && <p className="text-xs text-gray-500 mb-3 leading-relaxed">{tier.founding}</p>}
                   {tier.note && <p className="text-xs text-gray-400 mb-3">{tier.note}</p>}
                   <ul className="space-y-2 mb-6 flex-1">
-                    {tier.items.map((item, i) => (
-                      <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
-                        <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
+                    {tier.items.map((item, i) => {
+                      const isGold = item.startsWith('__GOLD__');
+                      const text = isGold ? item.replace('__GOLD__', '') : item;
+                      return (
+                        <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-2">
+                          <span className="text-bf-navy mt-0.5 shrink-0">&bull;</span>
+                          {isGold ? (
+                            <span className="font-semibold text-[#c8a84b]">{text}</span>
+                          ) : (
+                            <span>{text}</span>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                   {tier.ctaType === 'active' ? (
                     <DemoRequestForm
@@ -621,7 +653,7 @@ export default function GeoScorePageClient() {
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { num: '37', label: 'Signals tracked monthly' },
-                    { num: '4,300+', label: 'Institutions in corpus' },
+                    { num: '4,300+', label: 'Peer benchmarks' },
                     { num: '5', label: 'Nearest competitors tracked' },
                     { num: 'Monthly', label: 'Report cadence' },
                   ].map((s) => (
@@ -702,13 +734,17 @@ export default function GeoScorePageClient() {
       {/* ─── FOOTER ────────────────────────────────────────────── */}
       <footer className="py-6 px-6 border-t border-gray-100">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
-          <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
-            <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+          <span className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
+              <span style={{ color: '#1B5299' }}>BankForge</span>.ai
+            </span>
+            <span className="text-gray-300">·</span>
+            <a href="https://www.linkedin.com/company/bankforge-ai" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700 transition-colors">LinkedIn</a>
           </span>
           <span className="text-center">
             BankForge flags findings for compliance counsel review. We never conclude a violation.
           </span>
-          <span>&copy; 2026</span>
+          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms</a></span>
         </div>
       </footer>
     </div>
