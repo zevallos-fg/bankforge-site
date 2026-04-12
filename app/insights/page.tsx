@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import SiteNav from '../components/SiteNav';
 
 export const metadata: Metadata = {
   title: 'Insights — BankForge.ai',
@@ -23,31 +24,7 @@ export default function InsightsPage() {
   return (
     <div className="min-h-screen bg-bf-slate">
       {/* Nav */}
-      <nav
-        className="fixed top-0 inset-x-0 z-50 px-6 py-3 flex items-center justify-between"
-        style={{ backgroundColor: 'rgba(15,35,65,0.80)', backdropFilter: 'blur(12px)' }}
-      >
-        <Link
-          href="/"
-          className="text-xl tracking-tight"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
-          <span style={{ color: '#7EB3E8' }}>BankForge</span>
-          <span className="text-white">.ai</span>
-        </Link>
-        <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
-          <Link href="/for-banks" className="hover:text-white transition-colors">Banks</Link>
-          <Link href="/for-credit-unions" className="hover:text-white transition-colors">Credit Unions</Link>
-          <Link href="/for-rias" className="hover:text-white transition-colors">Investment Advisers</Link>
-          <Link href="/insights" className="text-white">Insights</Link>
-        </div>
-        <Link
-          href="mailto:outreach@bankforge.ai"
-          className="bg-white text-bf-navy-deep text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-        >
-          Request a Call
-        </Link>
-      </nav>
+      <SiteNav />
 
       {/* Content */}
       <div className="pt-24 pb-16 px-6">
@@ -101,7 +78,7 @@ export default function InsightsPage() {
             <a href="https://www.linkedin.com/company/bankforge-ai" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700 transition-colors">LinkedIn</a>
           </span>
           <span>BankForge flags findings for compliance counsel review. We never conclude a violation.</span>
-          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms</a></span>
+          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy Policy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms of Service</a></span>
         </div>
       </footer>
     </div>
