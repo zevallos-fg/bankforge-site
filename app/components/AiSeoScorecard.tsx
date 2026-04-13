@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toAiReadinessScore } from '@/app/lib/score-utils';
 
 /* ─── Types ─────────────────────────────────────────────────────────── */
 
@@ -71,6 +72,7 @@ function ScoreRing({ score }: { score: number }) {
   const dashOffset = circumference * (1 - pct);
   const color = getScoreColor(score);
   const tier = getTierLabel(score);
+  const displayScore = toAiReadinessScore(score);
 
   return (
     <div className="flex flex-col items-center">
@@ -91,10 +93,10 @@ function ScoreRing({ score }: { score: number }) {
         />
         {/* Score number */}
         <text x="64" y="60" textAnchor="middle" fill="white" fontSize="32" fontWeight="300" style={{ fontFamily: 'var(--font-display)' }}>
-          {score}
+          {displayScore}
         </text>
         <text x="64" y="78" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="11">
-          / 65
+          / 100
         </text>
       </svg>
       <span className="text-sm font-medium mt-1" style={{ color: tier.color }}>
@@ -158,7 +160,7 @@ export default function AiSeoScorecard({
 
           {peerMedianScore != null && (
             <p className="text-center text-xs mb-5" style={{ color: 'rgba(255,255,255,0.45)' }}>
-              FDIC-Insured Bank avg: <span className="text-white/70 font-medium">{peerMedianScore}</span>
+              FDIC-Insured Bank avg: <span className="text-white/70 font-medium">{toAiReadinessScore(peerMedianScore)}</span>
             </p>
           )}
 

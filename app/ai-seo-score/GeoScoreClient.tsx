@@ -5,6 +5,7 @@ import Link from 'next/link';
 import GeoScanInput from '../components/GeoScanInput';
 import SiteNav from '../components/SiteNav';
 import DemoRequestForm from '../components/DemoRequestForm';
+import { toAiReadinessScore } from '@/app/lib/score-utils';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -166,7 +167,8 @@ function AiSeoResultPanel({ result }: { result: any }) {
   const geoScore = geo?.score ?? 0;
   const geoColor = geoScore >= 60 ? '#10b981' : geoScore >= 40 ? '#BA7517' : geoScore >= 25 ? '#BA7517' : '#E24B4A';
   const geoLabel = geoScore >= 60 ? 'Strong' : geoScore >= 40 ? 'Moderate' : geoScore >= 25 ? 'Developing' : 'Needs Work';
-  const geoGap = geo?.top_peer_score != null && geo?.score != null ? geo.top_peer_score - geo.score : null;
+  const displayScore = toAiReadinessScore(geo?.score);
+  const displayGap = geo?.top_peer_score != null && geo?.score != null ? toAiReadinessScore(geo.top_peer_score) - toAiReadinessScore(geo.score) : null;
 
   return (
     <section id="geo-scan-results" className="py-16 px-6 bg-white border-b border-gray-100">
@@ -190,24 +192,24 @@ function AiSeoResultPanel({ result }: { result: any }) {
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">AI SEO Score</p>
             <div className="flex items-end gap-2 mb-2">
               <span className="text-5xl font-bold" style={{ color: geoColor, fontFamily: 'var(--font-display)' }}>
-                {geo?.score ?? 'N/A'}
+                {geo?.score != null ? displayScore : 'N/A'}
               </span>
-              <span className="text-gray-400 text-xl mb-1">/ 65</span>
+              <span className="text-gray-400 text-xl mb-1">/ 100</span>
             </div>
             <p className="text-xs font-medium mb-3" style={{ color: geoColor }}>{geoLabel}</p>
             <div className="w-full h-2.5 bg-gray-200 rounded-full mb-3">
-              <div className="h-2.5 rounded-full" style={{ width: `${Math.min((geoScore / 65) * 100, 100)}%`, backgroundColor: geoColor }} />
+              <div className="h-2.5 rounded-full" style={{ width: `${Math.min(displayScore, 100)}%`, backgroundColor: geoColor }} />
             </div>
             <div className="space-y-1 text-sm text-gray-600">
-              {geo?.peer_avg != null && <p>Peer avg: <strong className="text-gray-800">{geo.peer_avg}</strong></p>}
+              {geo?.peer_avg != null && <p>Peer avg: <strong className="text-gray-800">{toAiReadinessScore(geo.peer_avg)}</strong></p>}
               {geo?.percentile != null && geo?.peer_count != null && geo?.peer_state && (
                 <p>Top <strong className="text-gray-800">{Math.max(1, Math.round(100 - geo.percentile))}%</strong> of {geo.peer_count} {geo.peer_state} peers</p>
               )}
             </div>
-            {geoGap != null && geoGap > 15 && (
+            {displayGap != null && displayGap > 15 && (
               <div className="mt-3 rounded p-2.5" style={{ backgroundColor: '#FEF3C7', border: '1px solid #F59E0B' }}>
                 <p className="text-xs text-amber-800 leading-relaxed">
-                  <strong>{'\u26A0\uFE0F'} Top competitor{geo?.top_peer_name ? ` (${geo.top_peer_name})` : ''} scores {geo?.top_peer_score}</strong> — a {geoGap}-point gap.
+                  <strong>{'\u26A0\uFE0F'} Top competitor{geo?.top_peer_name ? ` (${geo.top_peer_name})` : ''} scores {toAiReadinessScore(geo?.top_peer_score)}</strong> — a {displayGap}-point gap.
                 </p>
               </div>
             )}

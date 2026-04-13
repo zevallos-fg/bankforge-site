@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getCorpusMonthLabel } from '@/app/lib/corpus-month';
+import { toAiReadinessScore } from '@/app/lib/score-utils';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -108,6 +109,8 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
   const geoScore = geo?.score ?? 0;
   const geoColor = geoScore >= 60 ? '#16A34A' : geoScore >= 40 ? '#D97706' : '#DC2626';
   const geoGap = geo?.top_peer_score != null && geo.score != null ? geo.top_peer_score - geo.score : null;
+  const displayScore = toAiReadinessScore(geo?.score);
+  const displayGap = geo?.top_peer_score != null && geo?.score != null ? toAiReadinessScore(geo.top_peer_score) - toAiReadinessScore(geo.score) : null;
 
   const innerContent = (
     <div className={inline ? 'w-full' : 'p-6'}>
@@ -200,7 +203,7 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
                 </div>
                 <div className="flex items-end gap-2 mb-2">
                   <span className="text-4xl font-bold" style={{ color: geoColor, fontFamily: 'var(--font-display)' }}>
-                    {geo?.score ?? 'N/A'}
+                    {geo?.score != null ? displayScore : 'N/A'}
                   </span>
                   <span className="text-gray-400 text-lg mb-1">/ 100</span>
                 </div>
@@ -208,22 +211,22 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
                 <div className="w-full h-2 bg-gray-200 rounded-full mb-3">
                   <div
                     className="h-2 rounded-full transition-all"
-                    style={{ width: `${Math.min((geoScore / 100) * 100, 100)}%`, backgroundColor: geoColor }}
+                    style={{ width: `${Math.min(displayScore, 100)}%`, backgroundColor: geoColor }}
                   />
                 </div>
                 {/* Peer context */}
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mb-3">
-                  {geo?.peer_avg != null && <span>Peer avg: <strong className="text-gray-700">{geo.peer_avg}</strong></span>}
-                  {geo?.top_peer_score != null && <span>Top peer: <strong className="text-gray-700">{geo.top_peer_score}</strong></span>}
+                  {geo?.peer_avg != null && <span>Peer avg: <strong className="text-gray-700">{toAiReadinessScore(geo.peer_avg)}</strong></span>}
+                  {geo?.top_peer_score != null && <span>Top peer: <strong className="text-gray-700">{toAiReadinessScore(geo.top_peer_score)}</strong></span>}
                   {geo?.percentile != null && geo?.peer_count != null && geo?.peer_state && (
                     <span>Rank: <strong className="text-gray-700">Top {Math.max(1, Math.round(100 - geo.percentile))}%</strong> of {geo.peer_count} {geo.peer_state} peers</span>
                   )}
                 </div>
                 {/* Competitor gap warning */}
-                {geoGap != null && geoGap > 15 && (
+                {displayGap != null && displayGap > 15 && (
                   <div className="rounded p-2.5 mb-3" style={{ backgroundColor: '#FEF3C7', border: '1px solid #F59E0B' }}>
                     <p className="text-xs text-amber-800 leading-relaxed">
-                      <strong>\u26A0\uFE0F Top competitor{geo?.top_peer_name ? ` (${geo.top_peer_name})` : ''} scores {geo?.top_peer_score}</strong> &mdash; a {geoGap}-point gap.
+                      <strong>\u26A0\uFE0F Top competitor{geo?.top_peer_name ? ` (${geo.top_peer_name})` : ''} scores {toAiReadinessScore(geo?.top_peer_score)}</strong> &mdash; a {displayGap}-point gap.
                       Institutions with higher AI SEO scores capture more AI search results when customers search for banking services in your market.
                     </p>
                   </div>

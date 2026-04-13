@@ -199,7 +199,7 @@ export default function SecMarketingClient() {
             <div className="mb-6">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Technical Signals</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <SigCard icon={'\u26A0\uFE0F'} name="AI SEO Score" value="33 / 100" desc="Below average. Not visible on AI search for adviser queries." color="amber" />
+                <SigCard icon={'\u26A0\uFE0F'} name="AI Readiness Score" value="51 / 100" desc="Below average. Not visible on AI search for adviser queries." color="amber" />
                 <SigCard icon={'\u2715'} name="DMARC" value="Missing" desc="Prevents email spoofing. Missing = FFIEC flag." color="red" />
                 <SigCard icon={'\u26A0\uFE0F'} name="Reg S-P Privacy" value="Not accessible" desc="Privacy notice not linked from homepage or contact page." color="amber" />
                 <SigCard icon={'\u2713'} name="SSL / TLS" value="TLSv1.3" desc="Encrypts traffic. TLS 1.3 = gold standard." color="green" />
