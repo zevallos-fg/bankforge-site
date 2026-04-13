@@ -6,6 +6,8 @@ import GeoScanInput from '../components/GeoScanInput';
 import SiteNav from '../components/SiteNav';
 import DemoRequestForm from '../components/DemoRequestForm';
 import { toAiReadinessScore } from '@/app/lib/score-utils';
+import { selectTopComparisons } from '@/app/lib/peer-comparisons';
+import PeerComparisonCallouts from '../components/PeerComparisonCallouts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -168,7 +170,9 @@ function AiSeoResultPanel({ result }: { result: any }) {
   const geoColor = geoScore >= 60 ? '#10b981' : geoScore >= 40 ? '#BA7517' : geoScore >= 25 ? '#BA7517' : '#E24B4A';
   const geoLabel = geoScore >= 60 ? 'Strong' : geoScore >= 40 ? 'Moderate' : geoScore >= 25 ? 'Developing' : 'Needs Work';
   const displayScore = toAiReadinessScore(geo?.score);
-  const displayGap = geo?.top_peer_score != null && geo?.score != null ? toAiReadinessScore(geo.top_peer_score) - toAiReadinessScore(geo.score) : null;
+  const peerComparisons = result.peer_comparisons_input
+    ? selectTopComparisons(result.peer_comparisons_input)
+    : [];
 
   return (
     <section id="geo-scan-results" className="py-16 px-6 bg-white border-b border-gray-100">
@@ -206,13 +210,7 @@ function AiSeoResultPanel({ result }: { result: any }) {
                 <p>Top <strong className="text-gray-800">{Math.max(1, Math.round(100 - geo.percentile))}%</strong> of {geo.peer_count} {geo.peer_state} peers</p>
               )}
             </div>
-            {displayGap != null && displayGap > 15 && (
-              <div className="mt-3 rounded p-2.5" style={{ backgroundColor: '#FEF3C7', border: '1px solid #F59E0B' }}>
-                <p className="text-xs text-amber-800 leading-relaxed">
-                  <strong>{'\u26A0\uFE0F'} Top competitor{geo?.top_peer_name ? ` (${geo.top_peer_name})` : ''} scores {toAiReadinessScore(geo?.top_peer_score)}</strong> — a {displayGap}-point gap.
-                </p>
-              </div>
-            )}
+            <PeerComparisonCallouts comparisons={peerComparisons} />
           </div>
 
           {/* RIGHT — SEO Signals */}

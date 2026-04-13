@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getCorpusMonth } from '@/app/lib/corpus-month';
+import { toAiReadinessScore } from '@/app/lib/score-utils';
 
 // Rate limit: 1 scan per IP per 72 hours
 const scanHistory = new Map<string, number>();
@@ -158,6 +159,93 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // Step 4b — local peer group (same state + asset tier) normalized scores
+  const assetTier = peerGroup?.asset_tier ?? null;
+  const localPeerScoresRaw: number[] = [];
+  if (peerState && assetTier) {
+    const { data: localPeerRows } = await supabase
+      .from('bank_monthly_baseline')
+      .select('geo_visibility_score')
+      .eq('institution_state', peerState)
+      .eq('repdte', baseline.repdte)
+      .is('deleted_at', null)
+      .not('geo_visibility_score', 'is', null)
+      .filter('benchmark_context->peer_group->>asset_tier', 'eq', assetTier)
+      .order('geo_visibility_score', { ascending: false });
+    for (const r of (localPeerRows ?? []) as Array<{ geo_visibility_score: number | null }>) {
+      if (typeof r.geo_visibility_score === 'number') {
+        localPeerScoresRaw.push(r.geo_visibility_score);
+      }
+    }
+  }
+
+  // Step 4c — national asset-tier cohort, paginated to defeat PostgREST 1000-row cap
+  const nationalScoresRaw: number[] = [];
+  if (assetTier) {
+    const PAGE = 1000;
+    for (let from = 0; from < 20000; from += PAGE) {
+      const { data: page } = await supabase
+        .from('bank_monthly_baseline')
+        .select('geo_visibility_score')
+        .eq('repdte', baseline.repdte)
+        .is('deleted_at', null)
+        .not('geo_visibility_score', 'is', null)
+        .filter('benchmark_context->peer_group->>asset_tier', 'eq', assetTier)
+        .range(from, from + PAGE - 1);
+      const rows = (page ?? []) as Array<{ geo_visibility_score: number | null }>;
+      for (const r of rows) {
+        if (typeof r.geo_visibility_score === 'number') {
+          nationalScoresRaw.push(r.geo_visibility_score);
+        }
+      }
+      if (rows.length < PAGE) break;
+    }
+  }
+
+  const entityNormalized =
+    typeof baseline.geo_visibility_score === 'number'
+      ? toAiReadinessScore(baseline.geo_visibility_score)
+      : null;
+  const localScoresNormalized = localPeerScoresRaw
+    .map(toAiReadinessScore)
+    .sort((a, b) => b - a);
+  const nationalScoresNormalized = nationalScoresRaw.map(toAiReadinessScore);
+
+  let localRank: number | null = null;
+  if (entityNormalized != null && localScoresNormalized.length > 0) {
+    const idx = localScoresNormalized.findIndex((s) => s === entityNormalized);
+    localRank = idx >= 0 ? idx + 1 : localScoresNormalized.length;
+  }
+
+  let nationalAvg: number | null = null;
+  let nationalP75: number | null = null;
+  if (nationalScoresNormalized.length > 0) {
+    const sum = nationalScoresNormalized.reduce((a, b) => a + b, 0);
+    nationalAvg = Math.round(sum / nationalScoresNormalized.length);
+    const sortedAsc = [...nationalScoresNormalized].sort((a, b) => a - b);
+    const p75Idx = Math.max(0, Math.ceil(0.75 * sortedAsc.length) - 1);
+    nationalP75 = sortedAsc[p75Idx];
+  }
+
+  const peerComparisonsInput =
+    entityNormalized != null &&
+    localScoresNormalized.length > 0 &&
+    nationalAvg != null &&
+    nationalP75 != null &&
+    peerState &&
+    assetTier
+      ? {
+          entityScore: entityNormalized,
+          topLocalScore: localScoresNormalized[0],
+          localRank: localRank ?? 1,
+          totalLocalPeers: localScoresNormalized.length,
+          nationalAvg,
+          nationalP75,
+          stateName: peerState,
+          assetTierLabel: assetTier,
+        }
+      : null;
+
   // Step 5: parse compliance findings
   const complianceRaw = baseline.bank_compliance_raw as Record<string, any> | null;
   const rawFindings = (complianceRaw?.findings ?? complianceRaw?.complianceObservations ?? []) as any[];
@@ -301,6 +389,7 @@ export async function GET(req: NextRequest) {
     examCycleSignal,
     riskTier,
     seoSignals,
+    peer_comparisons_input: peerComparisonsInput,
     repdte: baseline.repdte,
   });
 }
