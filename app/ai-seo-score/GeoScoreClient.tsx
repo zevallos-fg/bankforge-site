@@ -91,8 +91,8 @@ const pricingTiers: Array<{ step: string; name: string; price: string; founding:
 
 const stats = [
   { value: '4,300+', stacked: null, label: 'FDIC-Insured Banks scanned' },
-  { value: '45.8 avg', stacked: null, label: 'Average AI SEO score' },
-  { value: '16.6%', stacked: null, label: 'Score below 40 \u2014 invisible on AI search' },
+  { value: '66 avg', stacked: null, label: 'Average AI SEO score' },
+  { value: '14.8%', stacked: null, label: 'Score below 40 \u2014 invisible on AI search' },
 ];
 
 function ArrowRight({ color = '#1B5299' }: { color?: string }) {
@@ -360,7 +360,7 @@ export default function GeoScorePageClient() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-[#F5A0A0] opacity-75" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F5A0A0]" />
               </span>
-              16.6% of FDIC-Insured Banks are invisible to AI search. Are you?
+              14.8% of FDIC-Insured Banks are invisible to AI search. Are you?
             </span>
           </div>
 

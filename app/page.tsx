@@ -18,9 +18,9 @@ const bankCards = [
   {
     accent: 'blue',
     tag: 'AI SEO Score',
-    stat: '45.8 avg',
+    stat: '66 avg',
     title: 'Average bank AI SEO score out of 100',
-    desc: '16.6% of banks score below 40 \u2014 invisible on ChatGPT, Perplexity, and Google AI Overviews for local deposit and loan queries.',
+    desc: '14.8% of banks score below 40 \u2014 invisible on ChatGPT, Perplexity, and Google AI Overviews for local deposit and loan queries.',
     ref: 'March 2026',
   },
   {
@@ -118,7 +118,7 @@ const jsonLd = [
       {
         '@type': 'Question',
         name: 'What is an AI SEO score?',
-        acceptedAnswer: { '@type': 'Answer', text: 'An AI SEO score measures how visible your institution is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. BankForge computes AI SEO scores across 66,000+ institutions. The average bank scores 45.8 out of 100. The average RIA scores 33.3.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'An AI SEO score measures how visible your institution is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. BankForge computes AI SEO scores across 66,000+ institutions. The average bank scores 66 out of 100. The average RIA scores 51.' },
       },
       {
         '@type': 'Question',

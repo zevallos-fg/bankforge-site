@@ -204,7 +204,7 @@ export default function BankAiScorePage() {
             </p>
 
             <p>
-              Average bank AI SEO score nationally: <strong>45.8</strong>.
+              Average bank AI SEO score nationally: <strong>66</strong>.
               Average AI SEO score for investment advisers: <strong>33.3</strong>.
             </p>
 

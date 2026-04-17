@@ -4,13 +4,13 @@ import GeoScorePageClient from './GeoScoreClient';
 export const metadata: Metadata = {
   title: 'AI SEO + Marketing Intelligence — FDIC-Insured Banks | BankForge.ai',
   description:
-    "BankForge tracks 37 AI visibility and marketing intelligence signals across 4,300+ FDIC-insured banks. Average score: 45.8. See where your institution stands on ChatGPT, Perplexity, and Google AI Overviews.",
+    "BankForge tracks 37 AI visibility and marketing intelligence signals across 4,300+ FDIC-insured banks. Average score: 66. See where your institution stands on ChatGPT, Perplexity, and Google AI Overviews.",
   keywords:
     'bank AI search visibility, AI SEO score community bank, ChatGPT bank search, Perplexity bank visibility, AI search optimization financial institution, marketing intelligence',
   openGraph: {
     title: 'AI SEO + Marketing Intelligence | BankForge.ai',
     description:
-      '16.6% of FDIC-insured banks score below 40 on AI search — invisible when customers search for local banking services. See where your institution stands.',
+      '14.8% of FDIC-insured banks score below 40 on AI search — invisible when customers search for local banking services. See where your institution stands.',
     url: 'https://bankforge.ai/ai-seo-score',
   },
   alternates: { canonical: 'https://bankforge.ai/ai-seo-score' },
@@ -25,7 +25,7 @@ const faqSchema = {
       name: 'What is an AI SEO score for a bank?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'An AI SEO score measures how visible a bank is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. BankForge computes AI SEO scores across 4,300+ FDIC-insured banks. The average score is 45.8 out of 100. Banks scoring below 40 are effectively invisible when customers search for local banking services on AI platforms.',
+        text: 'An AI SEO score measures how visible a bank is on AI-powered search engines like ChatGPT, Perplexity, and Google AI Overviews. BankForge computes AI SEO scores across 4,300+ FDIC-insured banks. The average score is 66 out of 100. Banks scoring below 40 are effectively invisible when customers search for local banking services on AI platforms.',
       },
     },
     {
