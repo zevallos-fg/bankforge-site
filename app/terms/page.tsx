@@ -1,21 +1,39 @@
-export const metadata = { title: 'Terms of Service — BankForge.ai' };
+import type { Metadata } from 'next';
+import { CONTACT_EMAIL } from '@/app/lib/site';
+
+/**
+ * Placeholder, and deliberately noindex.
+ *
+ * Launch is gated on an attorney-drafted Terms and Privacy (D-TW-10 Q5), so this
+ * page stays a stub — but it is excluded from indexing rather than published as
+ * though it were a real agreement. Tracked as
+ * TD-MARKETING-SITE-HAS-NO-TERMS-OR-PRIVACY (fd6d19a8).
+ */
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  robots: { index: false, follow: false },
+  alternates: { canonical: '/terms' },
+};
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-white px-6 py-24">
-      <div className="max-w-2xl mx-auto">
-        <a href="/" className="text-sm text-[#1b5299] hover:underline mb-8 inline-block">
-          ← Back to BankForge.ai
-        </a>
-        <h1 className="text-2xl font-semibold text-[#0f2341] mb-4">Terms of Service</h1>
-        <p className="text-slate-600 text-sm leading-relaxed">
-          This document is under review by our legal counsel. For questions,
-          contact{' '}
-          <a href="mailto:outreach@bankforge.ai" className="text-[#1b5299] underline">
-            outreach@bankforge.ai
-          </a>.
+    <div className="min-h-screen bg-white px-6 py-24">
+      <div className="mx-auto max-w-2xl">
+        <h1
+          className="text-2xl text-bf-navy-deep"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Terms of Service
+        </h1>
+        <p className="mt-4 text-sm leading-relaxed text-gray-600">
+          These terms are with our legal counsel and are not yet published. Until they
+          are, nothing on this site forms an agreement. For questions, write to{' '}
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-bf-navy underline">
+            {CONTACT_EMAIL}
+          </a>
+          .
         </p>
       </div>
-    </main>
+    </div>
   );
 }

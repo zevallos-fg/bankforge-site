@@ -1,46 +1,38 @@
-import { createClient } from '@supabase/supabase-js';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error('Missing Supabase credentials');
-  return createClient(url, key);
+/**
+ * DISABLED on this branch — HALT-KEY-FIX-NEEDS-DDL, branch C (integrity-finding).
+ *
+ * What this route used to do: accept an unauthenticated POST from anyone on the
+ * internet and INSERT the attacker-supplied body into `public.website_demo_requests`
+ * using SUPABASE_SERVICE_ROLE_KEY, which bypasses RLS. There was no rate limit of
+ * any kind on this path.
+ *
+ * Why it could not simply be switched to the anon key (the B6 fix):
+ * `website_demo_requests` has RLS enabled and exactly ONE policy —
+ * `service_role_all`, FOR ALL, TO service_role. There is no policy granting anon
+ * INSERT, so an anon-key write is refused by RLS. Making it work needs a new
+ * INSERT policy — a database migration, which this track must not author
+ * (T3 scope: never write the database).
+ *
+ * So the route is disabled here rather than left armed. The new site collects
+ * interest by email instead (no signups, no payments — D-TW-10), so nothing in
+ * the rebuilt UI calls this endpoint.
+ *
+ * NOTE FOR THE LAUNCH LEG: production still serves the original route until this
+ * branch merges. Tracked as TD-MARKETING-SITE-API-USES-SERVICE-ROLE-KEY (550d7616).
+ * The needed policy is named in that TD.
+ */
+export async function POST() {
+  return NextResponse.json(
+    {
+      error: 'disabled',
+      message: 'This endpoint is disabled. Please contact us by email instead.',
+    },
+    { status: 410 },
+  );
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const {
-      email, name, institution_name, audience_type,
-      source_page, source_cta, domain, message
-    } = body;
-
-    if (!email || !email.includes('@')) {
-      return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
-    }
-
-    const supabase = getSupabase();
-    const { error } = await supabase.from('website_demo_requests').insert({
-      email:            email.trim().toLowerCase(),
-      name:             name?.trim() || null,
-      institution_name: institution_name?.trim() || null,
-      audience_type:    audience_type || 'unknown',
-      source_page:      source_page || null,
-      source_cta:       source_cta || null,
-      domain:           domain?.trim() || null,
-      message:          message?.trim() || null,
-      referrer:         req.headers.get('referer') || null,
-    });
-
-    if (error) {
-      console.error('Demo request insert error:', error);
-      return NextResponse.json({ error: 'Failed to submit' }, { status: 500 });
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error('Demo request error:', err);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
-  }
+export async function GET() {
+  return NextResponse.json({ error: 'disabled' }, { status: 410 });
 }

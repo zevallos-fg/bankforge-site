@@ -1,21 +1,35 @@
-export const metadata = { title: 'Privacy Policy — BankForge.ai' };
+import type { Metadata } from 'next';
+import { CONTACT_EMAIL } from '@/app/lib/site';
+
+/**
+ * Placeholder, and deliberately noindex. See app/terms/page.tsx for the reason.
+ * Tracked as TD-MARKETING-SITE-HAS-NO-TERMS-OR-PRIVACY (fd6d19a8).
+ */
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  robots: { index: false, follow: false },
+  alternates: { canonical: '/privacy' },
+};
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-white px-6 py-24">
-      <div className="max-w-2xl mx-auto">
-        <a href="/" className="text-sm text-[#1b5299] hover:underline mb-8 inline-block">
-          ← Back to BankForge.ai
-        </a>
-        <h1 className="text-2xl font-semibold text-[#0f2341] mb-4">Privacy Policy</h1>
-        <p className="text-slate-600 text-sm leading-relaxed">
-          This document is under review by our legal counsel. For questions,
-          contact{' '}
-          <a href="mailto:outreach@bankforge.ai" className="text-[#1b5299] underline">
-            outreach@bankforge.ai
-          </a>.
+    <div className="min-h-screen bg-white px-6 py-24">
+      <div className="mx-auto max-w-2xl">
+        <h1
+          className="text-2xl text-bf-navy-deep"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Privacy Policy
+        </h1>
+        <p className="mt-4 text-sm leading-relaxed text-gray-600">
+          This policy is with our legal counsel and is not yet published. For
+          questions about what we hold, write to{' '}
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-bf-navy underline">
+            {CONTACT_EMAIL}
+          </a>
+          .
         </p>
       </div>
-    </main>
+    </div>
   );
 }
