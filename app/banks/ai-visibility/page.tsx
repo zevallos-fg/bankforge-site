@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
+import ScanPreview from '@/app/components/ScanPreview';
 import { ANSWER_ENGINES, MEASURED } from '@/app/lib/site';
 import { getPricing, ctaFor, rowsForLane } from '@/app/lib/pricing';
 
@@ -115,6 +116,14 @@ export default async function BankAiVisibilityPage() {
         intro="The comparison is the useful part: a score on its own does not tell you whether to do anything."
         items={method}
       />
+
+      {/*
+        The free look-up, restored by TW1.F.2 Part B. It reads through
+        public.scan_preview_lookup with the anon key: no privileged credential is
+        involved and no table is read directly. When we hold nothing for a domain it
+        says so, rather than drawing a figure.
+      */}
+      <ScanPreview />
 
       <section className="bg-bf-slate px-6 py-14">
         <div className="mx-auto max-w-3xl">
