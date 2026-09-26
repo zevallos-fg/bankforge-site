@@ -171,6 +171,9 @@ export function formatUsd(amount: number): string {
  * `starts_at` carries an asterisk; the footnote is rendered by the caller.
  */
 export function headlinePrice(row: SkuRow): string {
+  // A row whose only ruled price is the founding one headlines THAT price.
+  if (foundingIsOnlyPrice(row)) return formatUsd(row.price_founding_usd);
+
   if (row.display_rule === 'by_quote' || row.price_standard_usd == null) {
     return 'Custom pricing';
   }
@@ -187,7 +190,40 @@ export function headlinePrice(row: SkuRow): string {
  */
 export function foundingLine(row: SkuRow): string | null {
   if (row.price_founding_usd == null) return null;
+  // The headline already IS this number, so the line qualifies it instead of
+  // repeating it. One price, said once.
+  if (foundingIsOnlyPrice(row)) return 'Founding rate for our first 5 clients';
   return `Founding rate for our first 5 clients: ${formatUsd(row.price_founding_usd)}`;
+}
+
+/**
+ * True when the ONLY price ruled for a row is its founding rate.
+ *
+ * THE DEFECT THIS CLOSES. `forge-ria-bundle-exam-readiness` (Exam Readiness
+ * Bundle) is ruled `display_rule: 'exact'` with `price_standard_usd` NULL and
+ * `price_founding_usd` set. The old reader had no branch for that shape, so the
+ * row fell through `price_standard_usd == null` and headlined "Custom pricing"
+ * while `foundingLine` printed a specific founding rate immediately beneath it.
+ * The page quoted a number and said in the same breath that it was not quoting
+ * one (TD-SKU-EXAM-READINESS-BUNDLE-RENDERS-CUSTOM-PRICING-BESIDE-A-FOUNDING-RATE).
+ *
+ * FIXED IN THE READER, NOT THE REGISTRY. The row is not wrong: that bundle
+ * genuinely has one ruled price and it is the founding one. The reader was the
+ * thing with no way to say so, and the registry is a ruling surface this leg
+ * does not write.
+ *
+ * `by_quote` STILL WINS. A row explicitly ruled quote-only is quoted whatever
+ * else it carries, so adding a founding rate to such a row can never silently
+ * turn a quote into a printed price.
+ */
+export function foundingIsOnlyPrice(
+  row: SkuRow,
+): row is SkuRow & { price_founding_usd: number } {
+  return (
+    row.display_rule !== 'by_quote' &&
+    row.price_standard_usd == null &&
+    row.price_founding_usd != null
+  );
 }
 
 /** The call to action implied by the row's status (D-TW-10). */
