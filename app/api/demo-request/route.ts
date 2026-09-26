@@ -47,7 +47,7 @@ import { createClient } from '@supabase/supabase-js';
  * `credit_union` and `unknown` both normalise to `other`. The columns still exist
  * and simply go NULL from here on. This is a real loss of lead attribution, taken
  * knowingly in exchange for removing the privileged key today, and filed as
- * TD-SITE-WALKTHROUGH-RPC-DROPS-LEAD-ATTRIBUTION-FIELDS rather than papered over
+ * TD-WALKTHROUGH-RPC-DROPS-SEVEN-ATTRIBUTION-COLUMNS rather than papered over
  * by smuggling the values into `p_message`.
  */
 
