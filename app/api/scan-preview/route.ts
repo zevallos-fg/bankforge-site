@@ -1,395 +1,106 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { getCorpusMonth } from '@/app/lib/corpus-month';
-import { toAiReadinessScore } from '@/app/lib/score-utils';
+import { NextResponse } from 'next/server';
 
-// Rate limit: 1 scan per IP per 72 hours
-const scanHistory = new Map<string, number>();
+/**
+ * Domain scan preview — WITHDRAWN (410 Gone).
+ *
+ * HISTORY (why this route is a stub):
+ *  - It read `public.entity_registry` and `public.bank_monthly_baseline` with the
+ *    privileged server key that bypasses RLS, and returned the result to any
+ *    unauthenticated caller who passed `?domain=`
+ *    (TD-MARKETING-SITE-API-USES-SERVICE-ROLE-KEY, 550d7616).
+ *
+ *    Its only rate limit was an in-process `Map`, which is per-instance and resets
+ *    on every cold start — and it could be switched off entirely by an environment
+ *    variable (`DISABLE_SCAN_RATE_LIMIT`), so the limit was configuration, not a
+ *    control. It also paginated `bank_monthly_baseline` in 1,000-row pages up to
+ *    20,000 rows per request, under that same privileged key.
+ *
+ *    That key's exact env-var name is deliberately NOT spelled out in this file,
+ *    so grepping the public routes for it returns a hit only where the key is
+ *    actually still used — nowhere, as of this commit. A history note that trips
+ *    the audit it is describing makes the audit useless.
+ *
+ * WHY 410 AND NOT AN ANON-KEY SWAP. The route only ever SELECTed — it never wrote
+ * — so swapping to the publishable (anon) key looks like a free fix. It is not.
+ * MEASURED 2026-09-26 against the live project with the publishable key:
+ *
+ *      GET /rest/v1/v_sku_catalog_public?select=*     -> HTTP 200  21 rows
+ *      GET /rest/v1/entity_registry?select=...&limit=1 -> HTTP 200  []
+ *
+ * Both corpus tables have RLS enabled and NO policy admitting `anon`. An anon read
+ * is therefore refused as an EMPTY RESULT AT HTTP 200, not as an error. Under the
+ * anon key this route would have answered `{found:false}` for every bank on earth,
+ * at 200, indistinguishable from "we have no data for you" — a silent wrong is
+ * worse than an outage, because nobody gets paged for it. The 21-row control on
+ * the same key in the same request pair is what proves the key itself works, so
+ * the empty result is a policy decision and not a broken credential.
+ *
+ * WHAT IT WOULD TAKE. A read path that is safe to expose needs DDL this leg was
+ * not allowed to author:
+ *
+ *      public.scan_preview_for_domain(p_domain text) RETURNS jsonb
+ *      SECURITY DEFINER, search_path pinned to pg_catalog, public, pg_temp,
+ *      EXECUTE granted to anon
+ *
+ * It must own (a) domain normalisation, (b) the projection — returning only the
+ * fields the marketing preview shows, never `select *` over a corpus table, and
+ * (c) a durable rate limit, since an in-process Map is not one. That is the same
+ * shape as `public.submit_walkthrough_request`, which is how the sibling
+ * demo-request route stopped needing the privileged key.
+ * Filed as TD-SITE-SCAN-PREVIEW-NEEDS-ANON-CALLABLE-READ-RPC.
+ *
+ * CALLERS ON THIS BRANCH — and this is where production differed from the preview
+ * rebuild, which had none. Three call sites referenced this path:
+ *
+ *      app/compliance-review/ComplianceReviewClient.tsx:122
+ *      app/components/GeoScanInput.tsx:22
+ *      app/components/ScanDemo.tsx:88
+ *
+ * The first two read `data.found`, which is absent from the 410 body, so each
+ * falls to its existing `not_found` branch and renders no scan result. The third
+ * called `setResult(data)` unconditionally and then derived `geoScore = geo?.score
+ * ?? 0`, so a 410 would have drawn a score-0 result card — a fabricated number,
+ * the exact silent-wrong class described above. It is guarded in the same commit.
+ * `ScanDemo` is not mounted by any page on this branch, so that path was not
+ * reachable in production; it is guarded anyway because it is a live call site.
+ *
+ * BODY SHAPE. `{ok:false, reason:'withdrawn'}` is the contract this leg was given.
+ * It differs from the preview rebuild's `{error:'gone', message}`; the human
+ * `message` is carried across because production, unlike the rebuild, has callers
+ * that surface text to a person.
+ */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/** Verbatim so a caller sees why, not just that. */
+const WITHDRAWN = {
+  ok: false,
+  reason: 'withdrawn',
+  message:
+    'The instant domain preview has been withdrawn. Request a walkthrough and we will run the review with you.',
+} as const;
 
-function normalizeDomain(input: string): string {
-  return input
-    .trim()
-    .toLowerCase()
-    .replace(/^https?:\/\//, '')
-    .replace(/^www\./, '')
-    .replace(/\/.*$/, '');
+function gone() {
+  return NextResponse.json(WITHDRAWN, { status: 410 });
 }
 
-export async function GET(req: NextRequest) {
-  const rawDomain = req.nextUrl.searchParams.get('domain');
-  if (!rawDomain) {
-    return NextResponse.json({ error: 'Missing domain parameter' }, { status: 400 });
-  }
-
-  // Rate limiting by IP
-  const ip =
-    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-    req.headers.get('x-real-ip') ??
-    'unknown';
-  const now = Date.now();
-  const last = scanHistory.get(ip);
-  const WINDOW = 72 * 60 * 60 * 1000;
-
-  const bypassRateLimit = process.env.DISABLE_SCAN_RATE_LIMIT === 'true';
-
-  if (!bypassRateLimit && last && now - last < WINDOW) {
-    return NextResponse.json(
-      {
-        error: 'rate_limited',
-        message:
-          'One preview scan is available every 72 hours. Request a full review for immediate access.',
-        retryAfter: Math.ceil((last + WINDOW - now) / 3600000) + ' hours',
-      },
-      { status: 429 },
-    );
-  }
-
-  const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    return NextResponse.json({ found: false });
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
-  const domain = normalizeDomain(rawDomain);
-
-  // Step 1: resolve entity
-  let entityResult = await supabase
-    .from('entity_registry')
-    .select('entity_id, entity_name, domain, fdic_cert, entity_type')
-    .eq('domain', domain)
-    .in('entity_type', ['bank', 'ria', 'credit_union'])
-    .maybeSingle();
-
-  if (!entityResult.data) {
-    entityResult = await supabase
-      .from('entity_registry')
-      .select('entity_id, entity_name, domain, fdic_cert, entity_type')
-      .eq('domain', `www.${domain}`)
-      .in('entity_type', ['bank', 'ria', 'credit_union'])
-      .maybeSingle();
-  }
-
-  const entity = entityResult.data;
-  if (!entity) {
-    return NextResponse.json({ found: false });
-  }
-
-  // Step 2: get baseline — 1 month in arrears, merge if data split across rows
-  const corpusRepdte = getCorpusMonth();
-  const selectCols = 'repdte, geo_visibility_score, benchmark_context, risk_tier, bank_compliance_raw, dns_security_raw, gbp_raw, web_archive_raw, serp_raw, fdic_enforcement_raw, exam_cycle_signal, risk_indicators, sc_https_failure, sc_missing_schema_markup, sc_missing_nmls, sc_missing_equal_housing, sc_missing_fdic_membership, signal_checks';
-  const { data: baselineRows } = await supabase
-    .from('bank_monthly_baseline')
-    .select(selectCols)
-    .eq('entity_id', entity.entity_id)
-    .eq('repdte', corpusRepdte)
-    .is('deleted_at', null)
-    .limit(4);
-
-  // Merge rows: coalesce null fields from sibling rows for same entity/repdte
-  const rows = baselineRows ?? [];
-  const baseline = rows.length > 0
-    ? rows.reduce((merged: any, row: any) => {
-        for (const key of Object.keys(row)) {
-          if (merged[key] == null && row[key] != null) merged[key] = row[key];
-        }
-        return merged;
-      }, { ...rows[0] })
-    : null;
-
-  // Record scan in rate limit map
-  scanHistory.set(ip, now);
-  for (const [key, timestamp] of scanHistory) {
-    if (now - timestamp > WINDOW) scanHistory.delete(key);
-  }
-
-  if (!baseline) {
-    return NextResponse.json({
-      found: true,
-      entity: {
-        name: entity.entity_name,
-        domain: entity.domain,
-        fdic_cert: entity.fdic_cert,
-        entity_type: entity.entity_type,
-        asset_tier: null,
-        location: null,
-      },
-      geo: { score: null, peer_avg: null, peer_p75: null, percentile: null, peer_count: null, peer_state: null, peer_asset_tier: null, top_peer_score: null, top_peer_name: null },
-      signals: { gbp_claimed: null, gbp_rating: null, gbp_reviews: null, dmarc_present: null, dmarc_policy: null, dkim_present: null, spf_present: null, ssl_health: null, tls_version: null, cert_expiry_days: null, web_velocity: null, last_capture: null },
-      compliance: { total: 0, high: 0, medium: 0, low: 0, top_flags: [] },
-      seoSignals: { https: null, pageTitle: null, metaDescription: null, h1Tag: null, schemaMarkup: null, brandVisibility: null, gbpListed: null },
-      repdte: null,
-    });
-  }
-
-  // Step 3: parse benchmark_context
-  const bc = baseline.benchmark_context as Record<string, any> | null;
-  const geoSignals = bc?.signals?.geo_score as Record<string, any> | undefined;
-  const peerGroup = bc?.peer_group as Record<string, any> | undefined;
-
-  // Step 4: get top peer by AI SEO score in same state
-  let topPeerScore: number | null = null;
-  let topPeerName: string | null = null;
-  const peerState = (baseline as any).institution_state ?? peerGroup?.state ?? null;
-
-  if (peerState) {
-    const { data: topPeerBaseline } = await supabase
-      .from('bank_monthly_baseline')
-      .select('entity_id, geo_visibility_score')
-      .eq('institution_state', peerState)
-      .eq('repdte', baseline.repdte)
-      .neq('entity_id', entity.entity_id)
-      .is('deleted_at', null)
-      .not('geo_visibility_score', 'is', null)
-      .order('geo_visibility_score', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (topPeerBaseline) {
-      topPeerScore = topPeerBaseline.geo_visibility_score as number;
-      const { data: topEnt } = await supabase
-        .from('entity_registry')
-        .select('entity_name')
-        .eq('entity_id', topPeerBaseline.entity_id)
-        .single();
-      topPeerName = topEnt?.entity_name ?? null;
-    }
-  }
-
-  // Step 4b — local peer group (same state + asset tier) normalized scores
-  const assetTier = peerGroup?.asset_tier ?? null;
-  const localPeerScoresRaw: number[] = [];
-  if (peerState && assetTier) {
-    const { data: localPeerRows } = await supabase
-      .from('bank_monthly_baseline')
-      .select('geo_visibility_score')
-      .eq('institution_state', peerState)
-      .eq('repdte', baseline.repdte)
-      .is('deleted_at', null)
-      .not('geo_visibility_score', 'is', null)
-      .filter('benchmark_context->peer_group->>asset_tier', 'eq', assetTier)
-      .order('geo_visibility_score', { ascending: false });
-    for (const r of (localPeerRows ?? []) as Array<{ geo_visibility_score: number | null }>) {
-      if (typeof r.geo_visibility_score === 'number') {
-        localPeerScoresRaw.push(r.geo_visibility_score);
-      }
-    }
-  }
-
-  // Step 4c — national asset-tier cohort, paginated to defeat PostgREST 1000-row cap
-  const nationalScoresRaw: number[] = [];
-  if (assetTier) {
-    const PAGE = 1000;
-    for (let from = 0; from < 20000; from += PAGE) {
-      const { data: page } = await supabase
-        .from('bank_monthly_baseline')
-        .select('geo_visibility_score')
-        .eq('repdte', baseline.repdte)
-        .is('deleted_at', null)
-        .not('geo_visibility_score', 'is', null)
-        .filter('benchmark_context->peer_group->>asset_tier', 'eq', assetTier)
-        .range(from, from + PAGE - 1);
-      const rows = (page ?? []) as Array<{ geo_visibility_score: number | null }>;
-      for (const r of rows) {
-        if (typeof r.geo_visibility_score === 'number') {
-          nationalScoresRaw.push(r.geo_visibility_score);
-        }
-      }
-      if (rows.length < PAGE) break;
-    }
-  }
-
-  const entityNormalized =
-    typeof baseline.geo_visibility_score === 'number'
-      ? toAiReadinessScore(baseline.geo_visibility_score)
-      : null;
-  const localScoresNormalized = localPeerScoresRaw
-    .map(toAiReadinessScore)
-    .sort((a, b) => b - a);
-  const nationalScoresNormalized = nationalScoresRaw.map(toAiReadinessScore);
-
-  let localRank: number | null = null;
-  if (entityNormalized != null && localScoresNormalized.length > 0) {
-    const idx = localScoresNormalized.findIndex((s) => s === entityNormalized);
-    localRank = idx >= 0 ? idx + 1 : localScoresNormalized.length;
-  }
-
-  let nationalAvg: number | null = null;
-  let nationalP75: number | null = null;
-  if (nationalScoresNormalized.length > 0) {
-    const sum = nationalScoresNormalized.reduce((a, b) => a + b, 0);
-    nationalAvg = Math.round(sum / nationalScoresNormalized.length);
-    const sortedAsc = [...nationalScoresNormalized].sort((a, b) => a - b);
-    const p75Idx = Math.max(0, Math.ceil(0.75 * sortedAsc.length) - 1);
-    nationalP75 = sortedAsc[p75Idx];
-  }
-
-  const peerComparisonsInput =
-    entityNormalized != null &&
-    localScoresNormalized.length > 0 &&
-    nationalAvg != null &&
-    nationalP75 != null &&
-    peerState &&
-    assetTier
-      ? {
-          entityScore: entityNormalized,
-          topLocalScore: localScoresNormalized[0],
-          localRank: localRank ?? 1,
-          totalLocalPeers: localScoresNormalized.length,
-          nationalAvg,
-          nationalP75,
-          stateName: peerState,
-          assetTierLabel: assetTier,
-        }
-      : null;
-
-  // Step 5: parse compliance findings
-  const complianceRaw = baseline.bank_compliance_raw as Record<string, any> | null;
-  const rawFindings = (complianceRaw?.findings ?? complianceRaw?.complianceObservations ?? []) as any[];
-  const high = rawFindings.filter((f: any) => String(f.severity ?? '').toUpperCase() === 'HIGH');
-  const medium = rawFindings.filter((f: any) => String(f.severity ?? '').toUpperCase() === 'MEDIUM');
-  const low = rawFindings.filter((f: any) => String(f.severity ?? '').toUpperCase() === 'LOW');
-
-  const topFlags = high.slice(0, 2).map((f: any) => ({
-    category: f.category ?? f.framework ?? null,
-    location: f.location ?? f.page ?? null,
-    summary: String(f.finding ?? f.description ?? f.observation ?? '').substring(0, 120),
-  }));
-
-  // Step 6: parse signals
-  const gbp = baseline.gbp_raw as Record<string, any> | null;
-  const dns = baseline.dns_security_raw as Record<string, any> | null;
-  const webArchive = baseline.web_archive_raw as Record<string, any> | null;
-  const serpRaw = baseline.serp_raw as Record<string, any> | null;
-  const signalChecks = baseline.signal_checks as Record<string, any> | null;
-
-  // Derive SEO signals from sc_* promoted columns + signal_checks JSONB
-  const seoSignals = {
-    https: baseline.sc_https_failure != null ? !baseline.sc_https_failure : null,
-    schemaMarkup: baseline.sc_missing_schema_markup != null ? !baseline.sc_missing_schema_markup : null,
-    nmls: baseline.sc_missing_nmls != null ? !baseline.sc_missing_nmls : null,
-    equalHousing: baseline.sc_missing_equal_housing != null ? !baseline.sc_missing_equal_housing : null,
-    fdicMembership: baseline.sc_missing_fdic_membership != null ? !baseline.sc_missing_fdic_membership : null,
-    pageTitle: signalChecks?.seo?.hasTitle ?? null,
-    metaDescription: signalChecks?.seo?.hasMetaDescription ?? null,
-    h1Tag: signalChecks?.seo?.hasH1 ?? null,
-    brandVisibility: serpRaw?.organic_results
-      ? (serpRaw.organic_results as any[]).some(
-          (r: any) => (r.position ?? 99) <= 10,
-        )
-      : null,
-    gbpListed: !!(gbp?.in_pack || gbp?.place_id || gbp?.isClaimed),
-  };
-
-  // Parse enforcement, exam cycle, risk indicators
-  const enforcementRaw = baseline.fdic_enforcement_raw as Record<string, any> | null;
-  const examCycle = baseline.exam_cycle_signal as Record<string, any> | null;
-  const riskIndicators = baseline.risk_indicators as Record<string, any> | null;
-
-  const enforcement = {
-    hasActive: enforcementRaw?.data_status !== 'source_unavailable' && (enforcementRaw?.actions?.length ?? 0) > 0,
-    count: enforcementRaw?.actions?.length ?? 0,
-  };
-
-  const examCycleSignal = {
-    tier: examCycle?.tier ?? null,
-    daysEstimate: examCycle?.days_until_exam ?? null,
-  };
-
-  const riskTier = riskIndicators?.risk_tier ?? baseline.risk_tier ?? null;
-
-  // Enrich findings with canonical bank finding types
-  const CANONICAL: Record<string, { regTag: string; examinerLanguage: string; frequency: string }> = {
-    reg_dd_rate_advertisement: { regTag: 'REG DD', examinerLanguage: "On the examiner's checklist every cycle. APY displayed without effective date, minimum balance, or fee disclosure triggers a Reg DD deficiency under 12 CFR 1030.4.", frequency: 'Very common' },
-    reg_dd_apy_calculation: { regTag: 'REG DD', examinerLanguage: "APY must be calculated using the exact formula in Appendix A of Reg DD. Inaccurate or missing APY is a direct examination deficiency.", frequency: 'Common' },
-    equal_housing_disclosure: { regTag: 'ECOA', examinerLanguage: "Required statement or logo not detected on consumer lending pages. Consistent examiner flag across FDIC, OCC, and CFPB supervised institutions.", frequency: 'Common' },
-    udaap_dark_pattern: { regTag: 'UDAAP', examinerLanguage: "Teaser rate or promotional language without clear conditions. Post-2022 CFPB focus area.", frequency: 'Elevated' },
-    nmls_disclosure: { regTag: 'SAFE ACT', examinerLanguage: "NMLS unique identifier must be displayed on all pages advertising mortgage loan products.", frequency: 'Common' },
-    privacy_notice_accessibility: { regTag: 'REG P', examinerLanguage: "Privacy notice absent from footer or not linked from account-opening pages. Examiners verify link placement during consumer compliance exams.", frequency: 'Very common' },
-    non_deposit_disclaimer: { regTag: 'FDIC', examinerLanguage: "Investment or insurance products displayed without required non-deposit disclaimer.", frequency: 'Common' },
-    accessibility_wcag: { regTag: 'ADA', examinerLanguage: "FFIEC guidance and DOJ ADA enforcement position require WCAG 2.1 AA standards. Enforcement activity increasing since 2023.", frequency: 'Very common' },
-    schema_markup_missing: { regTag: 'FFIEC', examinerLanguage: "Structured data helps AI search engines accurately categorize your institution's products. Absence signals low digital maturity.", frequency: 'Very common' },
-    https_failure: { regTag: 'FFIEC IT', examinerLanguage: "HTTPS required for all consumer-facing pages. FFIEC IT examiners flag HTTP as a cybersecurity control failure.", frequency: 'Rare on primary domain' },
-    cra_performance_context: { regTag: 'CRA', examinerLanguage: "Digital accessibility in LMI areas is an emerging CRA examination consideration.", frequency: 'Emerging' },
-    fdic_membership_display: { regTag: 'FDIC', examinerLanguage: "FDIC Part 328 requires the official FDIC digital sign on bank home page and deposit pages.", frequency: 'Common' },
-  };
-
-  const enrichedFindings = rawFindings.map((f: any) => {
-    const cat = String(f.category ?? f.finding_type ?? '').toLowerCase().replace(/[\s-]+/g, '_');
-    const canonical = CANONICAL[cat] ?? null;
-    const citation = String(f.regulatory_citation ?? f.regulation ?? f.framework ?? '');
-    return {
-      severity: String(f.severity ?? 'MEDIUM').toUpperCase(),
-      category: f.category ?? f.finding_type ?? null,
-      finding: String(f.finding ?? f.description ?? f.observation ?? ''),
-      regulatoryCitation: citation,
-      location: f.location ?? f.page ?? null,
-      regTag: canonical?.regTag ?? citation.split('/')[0]?.trim().toUpperCase().slice(0, 12) ?? '',
-      examinerLanguage: canonical?.examinerLanguage ?? null,
-      frequency: canonical?.frequency ?? null,
-    };
-  });
-
-  // Derive location from GBP address
-  let location: string | null = null;
-  if (gbp?.address) {
-    const parts = String(gbp.address).split(',').map((s: string) => s.trim());
-    location = parts.length >= 3 ? `${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : String(gbp.address);
-  }
-
-  return NextResponse.json({
-    found: true,
-    entity: {
-      name: entity.entity_name,
-      domain: entity.domain,
-      fdic_cert: entity.fdic_cert,
-      entity_type: entity.entity_type,
-      asset_tier: peerGroup?.asset_tier ?? null,
-      location,
-    },
-    geo: {
-      score: baseline.geo_visibility_score,
-      peer_avg: geoSignals?.peer_avg ?? null,
-      peer_p75: geoSignals?.peer_p75 ?? null,
-      percentile: geoSignals?.percentile ?? null,
-      peer_count: peerGroup?.peer_count ?? null,
-      peer_state: peerGroup?.state ?? peerState,
-      peer_asset_tier: peerGroup?.asset_tier ?? null,
-      top_peer_score: topPeerScore,
-      top_peer_name: topPeerName,
-    },
-    signals: {
-      gbp_claimed: gbp?.isClaimed ?? null,
-      gbp_rating: gbp?.rating ?? null,
-      gbp_reviews: gbp?.reviewCount ?? null,
-      dmarc_present: dns?.dmarc_present ?? null,
-      dmarc_policy: dns?.dmarc_policy ?? null,
-      dkim_present: dns?.dkim_present ?? null,
-      spf_present: dns?.spf_present ?? null,
-      ssl_health: dns?.ssl_health_tier ?? null,
-      tls_version: dns?.tls_version ?? null,
-      cert_expiry_days: dns?.days_until_expiry ?? null,
-      web_velocity: webArchive?.change_velocity_tier ?? null,
-      last_capture: webArchive?.last_capture_date ?? null,
-    },
-    compliance: {
-      total: rawFindings.length,
-      high: high.length,
-      medium: medium.length,
-      low: low.length,
-      top_flags: topFlags,
-      enrichedFindings,
-      peerAvgFindingCount: bc?.signals?.compliance?.peer_avg_finding_count ?? null,
-      peerPercentile: bc?.signals?.compliance?.percentile ?? null,
-    },
-    enforcement,
-    examCycleSignal,
-    riskTier,
-    seoSignals,
-    peer_comparisons_input: peerComparisonsInput,
-    repdte: baseline.repdte,
-  });
+// Every method, so there is no verb left that reaches a database client.
+export async function GET() {
+  return gone();
+}
+export async function POST() {
+  return gone();
+}
+export async function PUT() {
+  return gone();
+}
+export async function PATCH() {
+  return gone();
+}
+export async function DELETE() {
+  return gone();
+}
+export async function HEAD() {
+  return gone();
+}
+export async function OPTIONS() {
+  return gone();
 }
