@@ -17,7 +17,7 @@ type State = 'idle' | 'open' | 'submitting' | 'success' | 'error';
  *
  * `credit_union` has no lane of its own, so it normalises to `other` — a real
  * loss of granularity, named here rather than hidden, and tracked in
- * TD-SITE-WALKTHROUGH-RPC-DROPS-LEAD-ATTRIBUTION-FIELDS. Doing it in one place
+ * TD-WALKTHROUGH-RPC-DROPS-SEVEN-ATTRIBUTION-COLUMNS. Doing it in one place
  * means the route never has to guess what the site meant.
  */
 function toLane(audienceType: DemoRequestFormProps['audienceType']): string {
