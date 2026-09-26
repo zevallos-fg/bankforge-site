@@ -102,8 +102,8 @@ export default function HomePage() {
           </div>
           <p className="mt-6 max-w-3xl text-sm leading-relaxed text-gray-500">
             Those counts are what your results are compared against. A finding on its
-            own is an opinion; a finding next to how peers of your size and market
-            handle the same thing is a priority.
+            own is an opinion; a finding next to how your peer set handles the same
+            thing is a priority.
           </p>
         </div>
       </section>
