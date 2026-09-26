@@ -7,9 +7,14 @@ import { createClient } from '@supabase/supabase-js';
  * HISTORY (why this route looks like this):
  *  - It originally accepted an unauthenticated POST from anyone on the internet
  *    and INSERTed the attacker-supplied body straight into
- *    `public.website_demo_requests` using SUPABASE_SERVICE_ROLE_KEY, which
- *    bypasses RLS. There was no rate limit of any kind
+ *    `public.website_demo_requests` using the service-role key, which bypasses
+ *    RLS. There was no rate limit of any kind
  *    (TD-MARKETING-SITE-API-USES-SERVICE-ROLE-KEY, 550d7616).
+ *
+ *    That env var's exact name is deliberately NOT spelled out anywhere in this
+ *    file, so grepping the public routes for it returns a hit only where the key
+ *    is actually still used (scan-preview). A history note that trips the audit
+ *    it is describing makes the audit useless.
  *  - T3 could not fix it, only disable it (410), because an anon-key write is
  *    refused by RLS and adding an INSERT policy is a migration T3 could not author.
  *
