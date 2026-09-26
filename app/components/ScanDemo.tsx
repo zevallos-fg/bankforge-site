@@ -94,6 +94,20 @@ export default function ScanDemo({ onClose, inline = false }: { onClose?: () => 
         return;
       }
 
+      // The scan-preview endpoint is WITHDRAWN and answers 410 for every method.
+      // Do NOT fall through to setResult on a non-2xx: this component derives
+      // `geoScore = geo?.score ?? 0`, so an error body would draw a score-0
+      // result card that reads as a real measurement of the domain. A fabricated
+      // zero is worse than an outage because nobody gets paged for it.
+      if (!res.ok) {
+        setError(
+          (data as { message?: string })?.message ??
+            'The instant preview is no longer available. Request a walkthrough and we will run the review with you.',
+        );
+        setLoading(false);
+        return;
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 3200));
       setResult(data);
     } catch {
