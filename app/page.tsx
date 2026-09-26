@@ -20,7 +20,7 @@ const audiences = [
     href: '/banks',
     eyebrow: 'Banks and credit unions',
     title: 'The disclosures an examiner opens a browser to check',
-    body: 'Regulation DD rate advertising, Regulation Z triggering terms, Equal Housing Lender presence, UDAAP language and FFIEC non-deposit disclaimers.',
+    body: 'Deposit rate advertising — Regulation DD for banks, the NCUA rule at 12 CFR part 707 for credit unions — plus Regulation Z triggering terms, Equal Housing Lender presence, UDAAP language and FFIEC non-deposit disclaimers.',
   },
 ];
 

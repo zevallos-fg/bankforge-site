@@ -6,15 +6,16 @@ import { MEASURED, ANSWER_ENGINES } from '@/app/lib/site';
 export const metadata: Metadata = {
   title: 'For banks and credit unions',
   description:
-    'Tiqsi reviews bank and credit union websites against Regulation DD, Regulation Z, Fair Lending, UDAAP and FFIEC criteria, and benchmarks AI search visibility by asset tier and state.',
+    'Tiqsi reviews bank and credit union websites against deposit advertising, lending disclosure, Fair Lending, UDAAP and FFIEC criteria, and benchmarks AI search visibility by asset tier and state. Deposit advertising is Regulation DD for banks and the NCUA rule at 12 CFR part 707 for credit unions.',
   alternates: { canonical: '/banks' },
 };
 
 const items = [
   {
     title: 'Rate advertising',
-    body: 'A rate shown without the disclosures that have to travel with it once you advertise it.',
-    anchor: 'Regulation DD',
+    body:
+      'A rate shown without the disclosures that have to travel with it once you advertise it. Which rule that is depends on your charter: 12 CFR 1030.1(c) provides that Regulation DD applies to depository institutions except for credit unions, and the National Credit Union Administration issues the parallel Truth in Savings rule for credit unions at 12 CFR part 707, whose advertising section is 707.8.',
+    anchor: 'Regulation DD 12 CFR 1030 (banks) / NCUA 12 CFR 707 (credit unions)',
   },
   {
     title: 'Triggering terms',
@@ -54,7 +55,7 @@ export default function BanksPage() {
 
       <FindingList
         heading="What the review looks at"
-        intro="Each item names the regulation behind it. The report is meant to be arguable — your compliance team should be able to disagree with a finding on the merits."
+        intro="Each item names the regulation behind it, and where banks and credit unions are under different rules it names both. The report is meant to be arguable — your compliance team should be able to disagree with a finding on the merits."
         items={items}
       />
 
