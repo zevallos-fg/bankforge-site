@@ -60,7 +60,7 @@ const faqs: readonly FaqItem[] = [
   },
   {
     q: 'Can I pay to appear in a ChatGPT answer?',
-    a: 'Not as far as we can establish for the assistant answers we measure. What you can do is make what you publish clearer and easier to read. Be sceptical of anyone offering guaranteed placement in an AI answer.',
+    a: 'Not as far as we can establish for the assistant answers we measure. What you can do is make what you publish clearer and easier to read. Be sceptical of anyone who offers to place you in an AI answer for a fee.',
   },
   {
     q: 'Why does the answer change every time I ask?',

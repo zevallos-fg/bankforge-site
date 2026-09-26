@@ -77,7 +77,7 @@ const faqs: readonly FaqItem[] = [
     a: 'They overlap without being the same. Both depend on what you publish and how readable it is. But optimisation is measured by position in a list of links, and this is measured by whether you are named inside a written answer. A firm can do acceptably at one and poorly at the other.',
   },
   {
-    q: 'Can you guarantee we will be named?',
+    q: 'Can you promise we will be named?',
     a: 'No, and nobody honestly can. Anything an assistant says about your firm is its own output and we do not control it. What can be worked on is what is publicly readable about you, which is the material an assistant has to draw on when it answers.',
   },
   {
@@ -127,9 +127,9 @@ export default function AiVisibilityPage() {
             What it is not
           </h2>
           <p className="mt-4 text-base leading-relaxed text-gray-600">
-            It is not a placement you can buy, and it is not a guarantee anyone can
-            offer. Anything an assistant says about your firm is its own output and we do
-            not control it. It is also not a single permanent number: the same question
+            It is not a placement you can buy, and it is not an outcome anyone can
+            promise. Anything an assistant says about your firm is its own output and we
+            do not control it. It is also not a single permanent number: the same question
             can return different firms on different days, which is why a reading is
             reported with its dates.
           </p>
