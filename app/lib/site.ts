@@ -65,15 +65,32 @@ export const MEASURED = {
   aiVisibilityQueriesThisMonth: 15015,
 } as const;
 
-/** The public route list, used by sitemap, robots and llms.txt generation. */
+/**
+ * The public route list, used by sitemap, robots and llms.txt generation.
+ *
+ * The eight money-page titles are the BUYER'S phrasing, not an internal product
+ * label (D-TW-13). `llms.txt` prints this title verbatim and the sitemap is built
+ * from the same list, so a title written as a product name here is a title an
+ * answer engine reads as a product name. Four of the previous entries were
+ * internal labels ("RIA Marketing Rule Review", "Bank AI Visibility") and are
+ * now the question the page answers.
+ *
+ * Adding a page means adding it HERE. There is no second list: sitemap.ts and
+ * llms.txt/route.ts both map over this array, which is why neither needed an edit
+ * to pick the new pages up.
+ */
 export const ROUTES = [
   { path: '/', changeFrequency: 'weekly', priority: 1.0, title: 'Home' },
+  { path: '/ai-visibility', changeFrequency: 'monthly', priority: 0.9, title: 'What is AI visibility for financial institutions' },
   { path: '/rias', changeFrequency: 'weekly', priority: 0.9, title: 'For Investment Advisers' },
-  { path: '/rias/compliance', changeFrequency: 'monthly', priority: 0.8, title: 'RIA Marketing Rule Review' },
-  { path: '/rias/ai-visibility', changeFrequency: 'monthly', priority: 0.8, title: 'RIA AI Visibility' },
+  { path: '/rias/compliance', changeFrequency: 'monthly', priority: 0.8, title: 'SEC Marketing Rule website review for RIAs' },
+  { path: '/rias/pricing', changeFrequency: 'weekly', priority: 0.8, title: 'How much does an RIA marketing compliance review cost' },
+  { path: '/rias/ai-visibility', changeFrequency: 'monthly', priority: 0.8, title: 'AI visibility for financial advisors' },
+  { path: '/rias/ai-visibility/chatgpt', changeFrequency: 'monthly', priority: 0.7, title: 'How do financial advisors show up in ChatGPT' },
   { path: '/banks', changeFrequency: 'weekly', priority: 0.9, title: 'For Banks and Credit Unions' },
-  { path: '/banks/compliance', changeFrequency: 'monthly', priority: 0.8, title: 'Bank Compliance Review' },
-  { path: '/banks/ai-visibility', changeFrequency: 'monthly', priority: 0.8, title: 'Bank AI Visibility' },
+  { path: '/banks/compliance', changeFrequency: 'monthly', priority: 0.8, title: 'UDAAP website compliance review for community banks' },
+  { path: '/banks/compliance/reg-dd', changeFrequency: 'monthly', priority: 0.7, title: 'Reg DD / Truth in Savings website disclosure check' },
+  { path: '/banks/ai-visibility', changeFrequency: 'monthly', priority: 0.8, title: 'AI SEO for community banks' },
   { path: '/pricing', changeFrequency: 'weekly', priority: 0.9, title: 'Pricing' },
   { path: '/insights', changeFrequency: 'monthly', priority: 0.7, title: 'Insights' },
   { path: '/insights/bank-ai-score', changeFrequency: 'monthly', priority: 0.7, title: 'Why a bank AI visibility score is low' },

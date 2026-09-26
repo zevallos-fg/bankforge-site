@@ -156,8 +156,9 @@ export default function HomePage() {
             We put the questions your prospects actually ask to{' '}
             {ANSWER_ENGINES.join(', ')} and record what comes back — whether you are
             named, which firms are named instead, and what on your site explains the
-            difference. Results are peer-benchmarked, so you see your position among
-            firms of your size and market rather than a score with no context.
+            difference. Results are read against a peer set: advisers against peers in
+            their metro area, banks and credit unions within their asset tier and state.
+            Peers are described by market and never named.
           </p>
           <p className="mt-4 text-sm text-gray-500">
             {MEASURED.aiVisibilityQueriesThisMonth.toLocaleString('en-US')} such
@@ -166,6 +167,11 @@ export default function HomePage() {
           <p className="mt-6 text-sm text-gray-500">
             We report what the engines returned on the dates we asked. Answers move,
             and a measurement is a reading rather than a promise.
+          </p>
+          <p className="mt-6 text-base">
+            <Link href="/ai-visibility" className="text-bf-navy underline">
+              What is AI visibility for financial institutions?
+            </Link>
           </p>
         </div>
       </section>

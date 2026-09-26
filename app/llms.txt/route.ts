@@ -85,10 +85,13 @@ unions within their asset tier and state. Peers are described, never named.
 ## Regulatory frameworks covered
 
 - SEC Marketing Rule (Rule 206(4)-1), Form ADV, Form CRS, Regulation S-P
-- Regulation DD (savings rate advertising)
+- Regulation DD, Truth in Savings, 12 CFR part 1030 (deposit rate advertising).
+  Read from 12 CFR 1030.1 on 2026-09-26: part 1030 applies to depository
+  institutions EXCEPT credit unions. Credit unions are covered by the NCUA's
+  parallel Truth in Savings rule, 12 CFR part 707, advertising section 707.8.
 - Regulation Z (lending disclosure and triggering terms)
 - ECOA / Regulation B, including Equal Housing Lender disclosure
-- UDAAP
+- UDAAP: Dodd-Frank sections 1031 and 1036, codified at 12 U.S.C. 5531 and 5536
 - FFIEC interagency guidance, including non-deposit product disclaimers
 - NCUA examination criteria
 

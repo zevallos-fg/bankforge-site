@@ -14,9 +14,13 @@ import Link from 'next/link';
 export default function SiteNav() {
   const [mobileNav, setMobileNav] = useState(false);
 
+  // /ai-visibility is the cross-lane definitional page (money page 8, D-TW-13).
+  // It belongs in the nav because seven other pages link to it as the explanation
+  // of the term, so a reader needs to reach it without first picking a lane.
   const links = [
     { href: '/rias', label: 'Investment Advisers' },
     { href: '/banks', label: 'Banks & Credit Unions' },
+    { href: '/ai-visibility', label: 'AI Visibility' },
     { href: '/pricing', label: 'Pricing' },
     { href: '/insights', label: 'Insights' },
   ];
