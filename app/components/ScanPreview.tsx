@@ -25,6 +25,14 @@ import type { ScanPreviewResult } from '@/app/api/scan-preview/route';
  * The peer and compliance blocks are absent for recent months
  * (TD-BANK-BASELINE-ENRICHMENT-ABSENT-ON-EVERY-LATEST-SCORED-MONTH), so their
  * absence is the common case and is labelled rather than hidden or zero-filled.
+ *
+ * CTA TARGET, FIXED BY TW1.L.1. All three "Request a walkthrough" links pointed at
+ * `/#walkthrough`, and no `id="walkthrough"` existed anywhere in the site — so every
+ * one of them landed on the top of the home page with no form in sight. The F.2
+ * rendered check exercised the three result STATES and never clicked a link, which
+ * is how three dead calls-to-action passed a green check. They now point at
+ * `#walkthrough` on this same page, and the page mounts the walkthrough form under
+ * that id, so the anchor resolves in the document the reader is already in.
  */
 
 type State =
@@ -120,7 +128,7 @@ export default function ScanPreview() {
         {state.kind === 'error' && (
           <p className="mt-5 text-base text-gray-700" role="status">
             {state.message}{' '}
-            <Link href="/#walkthrough" className="underline">
+            <Link href="#walkthrough" className="underline">
               Request a walkthrough
             </Link>
             .
@@ -143,7 +151,7 @@ function Result({ data }: { data: ScanPreviewResult }) {
           gap in what we have measured, not a reading about the institution.
         </p>
         <p className="mt-3 text-sm text-gray-600">
-          <Link href="/#walkthrough" className="underline">
+          <Link href="#walkthrough" className="underline">
             Request a walkthrough
           </Link>{' '}
           and we will add it and run the review with you.
@@ -233,7 +241,7 @@ function Result({ data }: { data: ScanPreviewResult }) {
       )}
 
       <p className="mt-5 text-sm text-gray-600">
-        <Link href="/#walkthrough" className="underline">
+        <Link href="#walkthrough" className="underline">
           Request a walkthrough
         </Link>{' '}
         to go through this with us.

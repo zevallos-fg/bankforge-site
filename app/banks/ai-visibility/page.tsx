@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
 import ScanPreview from '@/app/components/ScanPreview';
+import WalkthroughForm from '@/app/components/WalkthroughForm';
 import { ANSWER_ENGINES, MEASURED } from '@/app/lib/site';
 import { getPricing, ctaFor, rowsForLane } from '@/app/lib/pricing';
 
@@ -175,6 +176,28 @@ export default async function BankAiVisibilityPage() {
               what AI visibility is
             </Link>
           </p>
+        </div>
+      </section>
+
+      {/*
+        The walkthrough form, and the `walkthrough` anchor the look-up above links to.
+
+        BOTH HALVES WERE MISSING. ScanPreview's three "Request a walkthrough" links
+        pointed at `/#walkthrough`, and no element with that id existed anywhere in the
+        site — so all three landed on the top of the home page, which has no form
+        either (its CTA is a mailto). Separately, WalkthroughForm was mounted on
+        exactly one page, /rias/pricing, so the bank audience had no form at all while
+        advisers did. One section fixes both: the anchor now resolves in the document
+        the reader is already in, and a bank can ask for a walkthrough from the page
+        that just told it what we hold.
+      */}
+      <section id="walkthrough" className="scroll-mt-20 bg-bf-slate px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <WalkthroughForm
+            lane="bank"
+            heading="Ask what a review would show for your institution"
+            body="Tell us your institution and what you want to know. We will run the questions for it and reply with the answers that came back, next to institutions in your asset tier and state."
+          />
         </div>
       </section>
 
