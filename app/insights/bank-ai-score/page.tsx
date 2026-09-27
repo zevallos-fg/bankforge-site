@@ -1,310 +1,77 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import SiteNav from '../../components/SiteNav';
+import { PageIntro } from '@/app/components/PageIntro';
+import { ANSWER_ENGINES } from '@/app/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Bank AI SEO Score — What It Is and How to Fix It | BankForge',
+  title: 'Why a bank’s AI visibility score comes back low',
   description:
-    "BankForge has computed GEO scores across 4,300+ community banks. The median score is 34 out of 100. See what drives your bank's AI visibility and what to fix first.",
-  alternates: { canonical: 'https://bankforge.ai/insights/bank-ai-score' },
-  openGraph: {
-    title: 'Bank AI SEO Score — What It Is and How to Fix It | BankForge',
-    url: 'https://bankforge.ai/insights/bank-ai-score',
-  },
+    'The common causes are structural: product pages an assistant cannot parse, absent structured data, and crawler rules that exclude AI readers.',
+  alternates: { canonical: '/insights/bank-ai-score' },
 };
 
-const jsonLdGraph = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Article',
-      headline: "Your Bank's AI Score Is Low. Here's Why — and What to Fix.",
-      datePublished: '2026-04-01',
-      dateModified: '2026-04-09',
-      url: 'https://www.bankforge.ai/insights/bank-ai-score',
-      author: { '@type': 'Organization', name: 'BankForge Research Team', url: 'https://www.bankforge.ai' },
-      publisher: { '@type': 'Organization', name: 'BankForge', url: 'https://www.bankforge.ai' },
-      about: 'Bank GEO score and AI search visibility for community banks',
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is a bank AI SEO score?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: "A bank AI SEO score measures how visible a financial institution is in AI-generated search results from ChatGPT, Perplexity, and Google AI Overviews. BankForge scores community banks from 0\u2013100 based on schema markup, Google Business Profile completeness, content freshness, technical signals, and third-party citation density.",
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the average bank GEO score?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The median community bank scores 34 out of 100. The top quartile averages 72. The bottom quartile averages 11, which means those institutions are effectively invisible when consumers search for local banking services on AI platforms.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why do community banks score low on AI search?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: '78% of community banks have no schema markup, 64% have significant Google Business Profile gaps, and most have not updated their website content in over 12 months. Banks with content updated in the last 90 days score 2.4x higher on AI visibility than banks with stale content.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: "How do I improve my bank's AI search visibility?",
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The three highest-impact actions are: add JSON-LD schema markup (Organization, LocalBusiness, FinancialProduct), complete your Google Business Profile, and publish authoritative content monthly. BankForge offers a GEO Baseline Report that scores your institution against peer banks and delivers 10 prioritized fixes.',
-          },
-        },
-      ],
-    },
-  ],
-};
+const causes = [
+  {
+    h: 'Nothing on the page states the obvious',
+    p: 'Assistants answer from what a page says plainly. Rates, locations, product names and eligibility often live in an image, a slider or a PDF, where a reader that only has text finds nothing to quote.',
+  },
+  {
+    h: 'No structured data',
+    p: 'Schema markup is how a page tells a machine what kind of thing it is describing. Without it, an assistant is guessing from prose — and it guesses conservatively, which usually means leaving you out.',
+  },
+  {
+    h: 'AI crawlers are excluded',
+    p: 'Plenty of robots.txt files were written when the only crawlers that mattered were search engines. If the assistants are disallowed, the rest of the work cannot help.',
+  },
+  {
+    h: 'The site answers questions nobody asked',
+    p: 'Pages are often organised around internal product naming rather than the question a customer would type. An assistant matches the question, not the brochure.',
+  },
+];
 
 export default function BankAiScorePage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Article + FAQ Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGraph) }}
+    <>
+      <PageIntro
+        eyebrow="Insights"
+        title="Why a bank’s AI visibility score comes back low."
+        lede="When an institution scores poorly, the cause is usually structural rather than editorial. These are the four we see most often."
       />
 
-      {/* Nav */}
-      <SiteNav />
-
-      {/* Article */}
-      <article className="pt-24 pb-16 px-6">
-        <div className="max-w-3xl mx-auto">
-          <Link
-            href="/insights"
-            className="text-bf-navy text-xs font-medium tracking-wide uppercase mb-6 inline-block hover:underline"
-          >
-            &larr; Back to Insights
-          </Link>
-
-          <h1
-            className="text-4xl text-gray-900 mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            Your Bank&apos;s AI Score Is Low.{' '}
-            <em className="text-bf-navy">Here&apos;s Why</em> — and What to Fix.
-          </h1>
-
-          <p className="text-sm text-gray-400 mb-10">
-            April 2026 &middot; BankForge Research Team
+      <section className="bg-white px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-base leading-relaxed text-gray-600">
+            An AI visibility score is a summary of a simple exercise: ask{' '}
+            {ANSWER_ENGINES.join(', ')} the questions your customers ask, and record
+            whether your institution is named. A low score means the assistants had
+            little to work with, or had reason to name somebody else.
           </p>
 
-          <div className="prose prose-gray max-w-none text-[15px] leading-relaxed">
-            <p>
-              If your CMO mentioned your bank&apos;s AI score in a recent meeting, you&apos;re not
-              alone. AI-powered search engines like Google&apos;s AI Overviews, Perplexity, and
-              ChatGPT are reshaping how consumers discover financial institutions — and most
-              community banks are invisible.
-            </p>
-
-            <p>
-              BankForge has computed AI visibility scores across 4,300+ FDIC-insured bank
-              websites. The results are stark: the median community bank scores 34 out of 100.
-              The top quartile averages 72. The bottom quartile averages 11.
-            </p>
-
-            <h2 style={{ fontFamily: 'var(--font-display)' }}>
-              What drives your AI score
-            </h2>
-
-            <p>
-              AI search engines don&apos;t read your website the way a human does. They extract
-              structured signals — and if those signals aren&apos;t there, your institution
-              effectively doesn&apos;t exist in the AI layer. Here are the five factors that
-              matter most:
-            </p>
-
-            <h3 style={{ fontFamily: 'var(--font-display)' }}>
-              1. Schema markup (JSON-LD)
-            </h3>
-            <p>
-              Schema markup is structured data embedded in your website&apos;s HTML that tells
-              AI systems exactly what your institution offers. Organization schema identifies
-              your bank. FinancialProduct schema describes your accounts and rates.
-              LocalBusiness schema maps your branches.
-            </p>
-            <p>
-              BankForge analysis: <strong>78% of community bank websites have no schema
-              markup at all.</strong> Without it, AI engines must infer what you offer from
-              unstructured text — and they rarely do so accurately.
-            </p>
-
-            <h3 style={{ fontFamily: 'var(--font-display)' }}>
-              2. Google Business Profile completeness
-            </h3>
-            <p>
-              Your Google Business Profile (GBP) is one of the primary data sources that AI
-              search engines draw from when answering questions about local financial
-              services. Incomplete profiles — missing services, stale hours, no product
-              categories — signal to AI systems that your institution isn&apos;t a reliable
-              source.
-            </p>
-            <p>
-              BankForge data: <strong>64% of community banks have significant Google Business Profile gaps.</strong>{' '}
-              Top-quartile banks maintain 90%+ profile completeness. Bottom-quartile banks
-              average under 40%.
-            </p>
-
-            <h3 style={{ fontFamily: 'var(--font-display)' }}>
-              3. Content authority and freshness
-            </h3>
-            <p>
-              AI engines prioritize content that demonstrates expertise. A bank website with
-              a single-page rate table and a generic &ldquo;About Us&rdquo; page scores lower than one
-              with educational content, market commentary, and regularly updated product
-              information. The Wayback Machine delta — the rate at which your website content
-              changes — is a measurable signal.
-            </p>
-            <p>
-              BankForge finding: banks with content updated in the last 90 days score
-              2.4x higher on AI visibility than banks whose content hasn&apos;t changed in
-              12+ months.
-            </p>
-
-            <h3 style={{ fontFamily: 'var(--font-display)' }}>
-              4. Technical signals
-            </h3>
-            <p>
-              HTTPS enforcement, mobile responsiveness, page speed, proper canonical tags,
-              and accessible navigation all factor into whether AI engines trust your website
-              as a source. These are table stakes for traditional SEO — and they&apos;re
-              equally important for AI visibility.
-            </p>
-
-            <h3 style={{ fontFamily: 'var(--font-display)' }}>
-              5. Third-party citation density
-            </h3>
-            <p>
-              When multiple authoritative sources reference your institution — FDIC listings,
-              state banking department records, industry directories, news coverage — AI
-              systems gain confidence in your entity. Banks that appear in AI Overviews
-              typically have 3&ndash;5x more citation sources than those that don&apos;t.
-            </p>
-
-            <h2 style={{ fontFamily: 'var(--font-display)' }}>
-              The MSA gap
-            </h2>
-
-            <p>
-              AI visibility isn&apos;t just an individual bank problem — it&apos;s a competitive
-              one. In the Miami market, the top-ranked institution scored 80 out of 100.
-              The lowest-ranked institution in the same market scored 10. Same city.
-              Same customer base.
-            </p>
-
-            <p>
-              Average bank AI SEO score nationally: <strong>66</strong>.
-              Average AI SEO score for investment advisers: <strong>33.3</strong>.
-            </p>
-
-            <p>
-              Consumers asking AI engines &ldquo;what&apos;s the best bank for a checking
-              account near me&rdquo; are getting answers that favor the institutions with
-              structured, complete, authoritative digital presences.
-            </p>
-
-            <h2 style={{ fontFamily: 'var(--font-display)' }}>
-              What to fix first
-            </h2>
-
-            <p>
-              If your bank&apos;s AI score is in the bottom quartile, here are the three
-              highest-impact actions:
-            </p>
-
-            <ol>
-              <li>
-                <strong>Add JSON-LD schema markup</strong> — Organization, LocalBusiness,
-                and FinancialProduct schemas. This is a one-time technical implementation
-                that most web developers can complete in a day.
-              </li>
-              <li>
-                <strong>Complete your Google Business Profile</strong> — Every field filled,
-                every service listed, photos current, reviews responded to. This is free
-                and takes 2&ndash;3 hours.
-              </li>
-              <li>
-                <strong>Publish authoritative content</strong> — Rate updates, market
-                commentary, community banking insights. AI engines need fresh, expert
-                content to cite. Monthly updates are the minimum cadence.
-              </li>
-            </ol>
-
-            <h2 style={{ fontFamily: 'var(--font-display)' }}>
-              One thing to do before all of this
-            </h2>
-
-            <p>
-              If your bank is planning a website redesign — and most community banks
-              redesign every 3&ndash;5 years — run a compliance scan first. BankForge has
-              found that 89% of community bank websites have at least one compliance gap
-              that would appear on an examiner&apos;s checklist: missing Equal Housing Lender
-              disclosures, UDAAP-risk language in product descriptions, or Reg DD
-              triggering terms without required context.
-            </p>
-
-            <p>
-              A redesign without a compliance baseline risks baking those gaps into a
-              brand-new site. And once they&apos;re built in, they&apos;re harder to find.
-            </p>
-
-            {/* CTA */}
-            <div
-              className="rounded-lg p-6 my-10 not-prose"
-              style={{
-                backgroundColor: 'var(--bf-gold-bg)',
-                borderLeft: '4px solid var(--bf-gold-bdr)',
-              }}
-            >
-              <p className="text-amber-800 text-xs font-medium uppercase tracking-wide mb-2">
-                Starting a website redesign?
-              </p>
-              <p className="text-sm text-amber-900 leading-relaxed mb-4">
-                Run a compliance scan before you build. BankForge identifies the regulatory
-                gaps your current site has — so your new site launches clean.
-              </p>
-              <Link
-                href="/ai-seo-score"
-                className="inline-block bg-bf-navy text-white font-medium px-5 py-2.5 rounded-lg hover:bg-bf-navy-deep transition-colors text-sm"
-              >
-                Learn about AI SEO + Marketing Intelligence &rarr;
-              </Link>
-            </div>
-
-            <p className="text-xs text-gray-400 italic">
-              BankForge flags findings for compliance counsel review. We never conclude a violation. All
-              compliance observations are advisory and should be reviewed by qualified
-              compliance counsel before remediation.
-            </p>
+          <div className="mt-10 space-y-8">
+            {causes.map((c) => (
+              <div key={c.h}>
+                <h2 className="text-lg text-bf-navy-deep" style={{ fontFamily: 'var(--font-display)' }}>
+                  {c.h}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{c.p}</p>
+              </div>
+            ))}
           </div>
-        </div>
-      </article>
 
-      {/* Footer */}
-      <footer className="py-6 px-6 border-t border-gray-100">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
-          <span className="flex items-center gap-2">
-            <span style={{ fontFamily: 'var(--font-display)' }} className="text-gray-500 text-sm">
-              <span style={{ color: '#1B5299' }}>BankForge</span>.ai
-            </span>
-            <span className="text-gray-300">·</span>
-            <a href="https://www.linkedin.com/company/bankforge-ai" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700 transition-colors">LinkedIn</a>
-          </span>
-          <span>BankForge flags findings for compliance counsel review. We never conclude a violation.</span>
-          <span className="flex items-center gap-2">&copy; 2026 BankForge.ai LLC<span className="text-gray-300">·</span><a href="/privacy" className="text-gray-500 hover:text-gray-700 transition-colors">Privacy Policy</a><span className="text-gray-300">·</span><a href="/terms" className="text-gray-500 hover:text-gray-700 transition-colors">Terms of Service</a></span>
+          <p className="mt-10 text-sm leading-relaxed text-gray-500">
+            None of these are quick wins in the marketing sense; they are ordinary
+            site work. The useful part is knowing which of them is actually costing
+            you, which is what a benchmarked reading is for.
+          </p>
+
+          <Link
+            href="/banks/ai-visibility"
+            className="mt-8 inline-block text-sm font-medium text-bf-navy hover:underline"
+          >
+            How we measure it →
+          </Link>
         </div>
-      </footer>
-    </div>
+      </section>
+    </>
   );
 }
