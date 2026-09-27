@@ -6,17 +6,15 @@ import { createClient } from '@supabase/supabase-js';
  *
  * HISTORY (why this route looks like this):
  *  - It originally accepted an unauthenticated POST from anyone on the internet
- *    and INSERTed the attacker-supplied body straight into
- *    `public.website_demo_requests` using the service-role key, which bypasses
- *    RLS. There was no rate limit of any kind
+ *    and INSERTed the caller-supplied body straight into
+ *    `public.website_demo_requests` using the privileged server key, which
+ *    bypasses RLS. There was no rate limit of any kind
  *    (TD-MARKETING-SITE-API-USES-SERVICE-ROLE-KEY, 550d7616).
  *
  *    That env var's exact name is deliberately NOT spelled out anywhere in this
  *    file, so grepping the public routes for it returns a hit only where the key
- *    is actually still used (scan-preview). A history note that trips the audit
- *    it is describing makes the audit useless.
- *  - T3 could not fix it, only disable it (410), because an anon-key write is
- *    refused by RLS and adding an INSERT policy is a migration T3 could not author.
+ *    is actually still used — nowhere, as of this commit. A history note that
+ *    trips the audit it is describing makes the audit useless.
  *
  * WHAT CHANGED: the write no longer goes to the table at all. It goes through
  * `public.submit_walkthrough_request(p_email, p_name, p_institution, p_lane,
@@ -26,15 +24,31 @@ import { createClient } from '@supabase/supabase-js';
  * global brake of 60 accepted per rolling hour), so neither is re-implemented
  * here and the two cannot drift apart.
  *
- * CONSEQUENCE: this route holds NO service-role reference. It uses the anon key
- * only — the same key a browser would carry — so a missing grant or policy fails
- * here loudly instead of succeeding under a privileged key.
+ * CONSEQUENCE: this route holds NO privileged-key reference. It uses the
+ * publishable (anon) key only — the same key a browser would carry — so a missing
+ * grant or policy fails here loudly instead of succeeding under a privileged key.
  *
- * MEASURED 2026-09-26, and worth knowing: `anon` still holds table-level
- * `arwdDxtm` (INSERT, SELECT, UPDATE, DELETE, TRUNCATE) on
- * `website_demo_requests`. A direct anon INSERT is refused by RLS and by RLS
- * alone (HTTP 401, SQLSTATE 42501). Revoking that grant needs Fernando's click;
- * it is filed, not fixed here.
+ * TABLE PRIVILEGES, CORRECTED. The preview rebuild's copy of this file recorded
+ * that `anon` still held table-level `arwdDxtm` on `website_demo_requests` and
+ * that revoking it was "filed, not fixed". That is no longer true and the note is
+ * not carried forward: migration
+ * `20260926030000_revoke_website_demo_requests_privileges_469.sql` revoked ALL
+ * from both `anon` and `authenticated` and asserted all fourteen privilege cells
+ * false, and it is on `main`. A direct anon INSERT is now refused by PRIVILEGE
+ * ("permission denied for table"), where before it was refused by RLS alone
+ * ("violates row-level security policy") — the same SQLSTATE 42501 either way,
+ * which is why the discriminating proof was a SELECT going from `200 []` to
+ * `401`. The RPC is unaffected: it is SECURITY DEFINER and runs as its owner.
+ *
+ * FIELDS THIS ROUTE NO LONGER PERSISTS. The route it replaces wrote four columns
+ * the RPC has no parameter for: `source_page`, `source_cta`, `domain`, and the
+ * server-derived `referrer`. It also wrote `audience_type` verbatim, whereas the
+ * RPC's lane vocabulary is {ria, bank, bd, other}, so the marketing site's
+ * `credit_union` and `unknown` both normalise to `other`. The columns still exist
+ * and simply go NULL from here on. This is a real loss of lead attribution, taken
+ * knowingly in exchange for removing the privileged key today, and filed as
+ * TD-WALKTHROUGH-RPC-DROPS-SEVEN-ATTRIBUTION-COLUMNS rather than papered over
+ * by smuggling the values into `p_message`.
  */
 
 /** Verbatim RPC reasons that mean "the caller sent something unusable". */
