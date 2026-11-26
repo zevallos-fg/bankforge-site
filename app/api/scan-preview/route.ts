@@ -1,7 +1,19 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { serverDb } from '@/app/lib/server-db';
 
 /**
+ * WEB2.A.1 (2026-11-26) -- READ THIS FIRST; it supersedes the "anon only" and "NO
+ * privileged credential" lines below, which are kept as the record of 2026-09-26.
+ * D-HQ3-20 (cbbe258c, Fernando 2026-11-05) revoked anon EXECUTE on
+ * scan_preview_lookup, so the public-key call below had answered 502 since then
+ * (TD 97cec896). The ruled fix is server-side: the call now uses the server-only
+ * credential from app/lib/server-db.ts, and anon is NOT re-granted. The route still
+ * performs no table read: one string to one function, mapped to a status code. The
+ * function still owns normalisation, projection and its durable rate limit.
+ *
+ * ORIGINAL NOTES (2026-09-26):
+ *
  * Domain scan preview — RESTORED, through a bounded public read.
  *
  * HISTORY. This route used to read `public.entity_registry` and
@@ -102,22 +114,18 @@ async function lookup(domain: string) {
     );
   }
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+  const db = serverDb();
 
-  if (!url || !anonKey) {
+  if (!db.ok) {
     // Say which name is missing, never its value.
-    console.warn(
-      '[scan-preview] WARNING: NEXT_PUBLIC_SUPABASE_URL and/or ' +
-        'NEXT_PUBLIC_SUPABASE_ANON_KEY are not set in this environment.',
-    );
+    console.warn(`[scan-preview] WARNING: ${db.missing} is not set in this environment.`);
     return NextResponse.json(
       { found: false, reason: 'not_configured' },
       { status: 503 },
     );
   }
 
-  const supabase = createClient(url, anonKey, {
+  const supabase = createClient(db.url, db.key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 

@@ -4,7 +4,8 @@ import { PageIntro } from '@/app/components/PageIntro';
 import PricingTable from '@/app/components/PricingTable';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
 import WalkthroughForm from '@/app/components/WalkthroughForm';
-import { getPricing, rowsForLane } from '@/app/lib/pricing';
+import { rowsForLane } from '@/app/lib/pricing';
+import { getPricing } from '@/app/lib/pricing-server';
 
 /**
  * MONEY PAGE 2 (D-TW-13) — buyer prompt: "How much does an RIA marketing
@@ -107,6 +108,17 @@ export default async function RiaPricingPage() {
       <section className="bg-white px-6 pb-16">
         <div className="mx-auto max-w-5xl">
           <PricingTable rows={pricing.rows} lane="ria" bound={pricing.bound} />
+
+          {/* Broker-dealers (WEB2.A.1): Broker-Dealer Simple, coming soon. */}
+          <h2
+            className="mt-12 text-xl text-bf-navy-deep"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            For broker-dealers
+          </h2>
+          <div className="mt-4">
+            <PricingTable rows={pricing.rows} lane="bd" bound={pricing.bound} />
+          </div>
 
           <div className="mt-10 grid gap-6 border-t border-gray-200 pt-8 md:grid-cols-2">
             <div>

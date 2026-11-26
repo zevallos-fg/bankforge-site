@@ -63,91 +63,53 @@ export interface PricingResult {
 export const PRICING_UNAVAILABLE_MESSAGE =
   'Pricing is being updated — book a walkthrough';
 
-const EMPTY: PricingResult = {
-  bound: false,
-  rows: [],
-  reason: null,
-  columnDiff: null,
-};
+// getPricing() lives in ./pricing-server.ts (WEB2.A.1): it holds the server-only
+// credential, and this module is imported by client components, so it must not.
+
+// ─── Availability: coming later / coming soon (WEB2.A.1, D-WEB2-1 63aa7a80) ────
 
 /**
- * Fetch the catalogue. Server-side only, at build time.
+ * Lanes whose products are on the site by name but not for sale yet.
  *
- * Reads with the ANON key over PostgREST, which is the same path a browser
- * would take — so a policy or grant that is missing fails here rather than
- * silently succeeding under a privileged key.
+ *  - bank: "Coming later". Bank go-to-market is paused; the pages stay up with no
+ *    prices and a waitlist (D-GTMR-31 45c9a547). Bank DATA collection is unaffected.
+ *  - bd: "Coming soon". Broker-Dealer Simple shows without a price until LGL confirms
+ *    the attorney's FINRA 2210 disclaimer scope (HR 47(b); D-GTMR-30 4fa33135).
+ *
+ * The registry already returns NULL prices for both (migration 675). This list is
+ * the display half of the same ruling, so a bank row can never render "Custom
+ * pricing" as though it were on sale and quoted.
  */
-export async function getPricing(): Promise<PricingResult> {
-  const url =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL ?? '';
-  const anonKey =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY ?? '';
+export const AVAILABILITY_LABEL: Record<string, string> = {
+  bank: 'Coming later',
+  bd: 'Coming soon',
+};
 
-  if (!url || !anonKey) {
-    const reason =
-      'NEXT_PUBLIC_SUPABASE_URL and/or NEXT_PUBLIC_SUPABASE_ANON_KEY are not set in this environment';
-    console.warn(`[pricing] WARNING: ${reason}. Rendering the unavailable message.`);
-    return { ...EMPTY, reason };
-  }
-
-  const endpoint =
-    `${url.replace(/\/+$/, '')}/rest/v1/v_sku_catalog_public` +
-    `?select=*&order=lane.asc,family.asc,display_order.asc`;
-
-  try {
-    const res = await fetch(endpoint, {
-      headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
-      // Build-time read; revalidate hourly so a price ruling reaches the site
-      // without a code change.
-      next: { revalidate: 3600 },
-    });
-
-    if (!res.ok) {
-      const body = await res.text().catch(() => '');
-      // A privilege error is the signal T1's HALT-ANON-READS-ZERO owns.
-      const reason = `v_sku_catalog_public returned HTTP ${res.status}. ${body.slice(0, 300)}`;
-      console.warn(`[pricing] WARNING: ${reason}`);
-      return { ...EMPTY, reason };
-    }
-
-    const rows = (await res.json()) as SkuRow[];
-
-    if (!Array.isArray(rows) || rows.length === 0) {
-      const reason = 'v_sku_catalog_public read successfully but returned 0 rows';
-      console.warn(`[pricing] WARNING: ${reason}`);
-      return { ...EMPTY, reason };
-    }
-
-    // Contract check. We do NOT adapt to a changed view: a column change is a
-    // new contract version and needs a ruling, so a drift renders the fallback.
-    const got = Object.keys(rows[0]);
-    const missing = CONTRACT_COLUMNS.filter((c) => !got.includes(c as string));
-    const unexpected = got.filter(
-      (c) => !(CONTRACT_COLUMNS as readonly string[]).includes(c),
-    );
-
-    if (missing.length > 0) {
-      const reason = `v_sku_catalog_public does not match CONTRACT. missing=[${missing.join(
-        ', ',
-      )}] unexpected=[${unexpected.join(', ')}]`;
-      console.warn(`[pricing] WARNING: ${reason}`);
-      return { ...EMPTY, reason, columnDiff: { missing: missing as string[], unexpected } };
-    }
-
-    return {
-      bound: true,
-      rows,
-      reason: null,
-      columnDiff: unexpected.length ? { missing: [], unexpected } : null,
-    };
-  } catch (err) {
-    const reason = `fetch of v_sku_catalog_public threw: ${
-      err instanceof Error ? err.message : String(err)
-    }`;
-    console.warn(`[pricing] WARNING: ${reason}`);
-    return { ...EMPTY, reason };
-  }
+/** The availability label for a row, or null when the row is on sale. */
+export function availabilityLabel(row: SkuRow): string | null {
+  return AVAILABILITY_LABEL[row.lane] ?? null;
 }
+
+/**
+ * Belt and braces for the same ruling. A row in a not-yet-for-sale lane never
+ * carries a price into the page, even if the view were to return one. Applied in
+ * getPricing() to every row, so no page, table or llms.txt line can print it.
+ */
+export function withholdUnpublishedPrices(row: SkuRow): SkuRow {
+  if (availabilityLabel(row) === null) return row;
+  return { ...row, price_founding_usd: null, price_standard_usd: null };
+}
+
+/**
+ * One-line scope shown under a product name, where the name alone does not say it.
+ * forge-ria-3 follows D-GTM5-5 (34fee543): the union of the two Simples.
+ * Wording passed the RIA compliance gate (HR 9) in WEB2.A.1.
+ */
+export const SKU_SCOPE: Record<string, string> = {
+  'forge-ria-3':
+    'For dual registrants. One review that reads your public communications against both the SEC Marketing Rule and FINRA Rule 2210, and checks them for consistency with your Form ADV, Form CRS and Regulation Best Interest disclosures.',
+  'forge-bd-1': 'For broker-dealers. Not yet available — join the waitlist and we will tell you when it is.',
+};
 
 // ─── Presentation helpers ──────────────────────────────────────────────────
 
@@ -171,6 +133,10 @@ export function formatUsd(amount: number): string {
  * `starts_at` carries an asterisk; the footnote is rendered by the caller.
  */
 export function headlinePrice(row: SkuRow): string {
+  // Not for sale yet: say so, never "Custom pricing" (WEB2.A.1).
+  const availability = availabilityLabel(row);
+  if (availability) return availability;
+
   // A row whose only ruled price is the founding one headlines THAT price.
   if (foundingIsOnlyPrice(row)) return formatUsd(row.price_founding_usd);
 
@@ -189,6 +155,7 @@ export function headlinePrice(row: SkuRow): string {
  * belongs in a conversation, not in cached HTML.
  */
 export function foundingLine(row: SkuRow): string | null {
+  if (availabilityLabel(row)) return null;
   if (row.price_founding_usd == null) return null;
   // The headline already IS this number, so the line qualifies it instead of
   // repeating it. One price, said once.

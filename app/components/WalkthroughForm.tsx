@@ -35,8 +35,14 @@ export default function WalkthroughForm({
   lane = 'ria',
   heading = 'Book a walkthrough',
   body = 'Tell us what you are registered as and what you are worried about. We will reply with what a review would look at on your own site.',
+  tag,
+  id,
 }: {
   lane?: string;
+  /** Request tag, e.g. bank-waitlist (app/lib/request-tags.ts). */
+  tag?: string;
+  /** Anchor id, so a CTA elsewhere can link straight to the form. */
+  id?: string;
   heading?: string;
   body?: string;
 }) {
@@ -54,6 +60,7 @@ export default function WalkthroughForm({
       lane: String(fd.get('lane') ?? lane),
       message: String(fd.get('message') ?? ''),
       company_website: String(fd.get('company_website') ?? ''),
+      ...(tag ? { tag } : {}),
     };
 
     try {
@@ -99,7 +106,7 @@ export default function WalkthroughForm({
 
   if (state.kind === 'sent') {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white p-8">
+      <div id={id} className="rounded-xl border border-gray-200 bg-white p-8">
         <h2
           className="text-xl text-bf-navy-deep"
           style={{ fontFamily: 'var(--font-display)' }}
@@ -115,7 +122,7 @@ export default function WalkthroughForm({
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-8">
+    <div id={id} className="rounded-xl border border-gray-200 bg-white p-8">
       <h2
         className="text-xl text-bf-navy-deep"
         style={{ fontFamily: 'var(--font-display)' }}
