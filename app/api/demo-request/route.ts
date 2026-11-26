@@ -1,8 +1,19 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { serverDb } from '@/app/lib/server-db';
+import { taggedMessage } from '@/app/lib/request-tags';
 
 /**
  * Walkthrough request intake.
+ *
+ * WEB2.A.1 (2026-11-26) -- READ THIS FIRST; it supersedes the "EXECUTE granted to
+ * anon" and "holds NO privileged-key reference" lines below, kept as the record.
+ * D-HQ3-20 (cbbe258c, Fernando 2026-11-05) revoked anon EXECUTE on
+ * submit_walkthrough_request, so the public-key call had answered 502 since then
+ * (TD 97cec896). The call now uses the server-only credential from
+ * app/lib/server-db.ts; anon is NOT re-granted. It is still one call to one function
+ * that owns validation and both rate limits; the route never touches the table.
+ * Bank pages send tag 'bank-waitlist' (app/lib/request-tags.ts).
  *
  * HISTORY (why this route looks like this):
  *  - It originally accepted an unauthenticated POST from anyone on the internet
@@ -69,6 +80,8 @@ type Payload = {
   institution?: unknown;
   lane?: unknown;
   message?: unknown;
+  /** Optional request tag; only values in REQUEST_TAGS are kept. */
+  tag?: unknown;
   /**
    * HONEYPOT. Rendered as a visually-hidden, `aria-hidden`, `tabIndex={-1}`
    * input that a person never sees and never focuses. A filled value means a
@@ -82,7 +95,6 @@ type Payload = {
 function asString(v: unknown): string {
   return typeof v === 'string' ? v.trim() : '';
 }
-
 export async function POST(request: Request) {
   let body: Payload;
   try {
@@ -100,15 +112,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true }, { status: 200 });
   }
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+  const db = serverDb();
 
-  if (!url || !anonKey) {
+  if (!db.ok) {
     // Say which name is missing, never its value.
-    console.warn(
-      '[demo-request] WARNING: NEXT_PUBLIC_SUPABASE_URL and/or ' +
-        'NEXT_PUBLIC_SUPABASE_ANON_KEY are not set in this environment.',
-    );
+    console.warn(`[demo-request] WARNING: ${db.missing} is not set in this environment.`);
     return NextResponse.json(
       { ok: false, reason: 'not_configured' },
       { status: 503 },
@@ -117,7 +125,7 @@ export async function POST(request: Request) {
 
   const rawLane = asString(body.lane).toLowerCase();
 
-  const supabase = createClient(url, anonKey, {
+  const supabase = createClient(db.url, db.key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
@@ -126,7 +134,7 @@ export async function POST(request: Request) {
     p_name: asString(body.name) || null,
     p_institution: asString(body.institution) || null,
     p_lane: LANES.has(rawLane) ? rawLane : 'other',
-    p_message: asString(body.message) || null,
+    p_message: taggedMessage(asString(body.tag), asString(body.message)),
   });
 
   if (error) {

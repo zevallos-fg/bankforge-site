@@ -5,6 +5,8 @@ import {
   unitLabel,
   ctaFor,
   rowsForLane,
+  availabilityLabel,
+  SKU_SCOPE,
   STARTS_AT_FOOTNOTE,
   PRICING_UNAVAILABLE_MESSAGE,
 } from '@/app/lib/pricing';
@@ -49,6 +51,16 @@ export default function PricingTable({
         {laneRows.map((row) => {
           const cta = ctaFor(row.site_status);
           const founding = foundingLine(row);
+          // Not for sale yet (WEB2.A.1): no unit line, and the bank waitlist is the
+          // tagged form on the bank pages rather than an email.
+          const availability = availabilityLabel(row);
+          const scope = SKU_SCOPE[row.sku_code];
+          const href =
+            row.lane === 'bank'
+              ? '/banks#waitlist'
+              : `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+                  `${cta.label}: ${row.product_name}`,
+                )}`;
           return (
             <div
               key={`${row.sku_code}-${row.tier_key ?? 'base'}`}
@@ -70,19 +82,23 @@ export default function PricingTable({
                 <p className="mt-1 text-sm text-gray-500">{row.tier_label}</p>
               )}
 
+              {scope && (
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{scope}</p>
+              )}
+
               <p className="mt-4 text-2xl text-bf-navy-deep" style={{ fontFamily: 'var(--font-display)' }}>
                 {headlinePrice(row)}
               </p>
-              <p className="text-sm text-gray-500">{unitLabel(row.billing_unit)}</p>
+              {!availability && (
+                <p className="text-sm text-gray-500">{unitLabel(row.billing_unit)}</p>
+              )}
 
               {founding && (
                 <p className="mt-2 text-xs leading-relaxed text-gray-500">{founding}</p>
               )}
 
               <a
-                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-                  `${cta.label}: ${row.product_name}`,
-                )}`}
+                href={href}
                 className="mt-5 inline-block rounded-lg bg-bf-navy px-4 py-2 text-center text-sm font-medium text-white hover:opacity-90 transition-opacity"
               >
                 {cta.label}

@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
-import { getPricing, ctaFor, rowsForLane } from '@/app/lib/pricing';
+import { ctaFor, rowsForLane } from '@/app/lib/pricing';
+import { getPricing } from '@/app/lib/pricing-server';
 
 /**
  * MONEY PAGE 1 (D-TW-13) — buyer prompt: "SEC Marketing Rule website review for RIAs".

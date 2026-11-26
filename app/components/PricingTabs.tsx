@@ -5,7 +5,7 @@ import type { SkuRow } from '@/app/lib/pricing';
 import PricingTable from './PricingTable';
 
 /**
- * RIA / Bank tabs.
+ * RIA / BD / Bank tabs. The BD tab carries Broker-Dealer Simple, coming soon (WEB2.A.1).
  *
  * Both panels are rendered into the HTML and the inactive one is hidden with the
  * `hidden` attribute rather than being omitted. That keeps the full catalogue in
@@ -18,10 +18,11 @@ export default function PricingTabs({
   rows: SkuRow[];
   bound: boolean;
 }) {
-  const [lane, setLane] = useState<'ria' | 'bank'>('ria');
+  const [lane, setLane] = useState<'ria' | 'bd' | 'bank'>('ria');
 
-  const tabs: { key: 'ria' | 'bank'; label: string }[] = [
+  const tabs: { key: 'ria' | 'bd' | 'bank'; label: string }[] = [
     { key: 'ria', label: 'Investment advisers' },
+    { key: 'bd', label: 'Broker-dealers' },
     { key: 'bank', label: 'Banks & credit unions' },
   ];
 
@@ -48,6 +49,9 @@ export default function PricingTabs({
 
       <div id="panel-ria" role="tabpanel" hidden={lane !== 'ria'}>
         <PricingTable rows={rows} lane="ria" bound={bound} />
+      </div>
+      <div id="panel-bd" role="tabpanel" hidden={lane !== 'bd'}>
+        <PricingTable rows={rows} lane="bd" bound={bound} />
       </div>
       <div id="panel-bank" role="tabpanel" hidden={lane !== 'bank'}>
         <PricingTable rows={rows} lane="bank" bound={bound} />

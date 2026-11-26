@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
+import { PageIntro, FindingList } from '@/app/components/PageIntro';
+import { ComingLaterNotice, BankWaitlist } from '@/app/components/BankComingLater';
 import { MEASURED, ANSWER_ENGINES } from '@/app/lib/site';
 
 export const metadata: Metadata = {
@@ -53,6 +54,8 @@ export default function BanksPage() {
         lede="Before anyone requests a document, your public website already answers a lot of questions about how you advertise. It is worth knowing what it currently says."
       />
 
+      <ComingLaterNotice />
+
       <FindingList
         heading="What the review looks at"
         intro="Each item names the regulation behind it, and where banks and credit unions are under different rules it names both. The report is meant to be arguable — your compliance team should be able to disagree with a finding on the merits."
@@ -88,13 +91,7 @@ export default function BanksPage() {
         </div>
       </section>
 
-      <CtaBand
-        title="See it on your own site"
-        body="We will run the review, walk you through the findings, and you decide what is worth acting on."
-        subject="Bank walkthrough request"
-        secondaryHref="/pricing"
-        secondaryLabel="See pricing"
-      />
+      <BankWaitlist />
     </>
   );
 }

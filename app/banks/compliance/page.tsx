@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
+import { PageIntro, FindingList } from '@/app/components/PageIntro';
+import { ComingLaterNotice, BankWaitlist } from '@/app/components/BankComingLater';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
-import { getPricing, ctaFor, rowsForLane } from '@/app/lib/pricing';
 
 /**
  * MONEY PAGE 5 (D-TW-13) — buyer prompt: "UDAAP website compliance review for
@@ -81,12 +81,6 @@ const faqs: readonly FaqItem[] = [
 ];
 
 export default async function BankCompliancePage() {
-  const pricing = await getPricing();
-  const forge = rowsForLane(pricing.rows, 'bank').filter((r) => r.family === 'forge');
-  const cta = ctaFor(
-    pricing.bound && forge.length > 0 ? forge[0].site_status : 'book_walkthrough',
-  );
-
   return (
     <>
       <PageIntro
@@ -94,6 +88,8 @@ export default async function BankCompliancePage() {
         title="UDAAP website compliance review for community banks"
         lede="What such a review covers, which statutory standards it is read against, and what you get at the end of it."
       />
+
+      <ComingLaterNotice />
 
       {/* ANSWER FIRST */}
       <section className="bg-white px-6 pt-14 pb-4">
@@ -173,14 +169,7 @@ export default async function BankCompliancePage() {
         </div>
       </section>
 
-      <CtaBand
-        title={cta.label}
-        body="We will show you the review on your own site first."
-        label={cta.label}
-        subject="UDAAP website compliance review for community banks"
-        secondaryHref="/pricing"
-        secondaryLabel="See pricing"
-      />
+      <BankWaitlist />
     </>
   );
 }

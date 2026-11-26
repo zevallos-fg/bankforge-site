@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { PageIntro, CtaBand } from '@/app/components/PageIntro';
 import PricingTabs from '@/app/components/PricingTabs';
-import { getPricing } from '@/app/lib/pricing';
+import { getPricing } from '@/app/lib/pricing-server';
 
 export const metadata: Metadata = {
   title: 'Pricing',

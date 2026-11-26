@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
 import { ANSWER_ENGINES, MEASURED } from '@/app/lib/site';
-import { getPricing, ctaFor, rowsForLane } from '@/app/lib/pricing';
+import { ctaFor, rowsForLane } from '@/app/lib/pricing';
+import { getPricing } from '@/app/lib/pricing-server';
 
 /**
  * MONEY PAGE 3 (D-TW-13) — buyer prompt: "AI visibility for financial advisors".

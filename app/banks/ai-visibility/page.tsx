@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
+import { PageIntro, FindingList } from '@/app/components/PageIntro';
+import { ComingLaterNotice } from '@/app/components/BankComingLater';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
 import ScanPreview from '@/app/components/ScanPreview';
 import WalkthroughForm from '@/app/components/WalkthroughForm';
 import { ANSWER_ENGINES, MEASURED } from '@/app/lib/site';
-import { getPricing, ctaFor, rowsForLane } from '@/app/lib/pricing';
 
 /**
  * MONEY PAGE 7 (D-TW-13) — buyer prompt: "AI SEO for community banks".
@@ -81,12 +81,6 @@ const faqs: readonly FaqItem[] = [
 ];
 
 export default async function BankAiVisibilityPage() {
-  const pricing = await getPricing();
-  const edge = rowsForLane(pricing.rows, 'bank').filter((r) => r.family === 'edge');
-  const cta = ctaFor(
-    pricing.bound && edge.length > 0 ? edge[0].site_status : 'book_walkthrough',
-  );
-
   return (
     <>
       <PageIntro
@@ -94,6 +88,8 @@ export default async function BankAiVisibilityPage() {
         title="AI SEO for community banks"
         lede="What an AI assistant says when a customer asks it for a bank like yours, and what your site gives it to work with."
       />
+
+      <ComingLaterNotice href="#walkthrough" />
 
       {/* ANSWER FIRST */}
       <section className="bg-white px-6 pt-14 pb-4">
@@ -195,20 +191,13 @@ export default async function BankAiVisibilityPage() {
         <div className="mx-auto max-w-3xl">
           <WalkthroughForm
             lane="bank"
-            heading="Ask what a review would show for your institution"
-            body="Tell us your institution and what you want to know. We will run the questions for it and reply with the answers that came back, next to institutions in your asset tier and state."
+            tag="bank-waitlist"
+            heading="Join the bank and credit union waitlist"
+            body="AI visibility for banks and credit unions is coming later. Leave your email and institution and we will write when it opens. Nothing is charged and no account is created."
           />
         </div>
       </section>
 
-      <CtaBand
-        title="Ask us what they say about you"
-        body="We will run the questions for your institution and show you the answers next to your tier and state."
-        label={cta.label}
-        subject="AI SEO for community banks"
-        secondaryHref="/pricing"
-        secondaryLabel="See pricing"
-      />
     </>
   );
 }

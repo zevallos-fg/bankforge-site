@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { PageIntro, FindingList, CtaBand } from '@/app/components/PageIntro';
+import { PageIntro, FindingList } from '@/app/components/PageIntro';
+import { ComingLaterNotice, BankWaitlist } from '@/app/components/BankComingLater';
 import FaqBlock, { type FaqItem } from '@/app/components/FaqBlock';
-import { getPricing, ctaFor, rowsForLane } from '@/app/lib/pricing';
 
 /**
  * MONEY PAGE 6 (D-TW-13) — buyer prompt: "Reg DD / Truth in Savings website
@@ -91,12 +91,6 @@ const faqs: readonly FaqItem[] = [
 ];
 
 export default async function BankRegDdPage() {
-  const pricing = await getPricing();
-  const forge = rowsForLane(pricing.rows, 'bank').filter((r) => r.family === 'forge');
-  const cta = ctaFor(
-    pricing.bound && forge.length > 0 ? forge[0].site_status : 'book_walkthrough',
-  );
-
   return (
     <>
       <PageIntro
@@ -104,6 +98,8 @@ export default async function BankRegDdPage() {
         title="Reg DD / Truth in Savings website disclosure check"
         lede="What such a check covers on your deposit pages, and which rule applies to whom."
       />
+
+      <ComingLaterNotice />
 
       {/* ANSWER FIRST */}
       <section className="bg-white px-6 pt-14 pb-4">
@@ -191,14 +187,7 @@ export default async function BankRegDdPage() {
         </div>
       </section>
 
-      <CtaBand
-        title={cta.label}
-        body="We will run the check on your own deposit pages and show you what it returns."
-        label={cta.label}
-        subject="Reg DD / Truth in Savings website disclosure check"
-        secondaryHref="/pricing"
-        secondaryLabel="See pricing"
-      />
+      <BankWaitlist />
     </>
   );
 }

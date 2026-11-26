@@ -8,12 +8,8 @@ import {
   ROUTES,
   absoluteUrl,
 } from '@/app/lib/site';
-import {
-  getPricing,
-  headlinePrice,
-  unitLabel,
-  foundingLine,
-} from '@/app/lib/pricing';
+import { headlinePrice, unitLabel, foundingLine, availabilityLabel } from '@/app/lib/pricing';
+import { getPricing } from '@/app/lib/pricing-server';
 
 /**
  * /llms.txt, generated.
@@ -25,6 +21,12 @@ import {
  * v_sku_catalog_public. When the catalogue cannot be read, the pricing section
  * says so instead of printing a remembered number.
  */
+const LANE_AUDIENCE: Record<string, string> = {
+  ria: 'investment advisers',
+  bd: 'broker-dealers',
+  bank: 'banks and credit unions',
+};
+
 export const dynamic = 'force-static';
 export const revalidate = 3600;
 
@@ -34,7 +36,13 @@ export async function GET() {
   const priceLines = pricing.bound
     ? pricing.rows.map((r) => {
         const founding = foundingLine(r);
-        const tier = r.tier_label ? ` (${r.tier_label})` : '';
+        // Several product names repeat across lanes (Edge Simple is an adviser product
+        // and a bank product), so every line names its audience (WEB2.A.1).
+        const tier =
+          (r.tier_label ? ` (${r.tier_label})` : '') +
+          (LANE_AUDIENCE[r.lane] ? `, for ${LANE_AUDIENCE[r.lane]}` : '');
+        // Not for sale yet (WEB2.A.1): the label only -- no unit, no price.
+        if (availabilityLabel(r)) return `- ${r.product_name}${tier}: ${headlinePrice(r)}`;
         return `- ${r.product_name}${tier}: ${headlinePrice(r)} ${unitLabel(
           r.billing_unit,
         )}${founding ? ` — ${founding}` : ''}`;
